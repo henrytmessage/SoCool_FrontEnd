@@ -7,7 +7,22 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@keyframes typing {
+  0% {
+    width: 0%;
+    visibility: hidden;
+  }
+  100% {
+    width: 100%;
+    visibility: visible;
+  }
+}
+
+.animate-typing {
+  animation: typing 5s alternate;
 }
