@@ -57,7 +57,7 @@ const ContentChat = () => {
   }
  
   return (
-    <div className='container mx-auto max-w-[1200px]'>
+    // <div className='container mx-auto max-w-[1200px]'>
       <div className='flex flex-col h-screen bg-grey-900'>
         <div className='flex-grow p-6'>
           <div className='flex flex-col space-y-4'>
@@ -94,7 +94,7 @@ const ContentChat = () => {
         </div>
       </form>
       </div>
-    </div>
+    // </div>
   )
 }
 

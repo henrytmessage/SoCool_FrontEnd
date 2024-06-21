@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 interface ITextAnimation {
   text: string;
-  setIsAnimating: React.Dispatch<React.SetStateAction<boolean>>
+  setIsAnimating?: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const TextAnimation = ({text, setIsAnimating}: ITextAnimation) => {
@@ -13,7 +13,7 @@ const TextAnimation = ({text, setIsAnimating}: ITextAnimation) => {
         await new Promise(resolve => setTimeout(resolve, 10)); // Đợi 50ms trước khi hiển thị ký tự tiếp theo
         setDisplayText(prev => prev + text[i]); // Thêm ký tự tiếp theo vào displayText
       }
-      setIsAnimating(false)
+      setIsAnimating && setIsAnimating(false)
     };
     animateText();
   }, [text]);

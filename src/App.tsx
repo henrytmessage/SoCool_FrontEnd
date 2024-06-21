@@ -8,10 +8,14 @@ function App() {
 
   return (
     <div className="App">
-      <Header/>
-      <BrowserRouter>
-        <AppRouters/>
-      </BrowserRouter>
+      <div className='container mx-auto max-w-[1200px]'>
+        <div className='flex flex-col h-screen bg-grey-900'>
+          <Header/>
+          <BrowserRouter>
+            <AppRouters/>
+          </BrowserRouter>
+        </div>
+      </div>
     </div>
   );
 }
