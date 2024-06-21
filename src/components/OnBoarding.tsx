@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Avatar } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { logoSoCool } from '../assets';
-import { Button, CustomInputEmail, CustomNumberInput, CustomSelect, CustomTextArea } from '../common';
+import { Button, CustomInputEmail, CustomModal, CustomNumberInput, CustomSelect, CustomTextArea } from '../common';
 import { KEY_CHOOSE_SOMETHING, PRICE_CURRENCY } from '../constant';
 
 const OnBoarding = () => {
@@ -19,6 +19,13 @@ const OnBoarding = () => {
   const [inputValueCurrency, setInputValueCurrency] = useState<string>('');
   const [textValueCriteria, setTextValueCriteria] = useState<string>('');
   const [inputEmail, setInputEmail] = useState<string>('');
+  const [isRequiredStep2, setIsRequiredStep2] = useState<boolean>(false)
+  const [isRequiredStep3, setIsRequiredStep3] = useState<boolean>(false)
+  const [isRequiredStep4, setIsRequiredStep4] = useState<boolean>(false)
+  const [isRequiredStep5, setIsRequiredStep5] = useState<boolean>(false)
+  const [isOpenModal, setIsOpenModal] = useState(false)
+
+
   const [steps, setSteps] = useState([
     { id: 1, content: t('questionHelp'), isCompleted: false },
     { id: 2, content: selectedValue === KEY_CHOOSE_SOMETHING.SELL_SOMETHING ? t('questionSell') : t('questionBuy'), isCompleted: false },
@@ -39,16 +46,32 @@ const OnBoarding = () => {
 
   // step 2
   const handleTextAreaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    if(e.target.value != '') {
+      setIsRequiredStep2(false)
+    }
+    else {
+      setIsRequiredStep2(true)
+    }
     setTextValue(e.target.value);
   };
 
   const handleConfirmText = () => {
-    updateStepStatus(2, true);
+    if(textValue) {
+      updateStepStatus(2, true);
+    }else {
+      setIsRequiredStep2(true)
+    }
   };
 
   // step 3
   const handleChangeNumber = (value: string) => {
     setInputValuePrice(value);
+    if(value == '') {
+      setIsRequiredStep3(true)
+    }
+    else {
+      setIsRequiredStep3(false)
+    }
   }
 
   const handleChangeCurrency = (value: string) => {
@@ -56,30 +79,69 @@ const OnBoarding = () => {
   };
 
   const handleConfirmPriceCurrency = () => {
-    updateStepStatus(3, true);
+    if(inputValuePrice) {
+      updateStepStatus(3, true);
+    } else {
+      setIsRequiredStep3(true)
+    }
   }
 
   // step 4
   const handleTextValueCriteria = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    if(e.target.value != '') {
+      setIsRequiredStep4(false)
+    }
+    else {
+      setIsRequiredStep4(true)
+    }
     setTextValueCriteria(e.target.value);
   }
 
   const handleConfirmCriteria = () => {
-    updateStepStatus(4, true);
+    if(textValueCriteria) {
+      updateStepStatus(4, true);
+    } else {
+      setIsRequiredStep4(true)
+    }
   };
 
   // step 5
-  const handleInputEmailChange = (valueInputEmail: string) => {
-    setInputEmail(valueInputEmail);
+  const validateEmail = (email: string) => {
+    // Regular expression for basic email validation
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(String(email).toLowerCase());
+  };
+  
+  const handleInputEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if( validateEmail(e.target.value) && e.target.value != '') {
+      setIsRequiredStep5(false)
+    }
+    else {
+      setIsRequiredStep5(true)
+    }
+    setInputEmail(e.target.value);
+  }
+  
+  const handleCloseModal = () => {
+    setIsOpenModal(false)
+  };
+
+  const handleOpenModal = () => {
+    setIsOpenModal(false)
   }
 
   const handleFormSubmit = () => {
-    console.log('Selected value:', selectedValue);
-    console.log('Text value:', textValue);
-    console.log('input Value Price:', inputValuePrice);
-    console.log("input Value Currency", inputValueCurrency);
-    console.log("text Value Criteria:", textValueCriteria);
-    console.log("value Input Email", inputEmail);
+    if( isRequiredStep2 || isRequiredStep3 || isRequiredStep4 || isRequiredStep5) {
+      return;
+    } else {
+      setIsOpenModal(true)
+      console.log('Selected value:', selectedValue);
+      console.log('Text value:', textValue);
+      console.log('input Value Price:', inputValuePrice);
+      console.log("input Value Currency", inputValueCurrency);
+      console.log("text Value Criteria:", textValueCriteria);
+      console.log("value Input Email", inputEmail);
+    }
   };
 
   const updateStepStatus = (stepId: number, isCompleted: boolean) => {
@@ -122,47 +184,56 @@ const OnBoarding = () => {
             value={selectedValue} 
             onChange={handleSelectChange} 
             options={dataChooseHere} 
-            disabled={selectedValue !== undefined} 
           />
         );
       case 2:
         return (
-          <div>
+          <div className='flex'>
             <CustomTextArea
               value={textValue}
               placeholder={t('writeSomethingHere')}
+              required={isRequiredStep2}
               onChange={handleTextAreaChange}
-              onEnterPress={handleConfirmText}
-              disabled={steps[1].isCompleted}
             />
-            { !steps[1].isCompleted && <Button onClick={handleConfirmText}>{t('confirm')}</Button> }
+            { !steps[1].isCompleted && 
+              <div>
+                <Button onClick={handleConfirmText}>{t('confirm')}</Button>
+              </div>
+            }
           </div>
         );
       case 3:
         return (
-          <div>
+          <div className='flex'>
             <CustomNumberInput
               onEnter={handleConfirmPriceCurrency}
-              disabled={steps[2].isCompleted}
               value={inputValuePrice}
               currencyOptions={currencyOptions}
+              required={isRequiredStep3}
               onChange={handleChangeNumber}
               onChangeSelect={handleChangeCurrency}
               />
-            { !steps[2].isCompleted && <Button onClick={handleConfirmPriceCurrency}>{t('confirm')}</Button> }    
+            { !steps[2].isCompleted && 
+              <div>
+                <Button onClick={handleConfirmPriceCurrency}>{t('confirm')}</Button>
+              </div>
+            }    
           </div>
         );
         case 4:
         return (
-          <div>
+          <div className='flex'>
             <CustomTextArea
               value={textValueCriteria}
               placeholder={t('writeSomethingHere')}
+              required={isRequiredStep4}
               onChange={handleTextValueCriteria}
-              onEnterPress={handleConfirmCriteria}
-              disabled={steps[3].isCompleted}
             />
-            { !steps[3].isCompleted && <Button onClick={handleConfirmCriteria}>{t('confirm')}</Button> }    
+            { !steps[3].isCompleted && 
+              <div>
+                <Button onClick={handleConfirmCriteria}>{t('confirm')}</Button>
+              </div>
+            }    
           </div>
         );
         case 5:
@@ -171,6 +242,7 @@ const OnBoarding = () => {
             <CustomInputEmail
               value={inputEmail}
               onChange={handleInputEmailChange}
+              required={isRequiredStep5}
             />
             <div><Button onClick={handleFormSubmit}>{t('generateLink')}</Button></div>
           </div>
@@ -179,6 +251,16 @@ const OnBoarding = () => {
         return null;
     }
   };
+
+  const renderInformation = (
+    <ul>
+        <li>{selectedValue}</li>
+        <li>{textValue}</li>
+        <li>{`${inputValuePrice} ${inputValueCurrency}`}</li>
+        <li>{textValueCriteria}</li>
+        <li>{inputEmail}</li>
+    </ul>
+  );
 
   return (
     <div className='flex flex-col h-screen'>
@@ -199,6 +281,7 @@ const OnBoarding = () => {
             </div>
           ))}
         </div>
+        <CustomModal open={isOpenModal} textButtonEdit={t('edit')} textButtonOK={t('submit')} onClose={handleCloseModal} onOK={handleOpenModal} title={t('hereInformation')} children={renderInformation}/>
       </div>
     </div>
   );

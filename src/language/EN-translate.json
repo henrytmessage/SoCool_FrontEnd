@@ -28,5 +28,9 @@
   "bestOfLuck": "Wish you the best of luck",
   "errorValidEmail": "Please enter a valid email address",
   "generateLink": "Generate a link for me!",
-  "confirm": "Confirm" 
+  "confirm": "Confirm",
+  "required": "This field is required.",
+  "hereInformation": "Here is your information",
+  "edit": "Edit",
+  "submit": "Submit"
 }

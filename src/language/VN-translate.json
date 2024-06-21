@@ -28,5 +28,9 @@
   "bestOfLuck": "Chúc bạn may mắn",
   "errorValidEmail": "Vui lòng nhập địa chỉ email hợp lệ",
   "generateLink": "Tạo liên kết cho tôi!",
-  "confirm": "Xác nhận"
+  "confirm": "Xác nhận",
+  "required": "Trường này là bắt buộc.",
+  "hereInformation": "Đây là các thông tin của bạn",
+  "edit": "Chỉnh sửa",
+  "submit": "Gửi"
 }

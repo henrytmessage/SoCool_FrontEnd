@@ -10,6 +10,7 @@ interface CustomTextAreaProps {
   onEnterPress?: () => void;
   width?: number;
   placeholder?: string;
+  required?: boolean
 }
 
 const CustomTextArea: React.FC<CustomTextAreaProps> = ({
@@ -17,31 +18,38 @@ const CustomTextArea: React.FC<CustomTextAreaProps> = ({
   disabled,
   maxLength,
   onChange,
-  onEnterPress,
+  // onEnterPress,
   width=850,
-  placeholder
+  placeholder,
+  required
 }) => {
+
+  const { t } = useTranslation();
   
-  const handleKeyPress = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault(); // Prevent default behavior (new line)
-      if (onEnterPress) {
-        onEnterPress(); // Call callback function if provided
-      }
-    }
-  };
+  // const handleKeyPress = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+  //   if (e.key === 'Enter' && !e.shiftKey) {
+  //     e.preventDefault(); // Prevent default behavior (new line)
+  //     if (onEnterPress) {
+  //       onEnterPress(); // Call callback function if provided
+  //     }
+  //   }
+  // };
 
   return (
-    <Input.TextArea
-      rows={4}
-      maxLength={maxLength}
-      value={value}
-      placeholder={placeholder}
-      disabled={disabled}
-      style={{ width: width }}
-      onChange={onChange}
-      onPressEnter={handleKeyPress}
-    />
+    <div className='flex flex-col'>
+      <Input.TextArea
+        rows={4}
+        maxLength={maxLength}
+        value={value}
+        placeholder={placeholder}
+        disabled={disabled}
+        style={{ width: width }}
+        status={required ? 'error' : ''}
+        onChange={onChange}
+        // onPressEnter={handleKeyPress}
+      />
+      {required && <span className="text-red-500 text-sm mt-1">{t('required')}</span>}
+    </div> 
   );
 };
 

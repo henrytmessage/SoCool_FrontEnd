@@ -4,50 +4,41 @@ import { useTranslation } from 'react-i18next';
 
 interface EmailInputProps {
   value?: string;
-  onChange?: (value: string) => void;
   size?: 'large' | 'middle' | 'small';
   width?: number;
+  required?: boolean;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onEnter?: () => void;
 }
 
-const CustomInputEmail: React.FC<EmailInputProps> = ({ value, onChange, size="large" , width = 400}) => {
+const CustomInputEmail: React.FC<EmailInputProps> = ({ value, size="large" , width = 400, required, onChange, onEnter}) => {
   const { t } = useTranslation();
-
-  const [email, setEmail] = useState(value || '');
-  const [error, setError] = useState('');
 
   const validateEmail = (email: string) => {
     // Regular expression for basic email validation
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(String(email).toLowerCase());
   };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value);
-  };
+;
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      if (validateEmail(email)) {
-        setError('');
-        onChange && onChange(email);
-      } else {
-        setError(t('errorValidEmail'));
-      }
+      onEnter && onEnter();
     }
   };
 
   return (
     <div className="flex flex-col">
       <Input
-        value={email}
-        onChange={handleChange}
+        value={value}
+        onChange={onChange}
         onKeyDown={handleKeyDown}
         placeholder={t('emailHere')}
-        status={error ? 'error' : ''}
+        status={required ? 'error' : ''}
         size={size}
         style={{ width: width }}
       />
-      {error && <span className="text-red-500 text-sm mt-1">{error}</span>}
+      {required && <span className="text-red-500 text-sm mt-1">{t('errorValidEmail')}</span>}
     </div>
   );
 };

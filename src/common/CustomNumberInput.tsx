@@ -9,12 +9,13 @@ interface CustomInputNumberProps {
   width?: number;
   disabled?: boolean;
   currencyOptions: string[];
+  required?: boolean;
   onChange: (value: string) => void; 
   onChangeSelect?: (value: string) => void;
   onEnter?: () => void;
 }
 
-const CustomInputNumber: React.FC<CustomInputNumberProps> = ({ value, size='large', width = 400, disabled, currencyOptions, onChange, onChangeSelect, onEnter }) => {
+const CustomInputNumber: React.FC<CustomInputNumberProps> = ({ value, size='large', width = 400, disabled, currencyOptions, required, onChange, onChangeSelect, onEnter }) => {
   const { t } = useTranslation();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -22,14 +23,6 @@ const CustomInputNumber: React.FC<CustomInputNumberProps> = ({ value, size='larg
     // Kiểm tra nếu là số
     if (/^\d*$/.test(inputValue)) {
       onChange(inputValue); 
-    }
-  };
-
-  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      if (onEnter) {
-        onEnter(); // Gọi callback khi nhấn Enter
-      }
     }
   };
 
@@ -45,16 +38,19 @@ const CustomInputNumber: React.FC<CustomInputNumberProps> = ({ value, size='larg
   );
 
   return (
-    <Input
-      value={value}
-      size={size}
-      style={{ width: width }}
-      addonAfter={selectAfter}
-      disabled={disabled}
-      placeholder={t('writeNumberHere')}
-      onChange={handleChange}
-      onPressEnter={handleKeyPress}
-    />
+    <div className="flex flex-col">
+      <Input
+        value={value}
+        size={size}
+        style={{ width: width }}
+        addonAfter={selectAfter}
+        disabled={disabled}
+        placeholder={t('writeNumberHere')}
+        status={required ? 'error' : ''}
+        onChange={handleChange}
+      />
+      {required && <span className="text-red-500 text-sm mt-1">{t('required')}</span>}
+    </div>
   );
 };
 
