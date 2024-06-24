@@ -32,5 +32,13 @@
   "required": "Trường này là bắt buộc.",
   "hereInformation": "Đây là các thông tin của bạn",
   "edit": "Chỉnh sửa",
-  "submit": "Gửi"
+  "submit": "Gửi",
+  "editHere": "Bạn có thể chỉnh sửa ở đây!",
+  "youWant": "Bạn đang muốn",
+  "product": "Sản phẩm",
+  "priceRange": "Khoảng giá",
+  "criteria": "Tiêu chí",
+  "yourEmail": "Email của bạn",
+  "alertCheckMail": "Bạn đã tạo link thành công, vui lòng kiểm tra lại email",
+  "time": "Thời gian:"
 }

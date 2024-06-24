@@ -5,30 +5,50 @@ import CustomSelect from './CustomSelect';
 
 interface CustomInputNumberProps {
   value: string;
+  valueCurrency?: string;
   size?: 'large' | 'middle' | 'small';
   width?: number;
   disabled?: boolean;
   currencyOptions: string[];
   required?: boolean;
+  isEdit?: boolean;
   onChange: (value: string) => void; 
   onChangeSelect?: (value: string) => void;
   onEnter?: () => void;
 }
 
-const CustomInputNumber: React.FC<CustomInputNumberProps> = ({ value, size='large', width = 400, disabled, currencyOptions, required, onChange, onChangeSelect, onEnter }) => {
+const CustomInputNumber: React.FC<CustomInputNumberProps> = ({ value, valueCurrency, size='large', width = 400, disabled, currencyOptions, required, onChange, onChangeSelect, onEnter, isEdit }) => {
   const { t } = useTranslation();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const inputValue = e.target.value;
-    // Kiểm tra nếu là số
-    if (/^\d*$/.test(inputValue)) {
-      onChange(inputValue); 
+    let inputValue = e.target.value;
+  
+    // Nếu là USD, cho phép nhập số và dấu "."
+    if (valueCurrency == 'USD') {
+      // Kiểm tra nếu là số hoặc dấu "." (nếu chưa có dấu ".")
+      if (/^\d*\.?\d*$/.test(inputValue)) {
+        // Kiểm tra nếu dấu "." đã có và ngăn cách nhiều hơn một dấu "."
+        if (inputValue.split('.').length <= 2) {
+          // Kiểm tra nếu có thể parse giá trị
+          if (!isNaN(parseFloat(inputValue))) {
+            onChange(inputValue); 
+          }
+        }
+      }
+    } else {
+      // Nếu không phải USD, chỉ cho phép nhập số
+      if (/^\d*$/.test(inputValue)) {
+        onChange(inputValue); 
+      }
     }
   };
+  
 
   const { Option } = Select;
   const selectAfter = (
-    <Select defaultValue={currencyOptions[0]} onChange={onChangeSelect} disabled={disabled}>
+    <Select defaultValue={valueCurrency} onChange={onChangeSelect} disabled={disabled} 
+      status={isEdit ? 'warning' : ''}
+    >
       {currencyOptions?.map((currency) => (
         <Option key={currency} value={currency}>
           {currency}
@@ -38,7 +58,7 @@ const CustomInputNumber: React.FC<CustomInputNumberProps> = ({ value, size='larg
   );
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col border-blue-500" >
       <Input
         value={value}
         size={size}
@@ -46,8 +66,9 @@ const CustomInputNumber: React.FC<CustomInputNumberProps> = ({ value, size='larg
         addonAfter={selectAfter}
         disabled={disabled}
         placeholder={t('writeNumberHere')}
-        status={required ? 'error' : ''}
+        status={required ? 'error' : (isEdit ? 'warning' : '')} 
         onChange={handleChange}
+    
       />
       {required && <span className="text-red-500 text-sm mt-1">{t('required')}</span>}
     </div>

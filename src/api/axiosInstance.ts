@@ -1,7 +1,7 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
 
 const axiosInstance: AxiosInstance = axios.create({
-  baseURL: 'https://freetestapi.com/api/v1', // Replace with your API base URL
+  baseURL: 'https://47.129.7.235', // Replace with your API base URL
   timeout: 10000, // Example timeout configuration
   headers: {
     'Content-Type': 'application/json',

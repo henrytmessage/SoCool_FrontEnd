@@ -5,5 +5,6 @@ import CustomSelect from "./CustomSelect"
 import CustomNumberInput from "./CustomNumberInput"
 import CustomInputEmail from "./CustomInputEmail"
 import CustomModal from "./CustomModal"
+import CustomModalSuccess from "./CustomModalSuccess"
 
-export { Button, CustomTextArea, CustomSelect, CustomNumberInput, CustomInputEmail, CustomModal }
+export { Button, CustomTextArea, CustomSelect, CustomNumberInput, CustomInputEmail, CustomModal, CustomModalSuccess }

@@ -10,7 +10,8 @@ interface CustomTextAreaProps {
   onEnterPress?: () => void;
   width?: number;
   placeholder?: string;
-  required?: boolean
+  required?: boolean;
+  isEdit?: boolean;
 }
 
 const CustomTextArea: React.FC<CustomTextAreaProps> = ({
@@ -21,7 +22,8 @@ const CustomTextArea: React.FC<CustomTextAreaProps> = ({
   // onEnterPress,
   width=850,
   placeholder,
-  required
+  required,
+  isEdit
 }) => {
 
   const { t } = useTranslation();
@@ -44,9 +46,10 @@ const CustomTextArea: React.FC<CustomTextAreaProps> = ({
         placeholder={placeholder}
         disabled={disabled}
         style={{ width: width }}
-        status={required ? 'error' : ''}
+        status={required ? 'error' : (isEdit ? 'warning' : '')} 
         onChange={onChange}
         // onPressEnter={handleKeyPress}
+        
       />
       {required && <span className="text-red-500 text-sm mt-1">{t('required')}</span>}
     </div> 

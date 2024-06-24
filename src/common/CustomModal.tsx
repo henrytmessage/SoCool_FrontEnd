@@ -28,6 +28,7 @@ const CustomModal: React.FC<ModalComponentProps> = ({ title, children, open = fa
             open={open}
             onOk={handleOK}
             onCancel={handleCancel}
+            style={{ minWidth: '50rem' }} 
             footer={[
               <Button key="back" onClick={handleCancel} classNameCustom="outline outline-0 bg-gray-200 text-gray-800 hover:bg-gray-300">
                 {textButtonEdit}

@@ -1,0 +1,64 @@
+import { Modal, Result } from "antd";
+import Button from "./Button";
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+
+interface IModalSuccessProps {
+  isOpen?: boolean;
+  titleSuccess?: string;
+  textButtonConfirm?: string;
+  status?: 'success' | 'error' | 'info' | 'warning';
+  onCloseModalSuccess: () => void;
+}
+
+const CustomModalSuccess: React.FC<IModalSuccessProps> = ({ isOpen, titleSuccess, textButtonConfirm, status = 'success', onCloseModalSuccess }) => {
+  const { t } = useTranslation();
+  const [countdown, setCountdown] = useState(3); 
+
+  useEffect(() => {
+    let timer: NodeJS.Timeout | null = null;
+
+    if (isOpen && countdown > 0) {
+      timer = setTimeout(() => {
+        setCountdown(countdown - 1);
+      }, 1000);
+    } else if (countdown === 0) {
+      // Thực hiện hàm khi đếm ngược kết thúc
+      handleCountdownEnd();
+    }
+
+    return () => {
+      if (timer) clearTimeout(timer);
+    };
+  }, [isOpen, countdown]);
+
+  const handleCountdownEnd = () => {
+    onCloseModalSuccess();
+  };
+
+  const handleCancel = () => {
+    onCloseModalSuccess();
+  };
+
+  return (
+    <Modal 
+      open={isOpen}
+      style={{ minWidth: '50rem' }} 
+      footer={null}
+      onCancel={handleCancel}
+    >
+      <Result
+        status={status}
+        title={titleSuccess}
+        subTitle={`${t('time')} ${countdown}`}
+        extra={[
+          <Button key={textButtonConfirm} onClick={handleCancel}>
+            {textButtonConfirm}
+          </Button>
+        ]}
+      />
+    </Modal>
+  );
+}
+
+export default CustomModalSuccess;

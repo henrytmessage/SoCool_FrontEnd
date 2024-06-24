@@ -9,9 +9,10 @@ interface EmailInputProps {
   required?: boolean;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onEnter?: () => void;
+  isEdit?: boolean;
 }
 
-const CustomInputEmail: React.FC<EmailInputProps> = ({ value, size="large" , width = 400, required, onChange, onEnter}) => {
+const CustomInputEmail: React.FC<EmailInputProps> = ({ value, size="large" , width = 400, required, onChange, onEnter, isEdit}) => {
   const { t } = useTranslation();
 
   const validateEmail = (email: string) => {
@@ -34,7 +35,7 @@ const CustomInputEmail: React.FC<EmailInputProps> = ({ value, size="large" , wid
         onChange={onChange}
         onKeyDown={handleKeyDown}
         placeholder={t('emailHere')}
-        status={required ? 'error' : ''}
+        status={required ? 'error' : (isEdit ? 'warning' : '')} 
         size={size}
         style={{ width: width }}
       />

@@ -32,5 +32,13 @@
   "required": "This field is required.",
   "hereInformation": "Here is your information",
   "edit": "Edit",
-  "submit": "Submit"
+  "submit": "Submit",
+  "editHere": "You can edit here!",
+  "youWant": "You are wanting",
+  "product": "Product",
+  "priceRange": "Price range",
+  "criteria": "Criteria",
+  "yourEmail": "Your email",
+  "alertCheckMail": "You have successfully created the link, please check your email again",
+  "time": "Time:"
 }
