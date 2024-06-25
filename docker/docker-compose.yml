@@ -1,0 +1,12 @@
+version: '3.4'
+
+services:
+  app:
+    container_name: fe-socool
+    restart: always
+    build: ..
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - /etc/ssl:/etc/ssl
