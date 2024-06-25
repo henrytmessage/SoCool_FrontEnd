@@ -13,5 +13,5 @@ RUN npm run build
 
 FROM nginx:latest as production-stage
 
-COPY --from=build-stage /app/dist/spa /usr/share/nginx/tsx
+COPY --from=build-stage /app/dist/spa /usr/share/nginx/html
 COPY ./docker/nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf
