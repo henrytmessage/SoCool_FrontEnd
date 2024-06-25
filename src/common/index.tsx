@@ -1,4 +1,4 @@
-import Button from "./Button";
+import CustomButton from "./CustomButton";
 // import Dropdown from "./DropDown"
 import CustomTextArea from "./CustomTextArea"
 import CustomSelect from "./CustomSelect"
@@ -7,4 +7,4 @@ import CustomInputEmail from "./CustomInputEmail"
 import CustomModal from "./CustomModal"
 import CustomModalSuccess from "./CustomModalSuccess"
 
-export { Button, CustomTextArea, CustomSelect, CustomNumberInput, CustomInputEmail, CustomModal, CustomModalSuccess }
+export { CustomButton, CustomTextArea, CustomSelect, CustomNumberInput, CustomInputEmail, CustomModal, CustomModalSuccess }

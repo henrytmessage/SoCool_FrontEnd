@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import { Modal } from 'antd';
-import Button from './Button';
+import Button from './CustomButton';
 
 interface ModalComponentProps {
     title?: string;

@@ -40,5 +40,7 @@
   "criteria": "Criteria",
   "yourEmail": "Your email",
   "alertCheckMail": "You have successfully created the link, please check your email again",
-  "time": "Time:"
+  "time": "Time:",
+  "404NotFound": "Sorry, the page you are looking for does not exist.",
+  "goBackHome": "Go back to the home page"
 }

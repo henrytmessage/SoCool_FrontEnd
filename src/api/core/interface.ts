@@ -6,3 +6,12 @@ export interface IBodyPostLink {
   note: string,
   email: string,
 }
+
+export interface IBodyAuthOTP {
+  email: string
+}
+
+export interface IBodyAuthRegister {
+  email: string,
+  otp: string,
+}

@@ -1,5 +1,5 @@
 import { Modal, Result } from "antd";
-import Button from "./Button";
+import Button from "./CustomButton";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -13,7 +13,7 @@ interface IModalSuccessProps {
 
 const CustomModalSuccess: React.FC<IModalSuccessProps> = ({ isOpen, titleSuccess, textButtonConfirm, status = 'success', onCloseModalSuccess }) => {
   const { t } = useTranslation();
-  const [countdown, setCountdown] = useState(3); 
+  const [countdown, setCountdown] = useState(10); 
 
   useEffect(() => {
     let timer: NodeJS.Timeout | null = null;

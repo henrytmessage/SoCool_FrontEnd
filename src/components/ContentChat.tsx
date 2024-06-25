@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next';
 import { getExample } from '../service';
 import TypingAnimation from './TypingAnimation'
-import { Avatar } from 'antd';
+import { Avatar, Button } from 'antd';
 import {logoSoCool} from '../assets'
 import TextAnimation from './TextAnimation';
 
@@ -90,7 +90,9 @@ const ContentChat = () => {
       <form onSubmit={event => handleSubmit(event)} className='flex-none p-6'>
         <div className='flex rounded-3xl  border border-[#b6b5b5] bg-[#F4F4F4]'>
           <input className='flex-grow px-4 py-2 bg-transparent text-[#0D0D0D] focus:outline-none' type="text"  placeholder={t('placeHolderMessage')} value={inputChat} onChange={(e) => handleChangeInputChat(e)}/>
-          <button className='bg-purple-500 rounded-3xl  px-4 py-2 text-[#0D0D0D] font-semibold focus:outline-none hover:bg-purple-600 transition-color duration-300' type='submit' >{t('send')}</button>
+          <Button type="primary" htmlType="submit"  size='large' className='rounded-3xl' loading={isLoading}>
+            {t('send')}
+          </Button>
         </div>
       </form>
       </div>

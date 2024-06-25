@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Avatar } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { logoSoCool } from '../assets';
-import { Button, CustomInputEmail, CustomModal, CustomModalSuccess, CustomNumberInput, CustomSelect, CustomTextArea } from '../common';
+import { CustomButton, CustomInputEmail, CustomModal, CustomModalSuccess, CustomNumberInput, CustomSelect, CustomTextArea } from '../common';
 import { KEY_CHOOSE_SOMETHING, PRICE_CURRENCY } from '../constant';
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import { postGenerateLink } from '../service';
@@ -195,8 +195,8 @@ import CustomAlert from '../common/CustomAlert';
           {t('callToAction')}
         </div>
         <div className='bg-gray-200 ml-4 rounded-xl p-[0.5rem] text-gray-800 flex space-x-2'>
-          <Button onClick={() => changeLanguage('en')}>{t('EN')}</Button>
-          <Button onClick={() => changeLanguage('vn')} classNameCustom='bg-violet-400 hover:bg-violet-500'>{t('VN')}</Button>
+          <CustomButton onClick={() => changeLanguage('en')}>{t('EN')}</CustomButton>
+          <CustomButton onClick={() => changeLanguage('vn')} classNameCustom='bg-violet-400 hover:bg-violet-500'>{t('VN')}</CustomButton>
         </div>
       </div>
     );
@@ -229,7 +229,7 @@ import CustomAlert from '../common/CustomAlert';
               />
               { !steps[1].isCompleted && 
                 <div>
-                  <Button onClick={handleConfirmText}>{t('confirm')}</Button>
+                  <CustomButton onClick={handleConfirmText}>{t('confirm')}</CustomButton>
                 </div>
               }
               {
@@ -252,7 +252,7 @@ import CustomAlert from '../common/CustomAlert';
                 />
               { !steps[2].isCompleted && 
                 <div>
-                  <Button onClick={handleConfirmPriceCurrency}>{t('confirm')}</Button>
+                  <CustomButton onClick={handleConfirmPriceCurrency}>{t('confirm')}</CustomButton>
                 </div>
               }    
               {
@@ -272,7 +272,7 @@ import CustomAlert from '../common/CustomAlert';
               />
               { !steps[3].isCompleted && 
                 <div>
-                  <Button onClick={handleConfirmCriteria}>{t('confirm')}</Button>
+                  <CustomButton onClick={handleConfirmCriteria}>{t('confirm')}</CustomButton>
                 </div>
               }  
               {
@@ -293,7 +293,7 @@ import CustomAlert from '../common/CustomAlert';
                 isEdit && renderEditHere
               } 
               <div>
-                <Button onClick={handleFormSubmit}>{t('generateLink')}</Button>
+                <CustomButton onClick={handleFormSubmit}>{t('generateLink')}</CustomButton>
               </div>
             </div>
           );
