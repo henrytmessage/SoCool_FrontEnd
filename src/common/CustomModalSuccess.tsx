@@ -22,7 +22,7 @@ const CustomModalSuccess: React.FC<IModalSuccessProps> = ({ isOpen, titleSuccess
       timer = setTimeout(() => {
         setCountdown(countdown - 1);
       }, 1000);
-    } else if (countdown == 0) {
+    } else if (countdown === 0) {
       // Thực hiện hàm khi đếm ngược kết thúc
       handleCountdownEnd();
     }
