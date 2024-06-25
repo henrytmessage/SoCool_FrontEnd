@@ -41,4 +41,5 @@ if (storedLanguage) {
   console.log("Geolocation is not supported by this browser.");
 }
 
+
 export default i18n;
