@@ -15,6 +15,8 @@ const Login: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
   const navigate = useNavigate(); // or useNavigate for react-router v6
+  const currentUrl = window.location.href;
+  sessionStorage.setItem('url_conversation', JSON.stringify(currentUrl));
 
   const handleEmailSubmit: FormProps<FieldType>['onFinish'] = async (values) => {
     if(values.email) {
@@ -45,9 +47,12 @@ const Login: React.FC = () => {
       try {
         const data = await postAuthRegisterService(bodyAuthRegister);
         if(data.status_code == 200) {
-          localStorage.setItem('access_token', JSON.stringify(data.data));
+          sessionStorage.setItem('access_token', JSON.stringify(data.data));
           message.success('Login successful!');
           navigate('/chat'); 
+        }
+        else if(data.status_code == 400) {
+          navigate('/login'); 
         }
         else {
           message.error('Invalid OTP!');
@@ -57,7 +62,7 @@ const Login: React.FC = () => {
       }
       setLoading(false);
     };
-  };
+  }; 
   
   return (
     <Form

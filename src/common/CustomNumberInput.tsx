@@ -22,6 +22,11 @@ const CustomInputNumber: React.FC<CustomInputNumberProps> = ({ value, valueCurre
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let inputValue = e.target.value;
+    
+    if (inputValue === '') {
+      onChange(inputValue);
+      return;
+    }
   
     // Nếu là USD, cho phép nhập số và dấu "."
     if (valueCurrency == 'USD') {
@@ -46,7 +51,7 @@ const CustomInputNumber: React.FC<CustomInputNumberProps> = ({ value, valueCurre
 
   const { Option } = Select;
   const selectAfter = (
-    <Select defaultValue={valueCurrency} onChange={onChangeSelect} disabled={disabled} 
+    <Select value={valueCurrency} onChange={onChangeSelect} disabled={true} 
       status={isEdit ? 'warning' : ''}
     >
       {currencyOptions?.map((currency) => (
@@ -62,11 +67,12 @@ const CustomInputNumber: React.FC<CustomInputNumberProps> = ({ value, valueCurre
       <Input
         value={value}
         size={size}
-        style={{ width: width }}
+        // style={{ width: width }}
         addonAfter={selectAfter}
         disabled={disabled}
         placeholder={t('writeNumberHere')}
         status={required ? 'error' : (isEdit ? 'warning' : '')} 
+        className='md:w-[400px]'
         onChange={handleChange}
     
       />

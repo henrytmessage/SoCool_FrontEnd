@@ -15,3 +15,7 @@ export interface IBodyAuthRegister {
   email: string,
   otp: string,
 }
+
+export interface IBodyConversation {
+  "url": string
+}

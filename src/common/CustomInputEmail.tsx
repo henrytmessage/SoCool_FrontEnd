@@ -37,7 +37,8 @@ const CustomInputEmail: React.FC<EmailInputProps> = ({ value, size="large" , wid
         placeholder={t('emailHere')}
         status={required ? 'error' : (isEdit ? 'warning' : '')} 
         size={size}
-        style={{ width: width }}
+        // style={{ width: width }}
+        className='md:w-[400px]'
       />
       {required && <span className="text-red-500 text-sm mt-1">{t('errorValidEmail')}</span>}
     </div>

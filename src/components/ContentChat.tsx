@@ -1,18 +1,43 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next';
 import { getExample } from '../service';
 import TypingAnimation from './TypingAnimation'
 import { Avatar, Button } from 'antd';
 import {logoSoCool} from '../assets'
 import TextAnimation from './TextAnimation';
+import { IBodyConversation } from '../api/core/interface';
+import { postConversation } from '../api/core';
+import { useNavigate } from 'react-router-dom';
 
 interface IChatLog {
   type: string,
   message: string,
 }
 
+interface IResponseConversation {
+  link: {
+      id: number,
+      url?: string,
+      title?: string,
+      note?: string,
+      price?: string,
+      type?: string,
+      currency?: string,
+      is_active?: boolean,
+      user_count?: number,
+      iat?: string,
+      exp?: string,
+      created_at?: string,
+      initChat: string,
+    },
+    user?: any
+}
+
 const ContentChat = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+
+  const [initConversation, setInitConversation] = useState<IResponseConversation>()
   const [inputChat, setInputChat] = useState('')
   const [chatLog, setChatLog] = useState<IChatLog[]>([])
   const [isLoading, setIsLoading] = useState(false)
@@ -55,17 +80,64 @@ const ContentChat = () => {
       setIsLoading(false);
     }
   }
+
+  useEffect(() => {
+    const fetchDataConversation = async () => {
+      const urlConversation = sessionStorage.getItem('url_conversation');
+      if (urlConversation) {
+        setIsLoading(true);
+        setIsAnimating(true)
+
+        const bodyConversation: IBodyConversation = {
+          url: JSON.parse(urlConversation)
+        };
+        try {
+          const response = await postConversation(bodyConversation);
+          const data = response.data;
+          
+          if (data.status_code === 200) {
+            setInitConversation(data.data)
+            setIsLoading(false); 
+          } else if(data.status_code === 421) {
+            setIsLoading(false); 
+            setIsAnimating(false)
+            navigate('/login'); 
+          }
+        } catch (error) {
+          console.error('Error fetching data:', error);
+          setIsLoading(false); 
+          navigate('/login'); 
+        }
+      }
+    };
+  
+    fetchDataConversation(); 
+  }, []); 
+  
  
   return (
-    // <div className='container mx-auto max-w-[1200px]'>
-      <div className='flex flex-col h-screen bg-grey-900'>
-        <div className='flex-grow p-6'>
-          <div className='flex flex-col space-y-4'>
+    <div className='flex flex-col h-screen bg-grey-900'>
+      <div className='flex-grow p-6'>
+        <div className='flex flex-col space-y-4'>
+            {
+              initConversation &&
+              <div className={'flex justify-start'}>
+                  <div>
+                    <Avatar src={<img src={logoSoCool} alt="avatar" />} />
+                  </div>
+                  <div className={'bg-[#F4F4F4] ml-4 rounded-3xl  p-4 text-[#0D0D0D] max-w-lg'}>
+                    <TextAnimation text={initConversation.link.initChat} setIsAnimating={setIsAnimating}/>
+                </div>
+              </div>
+            }
             {
               chatLog.map((message, index) => (
                 <div key={index} className={`flex ${message.type === 'user' ? 'justify-end': 'justify-start'}`}>
                   {  
-                    message.type === 'bot' && <Avatar src={<img src={logoSoCool} alt="avatar" />} />
+                    message.type === 'bot' && 
+                    <div>
+                      <Avatar src={<img src={logoSoCool} alt="avatar" />} /> 
+                    </div>
                   }
                   <div  className={`${
                     message.type === 'user' ? 'bg-[#F4F4F4]' : 'bg-[#F4F4F4] ml-4'
@@ -77,7 +149,9 @@ const ContentChat = () => {
             }
             {
               isLoading && <div key={chatLog.length} className='flex justify-start'>
-                <Avatar src={<img src={logoSoCool} alt="avatar" />} />
+                <div>
+                  <Avatar src={<img src={logoSoCool} alt="avatar" />} />
+                </div>
 
                 <div className='bg-[#F4F4F4] rounded-3xl  p-4 text-white max-w-sm ml-4'>
                   <TypingAnimation/>
@@ -95,8 +169,7 @@ const ContentChat = () => {
           </Button>
         </div>
       </form>
-      </div>
-    // </div>
+    </div>
   )
 }
 

@@ -161,7 +161,11 @@ import CustomAlert from '../common/CustomAlert';
     }
 
     const handleFormSubmit = () => {
-      if( isRequiredStep2 || isRequiredStep3 || isRequiredStep4 || isRequiredStep5) {
+      if(inputValuePrice == '') {
+        setIsRequiredStep3(true)
+        return;
+      }
+      if( isRequiredStep2 || isRequiredStep3 || isRequiredStep4 || isRequiredStep5 ) {
         return;
       } else {
         setIsEdit(false)
@@ -179,6 +183,8 @@ import CustomAlert from '../common/CustomAlert';
 
     useEffect(() => {
       // Cập nhật lại nội dung của các bước khi thay đổi ngôn ngữ hoặc selectedValue
+      setInputValuePrice('');
+      setInputValueCurrency(i18n.language == 'en' ? currencyOptions[0] : currencyOptions[1])
       setSteps([
         { id: 1, content: t('questionHelp'), isCompleted: steps[0].isCompleted },
         { id: 2, content: selectedValue === KEY_CHOOSE_SOMETHING.SELL_SOMETHING ? t('questionSell') : t('questionBuy'), isCompleted: steps[1].isCompleted },
@@ -189,14 +195,18 @@ import CustomAlert from '../common/CustomAlert';
     }, [i18n.language, selectedValue]);
 
     const renderCallToAction = () => (
-      <div className='flex items-center justify-start'>
-        <Avatar src={<img src={logoSoCool} alt='avatar' />} />
-        <div className='bg-gray-200 ml-4 rounded-3xl p-4 text-gray-800 max-w-screen-xl'>
-          {t('callToAction')}
+      <div className='flex  justify-start'>
+        <div>
+          <Avatar src={<img src={logoSoCool} alt='avatar' />} />
         </div>
-        <div className='bg-gray-200 ml-4 rounded-xl p-[0.5rem] text-gray-800 flex space-x-2'>
-          <CustomButton onClick={() => changeLanguage('en')}>{t('EN')}</CustomButton>
-          <CustomButton onClick={() => changeLanguage('vn')} classNameCustom='bg-violet-400 hover:bg-violet-500'>{t('VN')}</CustomButton>
+        <div className='flex flex-col md:flex-row gap-4'>
+          <div className='bg-gray-200 ml-4 rounded-3xl p-4 text-gray-800 max-w-screen-xl'>
+            {t('callToAction')}
+          </div>
+          <div className='bg-gray-200 ml-4 rounded-xl p-[0.5rem] text-gray-800 flex space-x-2'>
+            <CustomButton onClick={() => changeLanguage('en')}>{t('EN')}</CustomButton>
+            <CustomButton onClick={() => changeLanguage('vn')} classNameCustom='bg-violet-400 hover:bg-violet-500'>{t('VN')}</CustomButton>
+          </div>
         </div>
       </div>
     );
@@ -205,7 +215,7 @@ import CustomAlert from '../common/CustomAlert';
       switch (stepId) {
         case 1:
           return (
-            <div className='flex gap-4'>
+            <div className='flex gap-4 flex-col md:flex-row'>
               <CustomSelect 
               value={selectedValue} 
               onChange={handleSelectChange} 
@@ -219,7 +229,7 @@ import CustomAlert from '../common/CustomAlert';
           );
         case 2:
           return (
-            <div className='flex gap-4'>
+            <div className='flex gap-4 flex-col md:flex-row'>
               <CustomTextArea
                 value={textValue}
                 placeholder={t('writeSomethingHere')}
@@ -239,7 +249,7 @@ import CustomAlert from '../common/CustomAlert';
           );
         case 3:
           return (
-            <div className='flex gap-4'>
+            <div className='flex gap-4 flex-col md:flex-row'>
               <CustomNumberInput
                 onEnter={handleConfirmPriceCurrency}
                 value={inputValuePrice}
@@ -262,7 +272,7 @@ import CustomAlert from '../common/CustomAlert';
           );
           case 4:
           return (
-            <div className='flex gap-4'>
+            <div className='flex gap-4 flex-col md:flex-row'>
               <CustomTextArea
                 value={textValueCriteria}
                 placeholder={t('writeSomethingHere')}
@@ -282,7 +292,7 @@ import CustomAlert from '../common/CustomAlert';
           );
           case 5:
           return (
-            <div className='flex gap-4'>
+            <div className='flex gap-4 flex-col md:flex-row'>
               <CustomInputEmail
                 value={inputEmail}
                 onChange={handleInputEmailChange}
@@ -303,8 +313,8 @@ import CustomAlert from '../common/CustomAlert';
     };
 
     const renderEditHere = (
-      <div className='flex items-start text-[#faad14]'>
-        <div>
+      <div className='flex items-center text-[#faad14]'>
+        <div className='hidden md:block'>
           <ArrowLeftOutlined />
         </div>
         <div className='pl-1'>
@@ -342,7 +352,7 @@ import CustomAlert from '../common/CustomAlert';
                 <div className='flex flex-row'>
                   <Avatar src={<img src={logoSoCool} alt='avatar' />} />
                 </div>
-                <div className={` ${step.id === 1 ? 'flex flex-row items-center' : 'flex-col' } ml-4 gap-4 `}>
+                <div className={` ${step.id === 1 ? 'flex flex-row md:items-center' : 'flex-col' } flex-col md:flex-row ml-4 gap-4 `}>
                   <div className={`bg-gray-200 rounded-3xl p-4 text-gray-800 max-w-screen-xl inline-block  mr-4 ${step.id === 1 ? '' : 'mb-4'}`}>
                     {step.content}
                   </div>

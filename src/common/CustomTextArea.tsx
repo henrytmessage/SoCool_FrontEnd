@@ -19,7 +19,6 @@ const CustomTextArea: React.FC<CustomTextAreaProps> = ({
   disabled,
   maxLength,
   onChange,
-  // onEnterPress,
   width=850,
   placeholder,
   required,
@@ -27,29 +26,20 @@ const CustomTextArea: React.FC<CustomTextAreaProps> = ({
 }) => {
 
   const { t } = useTranslation();
-  
-  // const handleKeyPress = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-  //   if (e.key === 'Enter' && !e.shiftKey) {
-  //     e.preventDefault(); // Prevent default behavior (new line)
-  //     if (onEnterPress) {
-  //       onEnterPress(); // Call callback function if provided
-  //     }
-  //   }
-  // };
+  const isMobile = window.innerWidth <= 768;
 
   return (
     <div className='flex flex-col'>
       <Input.TextArea
-        rows={4}
+        rows={isMobile ? 2 : 4}
         maxLength={maxLength}
         value={value}
         placeholder={placeholder}
         disabled={disabled}
-        style={{ width: width }}
+        // style={{ width: isMobile ? '100%' : width }}
         status={required ? 'error' : (isEdit ? 'warning' : '')} 
         onChange={onChange}
-        // onPressEnter={handleKeyPress}
-        
+        className='md:w-[850px]'
       />
       {required && <span className="text-red-500 text-sm mt-1">{t('required')}</span>}
     </div> 

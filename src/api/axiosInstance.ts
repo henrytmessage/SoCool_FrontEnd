@@ -12,15 +12,18 @@ const axiosInstance: AxiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
   (config: any) => {
     // Perform actions before request is sent
-    const token = localStorage.getItem('accessToken');
-    if (token) {
-      // Ensure config.headers is initialized before assigning Authorization header
-      config.headers = {
-        ...config.headers,
-        Authorization: `Bearer ${token}`,
-      };
+    const accessToken = sessionStorage.getItem('access_token');
+    if( accessToken ) {
+      const token =  JSON.parse(accessToken).token;
+      if (token) {
+        // Ensure config.headers is initialized before assigning Authorization header
+        config.headers = {
+          ...config.headers,
+          Authorization: `Bearer ${token}`,
+        };
+      }
+      return config;
     }
-    return config;
   },
   (error: AxiosError) => {
     // Handle request error
