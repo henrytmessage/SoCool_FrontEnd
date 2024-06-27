@@ -19,3 +19,15 @@ export interface IBodyAuthRegister {
 export interface IBodyConversation {
   "url": string
 }
+
+export interface IBodySendMessage {
+  role?: string,
+  content?: string,
+  conversation_id?: number,
+  parent_id?: string,
+  type?: string,
+  price?: string,
+  currency?: string,
+  action?: string,
+  lang?: string
+}

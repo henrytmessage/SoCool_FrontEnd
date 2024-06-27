@@ -1,7 +1,7 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
 
 const axiosInstance: AxiosInstance = axios.create({
-  baseURL: 'http://localhost:5003', // Replace with your API base URL
+  baseURL: 'https://47.129.7.235', // Replace with your API base URL
   timeout: 10000, // Example timeout configuration
   headers: {
     'Content-Type': 'application/json',
@@ -13,17 +13,15 @@ axiosInstance.interceptors.request.use(
   (config: any) => {
     // Perform actions before request is sent
     const accessToken = sessionStorage.getItem('access_token');
-    if( accessToken ) {
-      const token =  JSON.parse(accessToken).token;
-      if (token) {
-        // Ensure config.headers is initialized before assigning Authorization header
-        config.headers = {
-          ...config.headers,
-          Authorization: `Bearer ${token}`,
-        };
-      }
-      return config;
+    const token = accessToken && JSON.parse(accessToken).token;
+    if (token) {
+      // Ensure config.headers is initialized before assigning Authorization header
+      config.headers = {
+        ...config.headers,
+        Authorization: `Bearer ${token}`,
+      };
     }
+    return config;
   },
   (error: AxiosError) => {
     // Handle request error

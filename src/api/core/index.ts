@@ -1,5 +1,5 @@
 import axiosInstance from "../axiosInstance";
-import { IBodyAuthOTP, IBodyAuthRegister, IBodyConversation, IBodyPostLink } from "./interface";
+import { IBodyAuthOTP, IBodyAuthRegister, IBodyConversation, IBodyPostLink, IBodySendMessage } from "./interface";
 
 // vi du
 export const getApiExample = (messageChat: string) => {
@@ -20,4 +20,8 @@ export const postAuthRegister = (body: IBodyAuthRegister) => {
 
 export const postConversation = (body: IBodyConversation) => {
   return axiosInstance.post('/conversation', body);
+}
+
+export const postConversationSendMessage = (body: IBodySendMessage) => {
+  return axiosInstance.post('/conversation/send-message', body);
 }

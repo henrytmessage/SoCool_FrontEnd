@@ -73,7 +73,7 @@ const Login: React.FC = () => {
       style={{ maxWidth: 500 }}
       onFinish={showOtp ? handleOtpSubmit : handleEmailSubmit}
       autoComplete="off"
-      className='flex flex-col h-screen w-[80%] max-w-[500px] mt-20 mx-auto'
+      className='flex flex-col w-[80%] max-w-[500px] mt-20 mx-auto'
     >
       <Form.Item<FieldType>
         label="Email"

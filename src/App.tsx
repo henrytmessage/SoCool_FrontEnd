@@ -8,11 +8,13 @@ function App() {
 
   return (
     <div className="App">
-      <div className='container mx-auto max-w-[1200px]'>
-        <div className='flex flex-col h-screen bg-grey-900'>
-          <Header/>
+      <div className=''>
+        <div className='flex flex-col bg-grey-900'>
           <BrowserRouter>
-            <AppRouters/>
+            <Header/>
+            <div className='mt-20 w-full h-[calc(100vh-84px)]' >
+              <AppRouters/>
+            </div>
           </BrowserRouter>
         </div>
       </div>

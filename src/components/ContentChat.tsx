@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next';
-import { getExample } from '../service';
+import { getExample, postSendMessageService } from '../service';
 import TypingAnimation from './TypingAnimation'
 import { Avatar, Button } from 'antd';
 import {logoSoCool} from '../assets'
@@ -33,15 +33,33 @@ interface IResponseConversation {
     user?: any
 }
 
+interface ISendMessage {
+  role?: string,
+  content?: string,
+  conversation_id?: number,
+  parent_id?: string,
+  type: string,
+  price?: string,
+  currency?: string,
+  action?: string,
+  lang?: string
+}
+
 const ContentChat = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
 
   const [initConversation, setInitConversation] = useState<IResponseConversation>()
   const [inputChat, setInputChat] = useState('')
+  const [language, setLanguage] = useState('')
   const [chatLog, setChatLog] = useState<IChatLog[]>([])
   const [isLoading, setIsLoading] = useState(false)
-  const [isAnimating, setIsAnimating] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false)
+  const [conversationId, setConversationId] = useState(0)
+  const [parentId, setParentId] = useState('')
+  const [initCurrency, setInitCurrency] = useState('')
+  const [actionMessage, setActionMessage] = useState('NONE')
+
   
 
   const handleChangeInputChat = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -59,21 +77,30 @@ const ContentChat = () => {
     setInputChat('')
   }
 
-  // đang fake dữ liệu sau sẽ thay thế = api của mình
   const onSendMessage = async (messageChat: string)  => {
-   // gọi api post đang fake
     try {
       setIsLoading(true);
       setIsAnimating(true)
 
-      const data = await getExample(messageChat); 
-      const MOCK_DATA = "Khi SaleGPT chat với 1 buyer thì mục tiêu là thuyết phục buyer mua với mức giá càng cao càng tốt (nhưng ko được tiết lộ mức giá mục tiêu B).		Khi chat sẽ hướng tới tìm 1 mức giá phù hợp, lấy từ dữ liệu mà buyer input.		Cần đánh giá sự nghiêm túc - quan tâm thật sự khi buyer input giá mua. Tránh các case trolling, chỉ dò hỏi giá.		Cùng 1 email, trong 1 ngày chỉ dc xác nhận 1 lần gửi negotiation."
-  
+      const bodySendMessage: ISendMessage = {
+        role: 'user',
+        content: messageChat,
+        conversation_id: conversationId,
+        type: 'manual',
+        lang: language,
+        // price: 0,
+        // currency: initCurrency,
+        // action: 'NONE',
+      } 
+      if (parentId) {
+        bodySendMessage.parent_id = parentId;
+      }
+
+      const data = await postSendMessageService(bodySendMessage); 
+      setParentId(data.data.id)
       // set lại mảng cập nhật thêm câu trả lời từ bot
-      setTimeout(() => {
-        setChatLog((prevChatLog) => [...prevChatLog, {type: 'bot', message: MOCK_DATA}]);
-        setIsLoading(false);
-      }, 3000);
+      setChatLog((prevChatLog) => [...prevChatLog, {type: 'bot', message: data.data.message}]);
+      setIsLoading(false);
 
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -97,6 +124,15 @@ const ContentChat = () => {
           
           if (data.status_code === 200) {
             setInitConversation(data.data)
+            setConversationId(data.data.link.id)
+            setInitCurrency(data.data.link.currency)
+            if(data.data.link.currency == 'USD') {
+              i18n.changeLanguage('en')
+              setLanguage('en')
+            } else {
+              i18n.changeLanguage('vn')
+              setLanguage('vn')
+            }
             setIsLoading(false); 
           } else if(data.status_code === 421) {
             setIsLoading(false); 
@@ -116,7 +152,7 @@ const ContentChat = () => {
   
  
   return (
-    <div className='flex flex-col h-screen bg-grey-900'>
+    <div className='flex flex-col h-full bg-grey-900 sm:mx-40'>
       <div className='flex-grow p-6'>
         <div className='flex flex-col space-y-4'>
             {

@@ -343,7 +343,7 @@ import CustomAlert from '../common/CustomAlert';
     );
     
     return (
-      <div className='flex flex-col h-screen'>
+      <div className='flex flex-col'>
         <div className='flex-grow p-6'>
           <div className='flex flex-col space-y-4'>
             {renderCallToAction()}
