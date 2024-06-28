@@ -1,53 +1,54 @@
 import React, { useEffect, useState } from 'react'
-import { useTranslation } from 'react-i18next';
-import { getExample, postSendMessageService } from '../service';
+import { useTranslation } from 'react-i18next'
+import { postSendMessageService } from '../service'
 import TypingAnimation from './TypingAnimation'
-import { Avatar, Button } from 'antd';
-import {logoSoCool} from '../assets'
-import TextAnimation from './TextAnimation';
-import { IBodyConversation } from '../api/core/interface';
-import { postConversation } from '../api/core';
-import { useNavigate } from 'react-router-dom';
+import { Avatar, Button, Input } from 'antd'
+import { logoSoCool } from '../assets'
+import TextAnimation from './TextAnimation'
+import { IBodyConversation } from '../api/core/interface'
+import { postConversation } from '../api/core'
+import { useNavigate } from 'react-router-dom'
+import { ACTION_CHAT } from '../constant'
 
 interface IChatLog {
-  type: string,
-  message: string,
+  type: string
+  message: string
 }
 
 interface IResponseConversation {
   link: {
-      id: number,
-      url?: string,
-      title?: string,
-      note?: string,
-      price?: string,
-      type?: string,
-      currency?: string,
-      is_active?: boolean,
-      user_count?: number,
-      iat?: string,
-      exp?: string,
-      created_at?: string,
-      initChat: string,
-    },
-    user?: any
+    id: number
+    url?: string
+    title?: string
+    note?: string
+    price?: string
+    type?: string
+    currency?: string
+    is_active?: boolean
+    user_count?: number
+    iat?: string
+    exp?: string
+    created_at?: string
+    initChat: string
+  }
+  user?: any
 }
 
 interface ISendMessage {
-  role?: string,
-  content?: string,
-  conversation_id?: number,
-  parent_id?: string,
-  type: string,
-  price?: string,
-  currency?: string,
-  action?: string,
+  role?: string
+  content?: string
+  conversation_id?: number
+  parent_id?: string
+  type: string
+  price?: string
+  currency?: string
+  action?: string
   lang?: string
 }
 
 const ContentChat = () => {
-  const { t, i18n } = useTranslation();
-  const navigate = useNavigate();
+  const { t, i18n } = useTranslation()
+  const navigate = useNavigate()
 
   const [initConversation, setInitConversation] = useState<IResponseConversation>()
   const [inputChat, setInputChat] = useState('')
@@ -60,26 +61,45 @@ const ContentChat = () => {
   const [initCurrency, setInitCurrency] = useState('')
   const [actionMessage, setActionMessage] = useState('NONE')
 
-  
-
   const handleChangeInputChat = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputChat(e.target.value)
+    if (actionMessage === ACTION_CHAT.CONFIRM_PRICE) {
+      const inputNumberPrice = e.target.value
+
+      if (inputNumberPrice === '') {
+        setInputChat(inputNumberPrice)
+        return
+      }
+      if (initCurrency === 'USD') {
+        if (
+          /^\d*\.?\d*$/.test(inputNumberPrice) &&
+          inputNumberPrice.split('.').length <= 2 &&
+          !isNaN(parseFloat(inputNumberPrice))
+        ) {
+          setInputChat(inputNumberPrice)
+        }
+      } else {
+        if (/^\d*$/.test(inputNumberPrice)) {
+          setInputChat(inputNumberPrice)
+        }
+      }
+    } else {
+      setInputChat(e.target.value)
+    }
   }
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+    event.preventDefault()
     if (isAnimating) {
-      console.log("isAnimating", isAnimating);
-      return;
-    };
-    setChatLog((prevChatLog) => [...prevChatLog, {type: 'user', message: inputChat}])
+      return
+    }
+    setChatLog(prevChatLog => [...prevChatLog, { type: 'user', message: inputChat }])
     onSendMessage(inputChat)
     setInputChat('')
   }
 
-  const onSendMessage = async (messageChat: string)  => {
+  const onSendMessage = async (messageChat: string) => {
     try {
-      setIsLoading(true);
+      setIsLoading(true)
       setIsAnimating(true)
 
       const bodySendMessage: ISendMessage = {
@@ -87,124 +107,145 @@ const ContentChat = () => {
         content: messageChat,
         conversation_id: conversationId,
         type: 'manual',
-        lang: language,
+        lang: language
         // price: 0,
         // currency: initCurrency,
         // action: 'NONE',
-      } 
+      }
       if (parentId) {
-        bodySendMessage.parent_id = parentId;
+        bodySendMessage.parent_id = parentId
       }
 
-      const data = await postSendMessageService(bodySendMessage); 
+      const data = await postSendMessageService(bodySendMessage)
       setParentId(data.data.id)
+      setActionMessage(data.data.action)
       // set lại mảng cập nhật thêm câu trả lời từ bot
-      setChatLog((prevChatLog) => [...prevChatLog, {type: 'bot', message: data.data.message}]);
-      setIsLoading(false);
-
+      setChatLog(prevChatLog => [...prevChatLog, { type: 'bot', message: data.data.message }])
+      setIsLoading(false)
     } catch (error) {
-      console.error('Error fetching data:', error);
-      setIsLoading(false);
+      console.error('Error fetching data:', error)
+      setIsLoading(false)
     }
   }
 
   useEffect(() => {
     const fetchDataConversation = async () => {
-      const urlConversation = sessionStorage.getItem('url_conversation');
+      const urlConversation = sessionStorage.getItem('url_conversation')
       if (urlConversation) {
-        setIsLoading(true);
+        setIsLoading(true)
         setIsAnimating(true)
 
         const bodyConversation: IBodyConversation = {
           url: JSON.parse(urlConversation)
-        };
+        }
         try {
-          const response = await postConversation(bodyConversation);
-          const data = response.data;
-          
+          const response = await postConversation(bodyConversation)
+          const data = response.data
+
           if (data.status_code === 200) {
             setInitConversation(data.data)
             setConversationId(data.data.link.id)
             setInitCurrency(data.data.link.currency)
-            if(data.data.link.currency == 'USD') {
+            if (data.data.link.currency == 'USD') {
               i18n.changeLanguage('en')
               setLanguage('en')
             } else {
               i18n.changeLanguage('vn')
               setLanguage('vn')
             }
-            setIsLoading(false); 
-          } else if(data.status_code === 421) {
-            setIsLoading(false); 
+            setIsLoading(false)
+          } else if (data.status_code === 421) {
+            setIsLoading(false)
             setIsAnimating(false)
-            navigate('/login'); 
+            navigate('/not-found')
           }
         } catch (error) {
-          console.error('Error fetching data:', error);
-          setIsLoading(false); 
-          navigate('/login'); 
+          console.error('Error fetching data:', error)
+          setIsLoading(false)
+          navigate('/not-found')
         }
+      } else {
+        // navigate('/not-found');
       }
-    };
-  
-    fetchDataConversation(); 
-  }, []); 
-  
- 
+    }
+
+    fetchDataConversation()
+  }, [])
+
   return (
-    <div className='flex flex-col h-full bg-grey-900 sm:mx-40'>
-      <div className='flex-grow p-6'>
-        <div className='flex flex-col space-y-4'>
-            {
-              initConversation &&
-              <div className={'flex justify-start'}>
-                  <div>
-                    <Avatar src={<img src={logoSoCool} alt="avatar" />} />
-                  </div>
-                  <div className={'bg-[#F4F4F4] ml-4 rounded-3xl  p-4 text-[#0D0D0D] max-w-lg'}>
-                    <TextAnimation text={initConversation.link.initChat} setIsAnimating={setIsAnimating}/>
-                </div>
+    <div className="flex flex-col h-full bg-grey-900 sm:mx-40">
+      <div className="flex-grow p-6">
+        <div className="flex flex-col space-y-4">
+          {initConversation && (
+            <div className={'flex justify-start'}>
+              <div>
+                <Avatar src={<img src={logoSoCool} alt="avatar" />} />
               </div>
-            }
-            {
-              chatLog.map((message, index) => (
-                <div key={index} className={`flex ${message.type === 'user' ? 'justify-end': 'justify-start'}`}>
-                  {  
-                    message.type === 'bot' && 
-                    <div>
-                      <Avatar src={<img src={logoSoCool} alt="avatar" />} /> 
-                    </div>
-                  }
-                  <div  className={`${
-                    message.type === 'user' ? 'bg-[#F4F4F4]' : 'bg-[#F4F4F4] ml-4'
-                    } rounded-3xl  p-4 text-[#0D0D0D] max-w-lg `}>
-                    {message.type =='bot' ? <TextAnimation text={message.message} setIsAnimating={setIsAnimating}/> : message.message}
-                  </div>
-                </div>
-              ))
-            }
-            {
-              isLoading && <div key={chatLog.length} className='flex justify-start'>
+              <div className={'bg-[#F4F4F4] ml-4 rounded-3xl p-4 text-[#0D0D0D] max-w-lg'}>
+                <TextAnimation text={initConversation.link.initChat} setIsAnimating={setIsAnimating} />
+              </div>
+            </div>
+          )}
+          {chatLog.map((message, index) => (
+            <div key={index} className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}>
+              {message.type === 'bot' && (
                 <div>
                   <Avatar src={<img src={logoSoCool} alt="avatar" />} />
                 </div>
-
-                <div className='bg-[#F4F4F4] rounded-3xl  p-4 text-white max-w-sm ml-4'>
-                  <TypingAnimation/>
-                </div>
+              )}
+              <div
+                className={`${
+                  message.type === 'user' ? 'bg-[#F4F4F4]' : 'bg-[#F4F4F4] ml-4'
+                } rounded-3xl  p-4 text-[#0D0D0D] max-w-lg `}
+              >
+                {message.type == 'bot' ? (
+                  <TextAnimation text={message.message} setIsAnimating={setIsAnimating} />
+                ) : (
+                  message.message
+                )}
               </div>
-            }
+            </div>
+          ))}
+          {isLoading && (
+            <div key={chatLog.length} className="flex justify-start">
+              <div>
+                <Avatar src={<img src={logoSoCool} alt="avatar" />} />
+              </div>
+              <div className="bg-[#F4F4F4] rounded-3xl p-4 text-white max-w-sm ml-4">
+                <TypingAnimation />
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {actionMessage !== ACTION_CHAT.CONFIRM_DEAL && (
+        <form onSubmit={event => handleSubmit(event)} className="flex-none p-6">
+          <div className="flex rounded-3xl border border-[#b6b5b5] bg-[#F4F4F4]">
+            {actionMessage === ACTION_CHAT.CONFIRM_PRICE && (
+              <Input
+                suffix={initCurrency}
+                variant="borderless"
+                className="px-4 py-2 bg-transparent"
+                placeholder={t('enterPrice')}
+                value={inputChat}
+                onChange={e => handleChangeInputChat(e)}
+              />
+            )}
+            <Input
+              variant="borderless"
+              className="px-4 py-2 bg-transparent"
+              type="text"
+              placeholder={t('placeHolderMessage')}
+              value={inputChat}
+              onChange={e => handleChangeInputChat(e)}
+            />
+            <Button type="primary" htmlType="submit" size="large" className="rounded-3xl" loading={isLoading}>
+              {t('send')}
+            </Button>
           </div>
-        </div>
-    
-      <form onSubmit={event => handleSubmit(event)} className='flex-none p-6'>
-        <div className='flex rounded-3xl  border border-[#b6b5b5] bg-[#F4F4F4]'>
-          <input className='flex-grow px-4 py-2 bg-transparent text-[#0D0D0D] focus:outline-none' type="text"  placeholder={t('placeHolderMessage')} value={inputChat} onChange={(e) => handleChangeInputChat(e)}/>
-          <Button type="primary" htmlType="submit"  size='large' className='rounded-3xl' loading={isLoading}>
-            {t('send')}
-          </Button>
-        </div>
-      </form>
+        </form>
+      )}
     </div>
   )
 }

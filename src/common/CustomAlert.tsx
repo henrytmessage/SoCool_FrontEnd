@@ -9,27 +9,29 @@ interface CustomAlertProps {
 }
 
 const CustomAlert: React.FC<CustomAlertProps> = ({ message, type = 'info', isShowAlert }) => {
-  const [visible, setVisible] = useState(false); // Initialize as hidden initially
+  const [visible, setVisible] = useState(false);
 
-  const showAlert = () => {
-    setVisible(true);
-    setTimeout(() => {
-      setVisible(false);
-    }, 3000); // Auto hide after 3 seconds
-  };
+  useEffect(() => {
+    if (isShowAlert) {
+      setVisible(true);
+      setTimeout(() => {
+        setVisible(false);
+      }, 5000); 
+    }
+  }, [isShowAlert]);
 
   return (
-    <div className="fixed top-0 right-0 m-4"> 
-      { isShowAlert && <Alert
-        message={message}
-        type={type}
-        showIcon
-        onClose={() => setVisible(false)}
-        closable
-      />
-    }
+    <div className="fixed top-0 right-0 m-4">
+      {visible && (
+        <Alert
+          message={message}
+          type={type}
+          showIcon
+          onClose={() => setVisible(false)}
+          closable
+        />
+      )}
     </div>
-
   );
 };
 

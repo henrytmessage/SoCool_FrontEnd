@@ -7,3 +7,8 @@ export const PRICE_CURRENCY = {
   USD: 'USD',
   VND: 'VND'
 }
+
+export const ACTION_CHAT = {
+  CONFIRM_DEAL: 'CONFIRM_DEAL',
+  CONFIRM_PRICE: 'CONFIRM_PRICE'
+}

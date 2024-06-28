@@ -43,5 +43,6 @@
   "time": "Time:",
   "404NotFound": "Sorry, the page you are looking for does not exist.",
   "goBackHome": "Go back to the home page",
-  "oneMinute": "You have one minute left to talk to me!"
+  "oneMinute": "You have one minute left to talk to me!",
+  "enterPrice": "Enter your price"
 }
