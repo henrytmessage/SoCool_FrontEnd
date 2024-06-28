@@ -43,9 +43,10 @@ const CustomModalSuccess: React.FC<IModalSuccessProps> = ({ isOpen, titleSuccess
   return (
     <Modal 
       open={isOpen}
-      style={{ minWidth: '50rem' }} 
+      style={{ minWidth: '40%' }} 
       footer={null}
       onCancel={handleCancel}
+      className={'w-4/5 md:w-3/5'}
     >
       <Result
         status={status}
