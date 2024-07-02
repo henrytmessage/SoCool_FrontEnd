@@ -54,5 +54,6 @@
   "yes": "Yes",
   "no": "No",
   "confirmDeal": "Confirm deal",
-  "": "Enter your phone number"
+  "phoneNumber": "Enter your phone number",
+  "negotiation": "Please make a negotiation"
 }

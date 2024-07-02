@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { postSendMessageService } from '../service'
 import TypingAnimation from './TypingAnimation'
@@ -30,6 +30,7 @@ interface IResponseConversation {
     exp?: string
     created_at?: string
     initChat: string
+    action?: string
   }
   user?: any
 }
@@ -51,6 +52,7 @@ interface ISendMessage {
 const ContentChat = () => {
   const { t, i18n } = useTranslation()
   const navigate = useNavigate()
+  const chatRef = useRef<HTMLDivElement>(null);
 
   const [initConversation, setInitConversation] = useState<IResponseConversation>()
   const [inputChat, setInputChat] = useState('')
@@ -62,32 +64,33 @@ const ContentChat = () => {
   const [parentId, setParentId] = useState('')
   const [initCurrency, setInitCurrency] = useState('')
   const [actionMessage, setActionMessage] = useState('NONE')
+  const [inputPrice, setInputPrice] = useState('')
   const [phoneNumber, setPhoneNumber] = useState('')
   const [disableInputPhoneNumber, setDisableInputPhoneNumber] = useState(false)
 
   const handleChangeInputChat = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (actionMessage === ACTION_CHAT.ENTER_PRICE) {
-      const inputNumberPrice = e.target.value
+    setInputChat(e.target.value)
+  }
 
-      if (inputNumberPrice === '') {
-        setInputChat(inputNumberPrice)
-        return
-      }
-      if (initCurrency === 'USD') {
-        if (
-          /^\d*\.?\d*$/.test(inputNumberPrice) &&
-          inputNumberPrice.split('.').length <= 2 &&
-          !isNaN(parseFloat(inputNumberPrice))
-        ) {
-          setInputChat(inputNumberPrice)
-        }
-      } else {
-        if (/^\d*$/.test(inputNumberPrice)) {
-          setInputChat(inputNumberPrice)
-        }
+  const handleChangePrice = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const inputNumberPrice = e.target.value
+
+    if (inputNumberPrice === '') {
+      setInputPrice(inputNumberPrice)
+      return
+    }
+    if (initCurrency === 'USD') {
+      if (
+        /^\d*\.?\d*$/.test(inputNumberPrice) &&
+        inputNumberPrice.split('.').length <= 2 &&
+        !isNaN(parseFloat(inputNumberPrice))
+      ) {
+        setInputPrice(inputNumberPrice)
       }
     } else {
-      setInputChat(e.target.value)
+      if (/^\d*$/.test(inputNumberPrice)) {
+        setInputPrice(inputNumberPrice)
+      }
     }
   }
 
@@ -102,9 +105,11 @@ const ContentChat = () => {
     if (isAnimating) {
       return
     }
-    setChatLog(prevChatLog => [...prevChatLog, { type: 'user', message: inputChat }])
+    setChatLog(prevChatLog => [...prevChatLog, { type: 'user', message: inputChat || inputPrice || phoneNumber }])
     onSendMessage(inputChat)
     setInputChat('')
+    setInputPrice('')
+    setPhoneNumber('')
   }
 
   const onSendMessage = async (messageChat: string, newContentType?: string) => {
@@ -127,6 +132,9 @@ const ContentChat = () => {
       }
       if (newContentType) {
         bodySendMessage.content_type = newContentType
+      }
+      if (inputPrice) {
+        bodySendMessage.price = inputPrice
       }
       if (phoneNumber) {
         bodySendMessage.phone = phoneNumber
@@ -164,8 +172,8 @@ const ContentChat = () => {
             variant="borderless"
             className="px-4 py-2 bg-transparent"
             placeholder={t('enterPrice')}
-            value={inputChat}
-            onChange={handleChangeInputChat}
+            value={inputPrice}
+            onChange={handleChangePrice}
           />
         )
       case ACTION_CHAT.ENTER_PHONE:
@@ -212,7 +220,8 @@ const ContentChat = () => {
             setInitConversation(data.data)
             setConversationId(data.data.link.id)
             setInitCurrency(data.data.link.currency)
-            if (data.data.link.currency == 'USD') {
+            setActionMessage(data.data.link.action)
+            if (data.data.link.currency === 'USD') {
               i18n.changeLanguage('en')
               setLanguage('en')
             } else {
@@ -238,9 +247,15 @@ const ContentChat = () => {
     fetchDataConversation()
   }, [])
 
+  useEffect(() => {
+    if (chatRef.current) {
+      chatRef.current.scrollTop = chatRef.current.scrollHeight;
+    }
+  }, [chatLog]);
+
   return (
     <div className="flex flex-col h-full bg-grey-900 sm:mx-40">
-      <div className="flex-grow p-6">
+      <div className="flex-grow p-6 overflow-y-auto" ref={chatRef}>
         <div className="flex flex-col space-y-4">
           {initConversation && (
             <div className={'flex justify-start'}>
@@ -248,7 +263,7 @@ const ContentChat = () => {
                 <Avatar src={<img src={logoSoCool} alt="avatar" />} />
               </div>
               <div className={'bg-[#F4F4F4] ml-4 rounded-3xl p-4 text-[#0D0D0D] max-w-lg'}>
-                <TextAnimation text={initConversation.link.initChat} setIsAnimating={setIsAnimating} />
+                <TextAnimation text={initConversation.link.initChat + '. ' + t('negotiation')} setIsAnimating={setIsAnimating} />
               </div>
             </div>
           )}
