@@ -11,7 +11,7 @@ import {
   CustomSelect,
   CustomTextArea
 } from '../common'
-import { KEY_CHOOSE_SOMETHING, PRICE_CURRENCY } from '../constant'
+import { KEY_CHOOSE_DELIVERY, KEY_CHOOSE_SOMETHING, PRICE_CURRENCY } from '../constant'
 import { ArrowLeftOutlined } from '@ant-design/icons'
 import { postGenerateLink } from '../service'
 import { IBodyPostLink } from '../api/core/interface'
@@ -24,6 +24,10 @@ const OnBoarding = () => {
     { key: KEY_CHOOSE_SOMETHING.SELL_SOMETHING, label: t('sellSomething') },
     { key: KEY_CHOOSE_SOMETHING.BUY_SOMETHING, label: t('buySomething') }
   ]
+  const dataChooseDelivery = [
+    { key: KEY_CHOOSE_DELIVERY.SUPPORTEDDELIVERY, label: t('supportedDelivery') },
+    { key: KEY_CHOOSE_DELIVERY.NOTSUPPORTEDDELIVERY, label: t('notSupportedDelivery') }
+  ]
   const currencyOptions = Object.keys(PRICE_CURRENCY)
 
   const [selectedValue, setSelectedValue] = useState<string | undefined>(undefined)
@@ -32,12 +36,15 @@ const OnBoarding = () => {
   const [inputValueCurrency, setInputValueCurrency] = useState<string>(
     i18n.language === 'en' ? currencyOptions[0] : currencyOptions[1]
   )
-  const [textValueCriteria, setTextValueCriteria] = useState<string>('')
+  const [textValueAddress, setTextValueAddress] = useState<string>('')
+  const [selectedDelivery, setSelectedDelivery] = useState(dataChooseDelivery[0].key)
   const [inputEmail, setInputEmail] = useState<string>('')
   const [isRequiredStep2, setIsRequiredStep2] = useState<boolean>(false)
   const [isRequiredStep3, setIsRequiredStep3] = useState<boolean>(false)
   const [isRequiredStep4, setIsRequiredStep4] = useState<boolean>(false)
   const [isRequiredStep5, setIsRequiredStep5] = useState<boolean>(false)
+  const [isRequiredStep6, setIsRequiredStep6] = useState<boolean>(false)
+
   const [isOpenModal, setIsOpenModal] = useState(false)
   const [isEdit, setIsEdit] = useState(false)
   const [isModalSuccess, setIsModalSuccess] = useState(false)
@@ -52,11 +59,11 @@ const OnBoarding = () => {
     { id: 3, content: t('questionPrice'), isCompleted: false },
     {
       id: 4,
-      content:
-        selectedValue === KEY_CHOOSE_SOMETHING.SELL_SOMETHING ? t('questionCriteriaBuy') : t('questionCriteriaSell'),
+      content: t('questionYourAddress'),
       isCompleted: false
     },
-    { id: 5, content: t('inputEmailAddress'), isCompleted: false }
+    { id: 5, content: t('chooseShipping'), isCompleted: false },
+    { id: 6, content: t('inputEmailAddress'), isCompleted: false }
   ])
 
   const changeLanguage = (lang: string) => {
@@ -112,17 +119,17 @@ const OnBoarding = () => {
   }
 
   // step 4
-  const handleTextValueCriteria = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const handleTextValueAddress = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     if (e.target.value != '') {
       setIsRequiredStep4(false)
     } else {
       setIsRequiredStep4(true)
     }
-    setTextValueCriteria(e.target.value)
+    setTextValueAddress(e.target.value)
   }
 
   const handleConfirmCriteria = () => {
-    if (textValueCriteria) {
+    if (textValueAddress) {
       updateStepStatus(4, true)
     } else {
       setIsRequiredStep4(true)
@@ -130,6 +137,13 @@ const OnBoarding = () => {
   }
 
   // step 5
+  const handleSelectChangeDelivery = (value: string) => {
+    setSelectedDelivery(value)
+  }
+  const handleConfirmDelivery = () => {
+    updateStepStatus(5, true)
+  }
+  // step 6
   const validateEmail = (email: string) => {
     // Regular expression for basic email validation
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -137,10 +151,10 @@ const OnBoarding = () => {
   }
 
   const handleInputEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (validateEmail(e.target.value) && e.target.value != '') {
-      setIsRequiredStep5(false)
+    if (validateEmail(e.target.value) && e.target.value !== '') {
+      setIsRequiredStep6(false)
     } else {
-      setIsRequiredStep5(true)
+      setIsRequiredStep6(true)
     }
     setInputEmail(e.target.value)
   }
@@ -156,7 +170,8 @@ const OnBoarding = () => {
       title: textValue,
       price: inputValuePrice,
       currency: inputValueCurrency,
-      note: textValueCriteria,
+      address: textValueAddress,
+      can_ship: selectedDelivery === KEY_CHOOSE_DELIVERY.SUPPORTEDDELIVERY ? true : false,
       email: inputEmail
     }
     try {
@@ -175,11 +190,11 @@ const OnBoarding = () => {
   }
 
   const handleFormSubmit = () => {
-    if (inputValuePrice == '') {
+    if (inputValuePrice === '') {
       setIsRequiredStep3(true)
       return
     }
-    if (isRequiredStep2 || isRequiredStep3 || isRequiredStep4 || isRequiredStep5) {
+    if (isRequiredStep2 || isRequiredStep3 || isRequiredStep4 || isRequiredStep6) {
       return
     } else {
       setIsEdit(false)
@@ -205,16 +220,16 @@ const OnBoarding = () => {
       { id: 3, content: t('questionPrice'), isCompleted: steps[2].isCompleted },
       {
         id: 4,
-        content:
-          selectedValue === KEY_CHOOSE_SOMETHING.SELL_SOMETHING ? t('questionCriteriaBuy') : t('questionCriteriaSell'),
+        content: t('questionYourAddress'),
         isCompleted: steps[3].isCompleted
       },
-      { id: 5, content: t('inputEmailAddress'), isCompleted: steps[4].isCompleted }
+      { id: 5, content: t('chooseShipping'), isCompleted: false },
+      { id: 6, content: t('inputEmailAddress'), isCompleted: steps[4].isCompleted }
     ])
   }, [i18n.language, selectedValue])
 
   const renderCallToAction = () => (
-    <div className="flex  justify-start">
+    <div className="flex justify-start">
       <div>
         <Avatar src={<img src={logoSoCool} alt="avatar" />} />
       </div>
@@ -287,10 +302,10 @@ const OnBoarding = () => {
         return (
           <div className="flex gap-4 flex-col md:flex-row">
             <CustomTextArea
-              value={textValueCriteria}
-              placeholder={t('writeSomethingHere')}
+              value={textValueAddress}
+              placeholder={t('placeholderAddress')}
               required={isRequiredStep4}
-              onChange={handleTextValueCriteria}
+              onChange={handleTextValueAddress}
               isEdit={isEdit}
             />
             {!steps[3].isCompleted && (
@@ -304,10 +319,27 @@ const OnBoarding = () => {
       case 5:
         return (
           <div className="flex gap-4 flex-col md:flex-row">
+            <CustomSelect
+              value={selectedDelivery}
+              onChange={handleSelectChangeDelivery}
+              options={dataChooseDelivery}
+              isEdit={isEdit}
+            />
+            {!steps[4].isCompleted && (
+              <div>
+                <CustomButton onClick={handleConfirmDelivery}>{t('confirm')}</CustomButton>
+              </div>
+            )}
+            {isEdit && renderEditHere}
+          </div>
+        )
+      case 6:
+        return (
+          <div className="flex gap-4 flex-col md:flex-row">
             <CustomInputEmail
               value={inputEmail}
               onChange={handleInputEmailChange}
-              required={isRequiredStep5}
+              required={isRequiredStep6}
               isEdit={isEdit}
             />
             {isEdit && renderEditHere}
@@ -336,11 +368,12 @@ const OnBoarding = () => {
         {[
           {
             title: t('youWant'),
-            value: selectedValue == KEY_CHOOSE_SOMETHING.SELL_SOMETHING ? t('sellSomething') : t('buySomething')
+            value: selectedValue === KEY_CHOOSE_SOMETHING.SELL_SOMETHING ? t('sellSomething') : t('buySomething')
           },
           { title: t('product'), value: textValue },
           { title: t('priceRange'), value: `${inputValuePrice} ${inputValueCurrency}` },
-          { title: t('criteria'), value: textValueCriteria },
+          { title: t('address'), value: textValueAddress },
+          { title: t('delivery'), value: selectedDelivery === KEY_CHOOSE_DELIVERY.SUPPORTEDDELIVERY ? t('supportedDelivery') : t('notSupportedDelivery') },
           { title: t('yourEmail'), value: inputEmail }
         ].map((item, index) => (
           <tr key={index} className="border-b border-gray-300">
@@ -367,12 +400,12 @@ const OnBoarding = () => {
               </div>
               <div
                 className={` ${
-                  step.id === 1 ? 'flex flex-row md:items-center' : 'flex-col'
+                  step.id === 1 || step.id === 5 ? 'flex flex-row md:items-center' : 'flex-col'
                 } flex-col md:flex-row ml-4 gap-4 `}
               >
                 <div
                   className={`bg-gray-200 rounded-3xl p-4 text-gray-800 max-w-screen-xl inline-block  mr-4 ${
-                    step.id === 1 ? '' : 'mb-4'
+                    step.id === 1 || step.id === 5 ? '' : 'mb-4'
                   }`}
                 >
                   {step.content}

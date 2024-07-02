@@ -45,7 +45,7 @@ const CustomModal: React.FC<ModalComponentProps> = ({
         >
           {textButtonEdit}
         </Button>,
-        <Button key="submit" onClick={handleOK} classNameCustom="text-gray-800 ml-6">
+        <Button key="submit" onClick={handleOK} classNameCustom="ml-6">
           {textButtonOK}
         </Button>
       ]}

@@ -41,9 +41,11 @@ interface ISendMessage {
   parent_id?: string
   type: string
   price?: string
+  phone?: string
   currency?: string
   action?: string
   lang?: string
+  content_type?: string
 }
 
 const ContentChat = () => {
@@ -60,9 +62,11 @@ const ContentChat = () => {
   const [parentId, setParentId] = useState('')
   const [initCurrency, setInitCurrency] = useState('')
   const [actionMessage, setActionMessage] = useState('NONE')
+  const [phoneNumber, setPhoneNumber] = useState('')
+  const [disableInputPhoneNumber, setDisableInputPhoneNumber] = useState(false)
 
   const handleChangeInputChat = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (actionMessage === ACTION_CHAT.CONFIRM_PRICE) {
+    if (actionMessage === ACTION_CHAT.ENTER_PRICE) {
       const inputNumberPrice = e.target.value
 
       if (inputNumberPrice === '') {
@@ -87,6 +91,12 @@ const ContentChat = () => {
     }
   }
 
+  const handleChangePhoneNumber = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target
+    const sanitizedValue = value.replace(/[^\d+]/g, '')
+    setPhoneNumber(sanitizedValue)
+  }
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     if (isAnimating) {
@@ -97,7 +107,7 @@ const ContentChat = () => {
     setInputChat('')
   }
 
-  const onSendMessage = async (messageChat: string) => {
+  const onSendMessage = async (messageChat: string, newContentType?: string) => {
     try {
       setIsLoading(true)
       setIsAnimating(true)
@@ -115,16 +125,72 @@ const ContentChat = () => {
       if (parentId) {
         bodySendMessage.parent_id = parentId
       }
+      if (newContentType) {
+        bodySendMessage.content_type = newContentType
+      }
+      if (phoneNumber) {
+        bodySendMessage.phone = phoneNumber
+      }
 
       const data = await postSendMessageService(bodySendMessage)
       setParentId(data.data.id)
       setActionMessage(data.data.action)
+      if (data.data.action === ACTION_CHAT.ENTER_PHONE) {
+        setDisableInputPhoneNumber(true)
+      }
       // set lại mảng cập nhật thêm câu trả lời từ bot
       setChatLog(prevChatLog => [...prevChatLog, { type: 'bot', message: data.data.message }])
       setIsLoading(false)
     } catch (error) {
       console.error('Error fetching data:', error)
       setIsLoading(false)
+    }
+  }
+
+  const handleClickYes = () => {
+    setDisableInputPhoneNumber(false)
+  }
+
+  const handleClickNo = () => {
+    onSendMessage(t('confirmDeal'), ACTION_CHAT.CONFIRM_DEAL)
+  }
+
+  const renderInputField = () => {
+    switch (actionMessage) {
+      case ACTION_CHAT.ENTER_PRICE:
+        return (
+          <Input
+            suffix={initCurrency}
+            variant="borderless"
+            className="px-4 py-2 bg-transparent"
+            placeholder={t('enterPrice')}
+            value={inputChat}
+            onChange={handleChangeInputChat}
+          />
+        )
+      case ACTION_CHAT.ENTER_PHONE:
+        return (
+          <Input
+            variant="borderless"
+            className="px-4 py-2 bg-transparent"
+            maxLength={10}
+            placeholder={t('phoneNumber')}
+            disabled={disableInputPhoneNumber}
+            value={phoneNumber}
+            onChange={handleChangePhoneNumber}
+          />
+        )
+      default:
+        return (
+          <Input
+            variant="borderless"
+            className="px-4 py-2 bg-transparent"
+            type="text"
+            placeholder={t('placeHolderMessage')}
+            value={inputChat}
+            onChange={handleChangeInputChat}
+          />
+        )
     }
   }
 
@@ -198,8 +264,28 @@ const ContentChat = () => {
                   message.type === 'user' ? 'bg-[#F4F4F4]' : 'bg-[#F4F4F4] ml-4'
                 } rounded-3xl  p-4 text-[#0D0D0D] max-w-lg `}
               >
-                {message.type == 'bot' ? (
-                  <TextAnimation text={message.message} setIsAnimating={setIsAnimating} />
+                {message.type === 'bot' ? (
+                  <>
+                    <TextAnimation text={message.message} setIsAnimating={setIsAnimating} />
+                    {actionMessage === ACTION_CHAT.ENTER_PHONE && (
+                      <div className="flex items-center justify-center gap-2 mt-2">
+                        <Button
+                          key="yes"
+                          onClick={handleClickYes}
+                          className="outline outline-0 bg-[#F4F4F4] text-gray-800 hover:bg-gray-300"
+                        >
+                          {t('yes')}
+                        </Button>
+                        <Button
+                          key="no"
+                          onClick={handleClickNo}
+                          className="outline outline-0 bg-[#F4F4F4] text-gray-800 hover:bg-gray-300"
+                        >
+                          {t('no')}
+                        </Button>
+                      </div>
+                    )}
+                  </>
                 ) : (
                   message.message
                 )}
@@ -222,24 +308,7 @@ const ContentChat = () => {
       {actionMessage !== ACTION_CHAT.CONFIRM_DEAL && (
         <form onSubmit={event => handleSubmit(event)} className="flex-none p-6">
           <div className="flex rounded-3xl border border-[#b6b5b5] bg-[#F4F4F4]">
-            {actionMessage === ACTION_CHAT.CONFIRM_PRICE && (
-              <Input
-                suffix={initCurrency}
-                variant="borderless"
-                className="px-4 py-2 bg-transparent"
-                placeholder={t('enterPrice')}
-                value={inputChat}
-                onChange={e => handleChangeInputChat(e)}
-              />
-            )}
-            <Input
-              variant="borderless"
-              className="px-4 py-2 bg-transparent"
-              type="text"
-              placeholder={t('placeHolderMessage')}
-              value={inputChat}
-              onChange={e => handleChangeInputChat(e)}
-            />
+            {renderInputField()}
             <Button type="primary" htmlType="submit" size="large" className="rounded-3xl" loading={isLoading}>
               {t('send')}
             </Button>

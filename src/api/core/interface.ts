@@ -3,8 +3,9 @@ export interface IBodyPostLink {
   title: string,
   price: string,
   currency: string,
-  note: string,
+  address: string,
   email: string,
+  can_ship: boolean,
 }
 
 export interface IBodyAuthOTP {
@@ -27,7 +28,9 @@ export interface IBodySendMessage {
   parent_id?: string,
   type?: string,
   price?: string,
+  phone?: string,
   currency?: string,
   action?: string,
-  lang?: string
+  lang?: string,
+  content_type?: string
 }
