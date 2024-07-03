@@ -220,7 +220,7 @@ const ContentChat = () => {
             setInitConversation(data.data)
             setConversationId(data.data.link.id)
             setInitCurrency(data.data.link.currency)
-            setActionMessage(data.data.link.action)
+            // setActionMessage(data.data.link.action)
             if (data.data.link.currency === 'USD') {
               i18n.changeLanguage('en')
               setLanguage('en')
@@ -263,7 +263,7 @@ const ContentChat = () => {
                 <Avatar src={<img src={logoSoCool} alt="avatar" />} />
               </div>
               <div className={'bg-[#F4F4F4] ml-4 rounded-3xl p-4 text-[#0D0D0D] max-w-lg'}>
-                <TextAnimation text={initConversation.link.initChat + '. ' + t('negotiation')} setIsAnimating={setIsAnimating} />
+                <TextAnimation text={initConversation.link.initChat} setIsAnimating={setIsAnimating} />
               </div>
             </div>
           )}
