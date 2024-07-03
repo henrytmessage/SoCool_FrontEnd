@@ -218,7 +218,7 @@ const ContentChat = () => {
 
           if (data.status_code === 200) {
             setInitConversation(data.data)
-            setConversationId(data.data.link.id)
+            setConversationId(data.data.id)
             setInitCurrency(data.data.link.currency)
             // setActionMessage(data.data.link.action)
             if (data.data.link.currency === 'USD') {
