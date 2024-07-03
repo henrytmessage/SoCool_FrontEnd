@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Avatar } from 'antd'
+import { Avatar, Button } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { logoSoCool } from '../assets'
 import {
@@ -16,6 +16,8 @@ import { ArrowLeftOutlined } from '@ant-design/icons'
 import { postGenerateLink } from '../service'
 import { IBodyPostLink } from '../api/core/interface'
 import CustomAlert from '../common/CustomAlert'
+import TextAnimation from './TextAnimation'
+import TypingAnimation from './TypingAnimation'
 
 const OnBoarding = () => {
   const { t, i18n } = useTranslation()
@@ -44,10 +46,14 @@ const OnBoarding = () => {
   const [isRequiredStep4, setIsRequiredStep4] = useState<boolean>(false)
   const [isRequiredStep5, setIsRequiredStep5] = useState<boolean>(false)
   const [isRequiredStep6, setIsRequiredStep6] = useState<boolean>(false)
+  const [isSuggestProduct, setIsSuggestProduct] = useState(false)
+  const [contentSuggestProduct, setContentSuggestProduct] = useState('teo teo teo')
+  const [isSuggestPrice, setIsSuggestPrice] = useState(false)
 
   const [isOpenModal, setIsOpenModal] = useState(false)
   const [isEdit, setIsEdit] = useState(false)
   const [isModalSuccess, setIsModalSuccess] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
 
   const [steps, setSteps] = useState([
     { id: 1, content: t('questionHelp'), isCompleted: false },
@@ -79,7 +85,7 @@ const OnBoarding = () => {
 
   // step 2
   const handleTextAreaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    if (e.target.value != '') {
+    if (e.target.value !== '') {
       setIsRequiredStep2(false)
     } else {
       setIsRequiredStep2(true)
@@ -89,16 +95,32 @@ const OnBoarding = () => {
 
   const handleConfirmText = () => {
     if (textValue) {
-      updateStepStatus(2, true)
+      // updateStepStatus(2, true)
+      setIsSuggestProduct(true)
     } else {
       setIsRequiredStep2(true)
     }
   }
 
+  const handleClickYesSuggestProduct = () => {
+    setTextValue(contentSuggestProduct)
+    setIsSuggestProduct(false)
+    updateStepStatus(2, true)
+    // đợi ai trả về content price
+    setIsSuggestPrice(true)
+  }
+
+  const handleClickNoSuggestProduct = () => {
+    setIsSuggestProduct(false)
+    updateStepStatus(2, true)
+    // đợi ai trả về content price
+    setIsSuggestPrice(true)
+  }
+
   // step 3
   const handleChangeNumber = (value: string) => {
     setInputValuePrice(value)
-    if (value == '') {
+    if (value === '') {
       setIsRequiredStep3(true)
     } else {
       setIsRequiredStep3(false)
@@ -176,7 +198,7 @@ const OnBoarding = () => {
     }
     try {
       const data = await postGenerateLink(body)
-      if (data.status_code == 200) {
+      if (data.status_code === 200) {
         setIsOpenModal(false)
         setIsModalSuccess(true)
       }
@@ -235,11 +257,13 @@ const OnBoarding = () => {
       </div>
       <div className="flex flex-col md:flex-row gap-4">
         <div className="bg-gray-200 ml-4 rounded-3xl p-4 text-gray-800 max-w-screen-xl">{t('callToAction')}</div>
-        <div className="bg-gray-200 ml-4 rounded-xl p-[0.5rem] text-gray-800 flex space-x-2">
-          <CustomButton onClick={() => changeLanguage('en')}>{t('EN')}</CustomButton>
-          <CustomButton onClick={() => changeLanguage('vn')} classNameCustom="bg-violet-400 hover:bg-violet-500">
-            {t('VN')}
-          </CustomButton>
+        <div className="flex">
+          <div className="bg-gray-200 ml-4 rounded-xl p-[0.5rem] text-gray-800 flex space-x-2">
+            <CustomButton onClick={() => changeLanguage('en')}>{t('EN')}</CustomButton>
+            <CustomButton onClick={() => changeLanguage('vn')} classNameCustom="bg-violet-400 hover:bg-violet-500">
+              {t('VN')}
+            </CustomButton>
+          </div>
         </div>
       </div>
     </div>
@@ -269,7 +293,7 @@ const OnBoarding = () => {
               onChange={handleTextAreaChange}
               isEdit={isEdit}
             />
-            {!steps[1].isCompleted && (
+            {!steps[1].isCompleted && !isSuggestProduct && (
               <div>
                 <CustomButton onClick={handleConfirmText}>{t('confirm')}</CustomButton>
               </div>
@@ -353,6 +377,55 @@ const OnBoarding = () => {
     }
   }
 
+  const renderAiSuggestProduct = () => (
+    <div className="flex justify-start">
+      <div>
+        <Avatar src={<img src={logoSoCool} alt="avatar" />} />
+      </div>
+      <div className="flex flex-col md:flex-row gap-4">
+        <div className="bg-gray-200 ml-4 rounded-3xl p-4 text-gray-800 max-w-screen-xl">
+          {!isLoading ? (
+            <TypingAnimation />
+          ) : (
+            <>
+              {t('callToAction')}
+              {/* <TextAnimation text={message.message} setIsAnimating={setIsAnimating} />  */}
+              <div className="flex items-center justify-center gap-2 mt-2">
+                <Button
+                  key="yes"
+                  onClick={handleClickYesSuggestProduct}
+                  className="outline outline-0 bg-[#F4F4F4] text-gray-800 hover:bg-gray-300"
+                >
+                  {t('yes')}
+                </Button>
+                <Button
+                  key="no"
+                  onClick={handleClickNoSuggestProduct}
+                  className="outline outline-0 bg-[#F4F4F4] text-gray-800 hover:bg-gray-300"
+                >
+                  {t('no')}
+                </Button>
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+    </div>
+  )
+
+  const renderAiSuggestPrice = () => (
+    <div className="flex justify-start">
+      <div>
+        <Avatar src={<img src={logoSoCool} alt="avatar" />} />
+      </div>
+      <div className="flex flex-col md:flex-row gap-4">
+        <div className="bg-gray-200 ml-4 rounded-3xl p-4 text-gray-800 max-w-screen-xl">
+          {!isLoading ? <TypingAnimation /> : <>{t('callToAction')}</>}
+        </div>
+      </div>
+    </div>
+  )
+
   const renderEditHere = (
     <div className="flex items-center text-[#faad14]">
       <div className="hidden md:block">
@@ -373,7 +446,13 @@ const OnBoarding = () => {
           { title: t('product'), value: textValue },
           { title: t('priceRange'), value: `${inputValuePrice} ${inputValueCurrency}` },
           { title: t('address'), value: textValueAddress },
-          { title: t('delivery'), value: selectedDelivery === KEY_CHOOSE_DELIVERY.SUPPORTEDDELIVERY ? t('supportedDelivery') : t('notSupportedDelivery') },
+          {
+            title: t('delivery'),
+            value:
+              selectedDelivery === KEY_CHOOSE_DELIVERY.SUPPORTEDDELIVERY
+                ? t('supportedDelivery')
+                : t('notSupportedDelivery')
+          },
           { title: t('yourEmail'), value: inputEmail }
         ].map((item, index) => (
           <tr key={index} className="border-b border-gray-300">
@@ -391,27 +470,32 @@ const OnBoarding = () => {
         <div className="flex flex-col space-y-4">
           {renderCallToAction()}
           {steps.map((step, index) => (
-            <div
-              key={step.id}
-              className={`flex items-start justify-start ${index > 0 && !steps[index - 1].isCompleted ? 'hidden' : ''}`}
-            >
-              <div className="flex flex-row">
-                <Avatar src={<img src={logoSoCool} alt="avatar" />} />
-              </div>
+            <div key={step.id} className="flex flex-col space-y-4">
               <div
-                className={` ${
-                  step.id === 1 || step.id === 5 ? 'flex flex-row md:items-center' : 'flex-col'
-                } flex-col md:flex-row ml-4 gap-4 `}
+                className={`flex items-start justify-start ${
+                  index > 0 && !steps[index - 1].isCompleted ? 'hidden' : ''
+                }`}
               >
-                <div
-                  className={`bg-gray-200 rounded-3xl p-4 text-gray-800 max-w-screen-xl inline-block  mr-4 ${
-                    step.id === 1 || step.id === 5 ? '' : 'mb-4'
-                  }`}
-                >
-                  {step.content}
+                <div className="flex flex-row">
+                  <Avatar src={<img src={logoSoCool} alt="avatar" />} />
                 </div>
-                <div>{renderStepContent(step.id)}</div>
+                <div
+                  className={` ${
+                    step.id === 1 || step.id === 5 ? 'flex flex-row md:items-center' : 'flex-col'
+                  } flex-col md:flex-row ml-4 gap-4 `}
+                >
+                  <div
+                    className={`bg-gray-200 rounded-3xl p-4 text-gray-800 max-w-screen-xl inline-block  mr-4 ${
+                      step.id === 1 || step.id === 5 ? '' : 'mb-4'
+                    }`}
+                  >
+                    {step.content}
+                  </div>
+                  <div>{renderStepContent(step.id)}</div>
+                </div>
               </div>
+              {!steps[2].isCompleted && step.id === 2 && isSuggestProduct && renderAiSuggestProduct()}
+              {step.id === 3 && isSuggestPrice && renderAiSuggestPrice()}
             </div>
           ))}
         </div>

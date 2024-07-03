@@ -14,7 +14,7 @@ export const KEY_CHOOSE_DELIVERY = {
 }
 
 export const ACTION_CHAT = {
-  CONFIRM_DEAL: 'CONFIRM_DEAL',
-  ENTER_PRICE: 'ENTER_PRICE',
-  ENTER_PHONE: 'ENTER_PHONE'
+  CONFIRM_DEAL: 'confirm_deal',
+  ENTER_PRICE: 'enter_price',
+  ENTER_PHONE: 'enter_phone'
 }
