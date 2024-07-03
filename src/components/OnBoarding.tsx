@@ -384,7 +384,7 @@ const OnBoarding = () => {
       </div>
       <div className="flex flex-col md:flex-row gap-4">
         <div className="bg-gray-200 ml-4 rounded-3xl p-4 text-gray-800 max-w-screen-xl">
-          {!isLoading ? (
+          {isLoading ? (
             <TypingAnimation />
           ) : (
             <>
@@ -420,7 +420,7 @@ const OnBoarding = () => {
       </div>
       <div className="flex flex-col md:flex-row gap-4">
         <div className="bg-gray-200 ml-4 rounded-3xl p-4 text-gray-800 max-w-screen-xl">
-          {!isLoading ? <TypingAnimation /> : <>{t('callToAction')}</>}
+          {isLoading ? <TypingAnimation /> : <>{t('callToAction')}</>}
         </div>
       </div>
     </div>
