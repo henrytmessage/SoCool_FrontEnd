@@ -56,5 +56,6 @@
   "confirmDeal": "Confirm deal",
   "phoneNumber": "Enter your phone number",
   "negotiation": "Please make a negotiation",
-  "sampleSuggestProduct": "This is the sample we suggest, would you like to try it right away?"
+  "sampleSuggestProduct": "This is the sample we suggest, would you like to try it right away?",
+  "tryAgain": "An error occurred, please try again."
 }

@@ -14,6 +14,7 @@ import { formatVND, removeSpaces } from '../function'
 interface IChatLog {
   type: string
   message: string
+  action?: string
 }
 
 interface IResponseConversation {
@@ -105,14 +106,16 @@ const ContentChat = () => {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    if (isAnimating) {
+    const returnSubmit = !inputChat && !inputPrice && !phoneNumber
+    if (isAnimating || returnSubmit) {
       return
     }
     setChatLog(prevChatLog => [
       ...prevChatLog,
-      { type: 'user', message: inputChat || inputPrice + ' ' + initCurrency || phoneNumber }
+      { type: 'user', message: inputChat || phoneNumber || inputPrice + ' ' + initCurrency }
     ])
-    onSendMessage(inputChat)
+    phoneNumber ? onSendMessage(inputChat, ACTION_CHAT.CONFIRM_DEAL) : onSendMessage(inputChat)
+
     setInputChat('')
     setInputPrice('')
     setPhoneNumber('')
@@ -147,13 +150,22 @@ const ContentChat = () => {
       }
 
       const data = await postSendMessageService(bodySendMessage)
-      setParentId(data.data.id)
-      setActionMessage(data.data.action)
-      if (data.data.action === ACTION_CHAT.ENTER_PHONE) {
-        setDisableInputPhoneNumber(true)
+      if (data && data.status_code === 200) {
+        setParentId(data.data.id)
+        setActionMessage(data.data.action)
+        const isEnterPhone = data.data.action === ACTION_CHAT.ENTER_PHONE
+        if (isEnterPhone) {
+          setDisableInputPhoneNumber(true)
+        }
+        // set lại mảng cập nhật thêm câu trả lời từ bot
+        setChatLog(prevChatLog => [
+          ...prevChatLog,
+          { type: 'bot', message: data.data.message, action: isEnterPhone ? ACTION_CHAT.ENTER_PHONE : '' }
+        ])
+        setActionMessage(data.data.action)
+      } else {
+        setChatLog(prevChatLog => [...prevChatLog, { type: 'bot', message: t('tryAgain') }])
       }
-      // set lại mảng cập nhật thêm câu trả lời từ bot
-      setChatLog(prevChatLog => [...prevChatLog, { type: 'bot', message: data.data.message }])
       setIsLoading(false)
     } catch (error) {
       console.error('Error fetching data:', error)
@@ -291,24 +303,26 @@ const ContentChat = () => {
                 {message.type === 'bot' ? (
                   <>
                     <TextAnimation text={message.message} setIsAnimating={setIsAnimating} />
-                    {actionMessage === ACTION_CHAT.ENTER_PHONE && (
-                      <div className="flex items-center justify-center gap-2 mt-2">
-                        <Button
-                          key="yes"
-                          onClick={handleClickYes}
-                          className="outline outline-0 bg-[#F4F4F4] text-gray-800 hover:bg-gray-300"
-                        >
-                          {t('yes')}
-                        </Button>
-                        <Button
-                          key="no"
-                          onClick={handleClickNo}
-                          className="outline outline-0 bg-[#F4F4F4] text-gray-800 hover:bg-gray-300"
-                        >
-                          {t('no')}
-                        </Button>
-                      </div>
-                    )}
+                    {actionMessage === ACTION_CHAT.ENTER_PHONE &&
+                      message.action === ACTION_CHAT.ENTER_PHONE &&
+                      disableInputPhoneNumber && (
+                        <div className="flex items-center justify-center gap-2 mt-2">
+                          <Button
+                            key="yes"
+                            onClick={handleClickYes}
+                            className="outline outline-0 bg-[#F4F4F4] text-gray-800 hover:bg-gray-300"
+                          >
+                            {t('yes')}
+                          </Button>
+                          <Button
+                            key="no"
+                            onClick={handleClickNo}
+                            className="outline outline-0 bg-[#F4F4F4] text-gray-800 hover:bg-gray-300"
+                          >
+                            {t('no')}
+                          </Button>
+                        </div>
+                      )}
                   </>
                 ) : (
                   message.message
@@ -329,16 +343,22 @@ const ContentChat = () => {
         </div>
       </div>
 
-      {actionMessage !== ACTION_CHAT.CONFIRM_DEAL && (
-        <form onSubmit={event => handleSubmit(event)} className="flex-none p-6">
-          <div className="flex rounded-3xl border border-[#b6b5b5] bg-[#F4F4F4]">
-            {renderInputField()}
-            <Button type="primary" htmlType="submit" size="large" className="rounded-3xl" loading={isLoading}>
-              {t('send')}
-            </Button>
-          </div>
-        </form>
-      )}
+      {/* {actionMessage !== ACTION_CHAT.CONFIRM_DEAL && ( */}
+      <form onSubmit={event => handleSubmit(event)} className="flex-none p-6">
+        <div className="flex rounded-3xl border border-[#b6b5b5] bg-[#F4F4F4]">
+          {renderInputField()}
+          <Button
+            type="primary"
+            htmlType="submit"
+            size="large"
+            className={`rounded-3xl ${(!inputChat && !phoneNumber && !inputPrice && 'opacity-80')}`}
+            loading={isLoading}
+          >
+            {t('send')}
+          </Button>
+        </div>
+      </form>
+      {/* )} */}
     </div>
   )
 }
