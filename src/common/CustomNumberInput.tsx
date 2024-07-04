@@ -2,6 +2,7 @@ import React from 'react';
 import { Input, Select } from 'antd';
 import { useTranslation } from 'react-i18next';
 import CustomSelect from './CustomSelect';
+import { formatVND } from '../function';
 
 interface CustomInputNumberProps {
   value: string;
@@ -21,7 +22,7 @@ const CustomInputNumber: React.FC<CustomInputNumberProps> = ({ value, valueCurre
   const { t } = useTranslation();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let inputValue = e.target.value;
+    let inputValue = e.target.value.replace(/\s/g, '');
     
     if (inputValue === '') {
       onChange(inputValue);
@@ -29,7 +30,7 @@ const CustomInputNumber: React.FC<CustomInputNumberProps> = ({ value, valueCurre
     }
   
     // Nếu là USD, cho phép nhập số và dấu "."
-    if (valueCurrency == 'USD') {
+    if (valueCurrency === 'USD') {
       // Kiểm tra nếu là số hoặc dấu "." (nếu chưa có dấu ".")
       if (/^\d*\.?\d*$/.test(inputValue)) {
         // Kiểm tra nếu dấu "." đã có và ngăn cách nhiều hơn một dấu "."
@@ -43,7 +44,8 @@ const CustomInputNumber: React.FC<CustomInputNumberProps> = ({ value, valueCurre
     } else {
       // Nếu không phải USD, chỉ cho phép nhập số
       if (/^\d*$/.test(inputValue)) {
-        onChange(inputValue); 
+        const inputNumberPrice = formatVND(inputValue)
+        onChange(inputNumberPrice); 
       }
     }
   };

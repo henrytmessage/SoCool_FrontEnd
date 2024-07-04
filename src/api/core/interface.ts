@@ -1,11 +1,11 @@
 export interface IBodyPostLink {
-  type: string | undefined,
-  title: string,
-  price: string,
-  currency: string,
-  address: string,
-  email: string,
-  can_ship: boolean,
+  type: string | undefined
+  title: string
+  price: string
+  currency: string
+  address: string
+  email: string
+  can_ship: boolean
 }
 
 export interface IBodyAuthOTP {
@@ -13,24 +13,28 @@ export interface IBodyAuthOTP {
 }
 
 export interface IBodyAuthRegister {
-  email: string,
-  otp: string,
+  email: string
+  otp: string
 }
 
 export interface IBodyConversation {
-  "url": string
+  url: string
 }
 
 export interface IBodySendMessage {
-  role?: string,
-  content?: string,
-  conversation_id?: number,
-  parent_id?: string,
-  type?: string,
-  price?: string,
-  phone?: string,
-  currency?: string,
-  action?: string,
-  lang?: string,
+  role?: string
+  content?: string
+  conversation_id?: number
+  parent_id?: string
+  type?: string
+  price?: string
+  phone?: string
+  currency?: string
+  action?: string
+  lang?: string
   content_type?: string
+}
+
+export interface IBodyCreateTitle {
+  title: string
 }

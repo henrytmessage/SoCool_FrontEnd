@@ -13,11 +13,12 @@ import {
 } from '../common'
 import { KEY_CHOOSE_DELIVERY, KEY_CHOOSE_SOMETHING, PRICE_CURRENCY } from '../constant'
 import { ArrowLeftOutlined } from '@ant-design/icons'
-import { postGenerateLink } from '../service'
-import { IBodyPostLink } from '../api/core/interface'
+import { postCreateTitleSample, postGenerateLink } from '../service'
+import { IBodyCreateTitle, IBodyPostLink } from '../api/core/interface'
 import CustomAlert from '../common/CustomAlert'
 import TextAnimation from './TextAnimation'
 import TypingAnimation from './TypingAnimation'
+import { removeSpaces } from '../function'
 
 const OnBoarding = () => {
   const { t, i18n } = useTranslation()
@@ -47,7 +48,7 @@ const OnBoarding = () => {
   const [isRequiredStep5, setIsRequiredStep5] = useState<boolean>(false)
   const [isRequiredStep6, setIsRequiredStep6] = useState<boolean>(false)
   const [isSuggestProduct, setIsSuggestProduct] = useState(false)
-  const [contentSuggestProduct, setContentSuggestProduct] = useState('teo teo teo')
+  const [contentSuggestProduct, setContentSuggestProduct] = useState('')
   const [isSuggestPrice, setIsSuggestPrice] = useState(false)
 
   const [isOpenModal, setIsOpenModal] = useState(false)
@@ -97,8 +98,28 @@ const OnBoarding = () => {
     if (textValue) {
       // updateStepStatus(2, true)
       setIsSuggestProduct(true)
+      CreateAiProductTitle()
     } else {
       setIsRequiredStep2(true)
+    }
+  }
+
+  // get ai create title sample
+  const CreateAiProductTitle = async () => {
+    setIsLoading(true)
+    const body: IBodyCreateTitle = {
+      title: textValue
+    }
+    try {
+      const data = await postCreateTitleSample(body)
+      if (data.status_code === 200) {
+        setContentSuggestProduct(data.data)
+        setIsLoading(false)
+      } else {
+        setIsLoading(false)
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error)
     }
   }
 
@@ -190,7 +211,7 @@ const OnBoarding = () => {
     const body: IBodyPostLink = {
       type: selectedValue,
       title: textValue,
-      price: inputValuePrice,
+      price: removeSpaces(inputValuePrice),
       currency: inputValueCurrency,
       address: textValueAddress,
       can_ship: selectedDelivery === KEY_CHOOSE_DELIVERY.SUPPORTEDDELIVERY ? true : false,
@@ -245,8 +266,8 @@ const OnBoarding = () => {
         content: t('questionYourAddress'),
         isCompleted: steps[3].isCompleted
       },
-      { id: 5, content: t('chooseShipping'), isCompleted: false },
-      { id: 6, content: t('inputEmailAddress'), isCompleted: steps[4].isCompleted }
+      { id: 5, content: t('chooseShipping'), isCompleted: steps[4].isCompleted },
+      { id: 6, content: t('inputEmailAddress'), isCompleted: steps[5].isCompleted }
     ])
   }, [i18n.language, selectedValue])
 
@@ -388,8 +409,7 @@ const OnBoarding = () => {
             <TypingAnimation />
           ) : (
             <>
-              {t('callToAction')}
-              {/* <TextAnimation text={message.message} setIsAnimating={setIsAnimating} />  */}
+              <TextAnimation text={t('sampleSuggestProduct') + ' ' + contentSuggestProduct} /> 
               <div className="flex items-center justify-center gap-2 mt-2">
                 <Button
                   key="yes"

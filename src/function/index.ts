@@ -4,4 +4,17 @@ export const checkLocationInVietnam = (lat: number, lng: number) => {
   } else {
     return false
   }
-};
+}
+
+export const formatVND = (str: string) => {
+  return str
+    .split('')
+    .reverse()
+    .reduce((prev, next, index) => {
+      return (index && index % 3 === 0 ? next + ' ' : next) + prev
+    }, '')
+}
+
+export const removeSpaces = (str: string) => {
+  return str.replace(/\s/g, '')
+}

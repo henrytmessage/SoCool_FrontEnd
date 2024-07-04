@@ -9,6 +9,7 @@ import { IBodyConversation } from '../api/core/interface'
 import { postConversation } from '../api/core'
 import { useNavigate } from 'react-router-dom'
 import { ACTION_CHAT } from '../constant'
+import { formatVND, removeSpaces } from '../function'
 
 interface IChatLog {
   type: string
@@ -52,7 +53,7 @@ interface ISendMessage {
 const ContentChat = () => {
   const { t, i18n } = useTranslation()
   const navigate = useNavigate()
-  const chatRef = useRef<HTMLDivElement>(null);
+  const chatRef = useRef<HTMLDivElement>(null)
 
   const [initConversation, setInitConversation] = useState<IResponseConversation>()
   const [inputChat, setInputChat] = useState('')
@@ -73,12 +74,13 @@ const ContentChat = () => {
   }
 
   const handleChangePrice = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const inputNumberPrice = e.target.value
+    let inputNumberPrice = e.target.value.replace(/\s/g, '')
 
     if (inputNumberPrice === '') {
       setInputPrice(inputNumberPrice)
       return
     }
+
     if (initCurrency === 'USD') {
       if (
         /^\d*\.?\d*$/.test(inputNumberPrice) &&
@@ -89,7 +91,8 @@ const ContentChat = () => {
       }
     } else {
       if (/^\d*$/.test(inputNumberPrice)) {
-        setInputPrice(inputNumberPrice)
+        const formattedPrice = formatVND(inputNumberPrice)
+        setInputPrice(formattedPrice)
       }
     }
   }
@@ -105,7 +108,10 @@ const ContentChat = () => {
     if (isAnimating) {
       return
     }
-    setChatLog(prevChatLog => [...prevChatLog, { type: 'user', message: inputChat || inputPrice || phoneNumber }])
+    setChatLog(prevChatLog => [
+      ...prevChatLog,
+      { type: 'user', message: inputChat || inputPrice + ' ' + initCurrency || phoneNumber }
+    ])
     onSendMessage(inputChat)
     setInputChat('')
     setInputPrice('')
@@ -134,7 +140,7 @@ const ContentChat = () => {
         bodySendMessage.content_type = newContentType
       }
       if (inputPrice) {
-        bodySendMessage.price = inputPrice
+        bodySendMessage.price = removeSpaces(inputPrice)
       }
       if (phoneNumber) {
         bodySendMessage.phone = phoneNumber
@@ -249,9 +255,9 @@ const ContentChat = () => {
 
   useEffect(() => {
     if (chatRef.current) {
-      chatRef.current.scrollTop = chatRef.current.scrollHeight;
+      chatRef.current.scrollTop = chatRef.current.scrollHeight
     }
-  }, [chatLog]);
+  }, [chatLog])
 
   return (
     <div className="flex flex-col h-full bg-grey-900 sm:mx-40">
@@ -263,7 +269,10 @@ const ContentChat = () => {
                 <Avatar src={<img src={logoSoCool} alt="avatar" />} />
               </div>
               <div className={'bg-[#F4F4F4] ml-4 rounded-3xl p-4 text-[#0D0D0D] max-w-lg'}>
-                <TextAnimation text={initConversation.link.initChat + '. ' + t('negotiation')} setIsAnimating={setIsAnimating} />
+                <TextAnimation
+                  text={initConversation.link.initChat + '. ' + t('negotiation')}
+                  setIsAnimating={setIsAnimating}
+                />
               </div>
             </div>
           )}
