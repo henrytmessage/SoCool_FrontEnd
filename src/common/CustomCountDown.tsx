@@ -36,6 +36,7 @@ const CustomCountUp: React.FC = () => {
 
       if (elapsedSeconds >= maxTime) {
         setShowFinalText(true);
+        localStorage.removeItem('startTime');
         setTimeout(() => {
           navigate('/login');
         }, 3000);
