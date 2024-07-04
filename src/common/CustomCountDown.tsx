@@ -15,33 +15,36 @@ const CustomCountUp: React.FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    const startTime = localStorage.getItem('startTime');
+
+    if (!startTime) {
+      localStorage.setItem('startTime', Date.now().toString());
+    }
+
     const interval = setInterval(() => {
-      setSeconds((prevSeconds) => {
-        if (prevSeconds < maxTime) {
-          return prevSeconds + 1;
-        } else {
-          clearInterval(interval);
-          return prevSeconds;
-        }
-      });
+      const startTime = parseInt(localStorage.getItem('startTime') || '0', 10);
+      const currentTime = Date.now();
+      const elapsedSeconds = Math.floor((currentTime - startTime) / 1000);
+
+      setSeconds(elapsedSeconds);
+
+      if (elapsedSeconds >= alertTime && elapsedSeconds < alertTime + 5) {
+        setShowAlert(true);
+      } else {
+        setShowAlert(false);
+      }
+
+      if (elapsedSeconds >= maxTime) {
+        setShowFinalText(true);
+        setTimeout(() => {
+          navigate('/login');
+        }, 3000);
+        clearInterval(interval);
+      }
     }, 1000);
 
-    if (seconds === alertTime) {
-      setShowAlert(true);
-      setTimeout(() => {
-        setShowAlert(false);
-      }, 5000);
-    }
-
-    if (seconds === maxTime) {
-      setShowFinalText(true);
-      setTimeout(() => {
-        navigate('/login'); 
-      }, 3000);
-    }
-
     return () => clearInterval(interval);
-  }, [seconds, alertTime, maxTime, navigate]);
+  }, [alertTime, maxTime, navigate]);
 
   const formatTime = (secs: number): string => {
     const minutes = Math.floor(secs / 60);
