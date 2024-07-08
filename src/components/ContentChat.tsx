@@ -169,6 +169,7 @@ const ContentChat = () => {
       setIsLoading(false)
     } catch (error) {
       console.error('Error fetching data:', error)
+      setChatLog(prevChatLog => [...prevChatLog, { type: 'bot', message: t('tryAgain') }])
       setIsLoading(false)
     }
   }
