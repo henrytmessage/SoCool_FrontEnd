@@ -13,8 +13,8 @@ import {
 } from '../common'
 import { KEY_CHOOSE_DELIVERY, KEY_CHOOSE_SOMETHING, PRICE_CURRENCY } from '../constant'
 import { ArrowLeftOutlined } from '@ant-design/icons'
-import { postCreateTitleSample, postGenerateLink } from '../service'
-import { IBodyCreateTitle, IBodyPostLink } from '../api/core/interface'
+import { postCreateSearchPrice, postCreateTitleSample, postGenerateLink } from '../service'
+import { IBodyCreateSearchPrice, IBodyCreateTitle, IBodyPostLink } from '../api/core/interface'
 import CustomAlert from '../common/CustomAlert'
 import TextAnimation from './TextAnimation'
 import TypingAnimation from './TypingAnimation'
@@ -50,6 +50,7 @@ const OnBoarding = () => {
   const [isSuggestProduct, setIsSuggestProduct] = useState(false)
   const [contentSuggestProduct, setContentSuggestProduct] = useState('')
   const [isSuggestPrice, setIsSuggestPrice] = useState(false)
+  const [contentSuggestPrice, setContentSuggestPrice] = useState('')
 
   const [isOpenModal, setIsOpenModal] = useState(false)
   const [isEdit, setIsEdit] = useState(false)
@@ -76,6 +77,7 @@ const OnBoarding = () => {
   const changeLanguage = (lang: string) => {
     localStorage.setItem('language', lang)
     i18n.changeLanguage(lang)
+    window.location.reload()
   }
 
   // step 1
@@ -108,12 +110,16 @@ const OnBoarding = () => {
   const CreateAiProductTitle = async () => {
     setIsLoading(true)
     const body: IBodyCreateTitle = {
-      title: textValue
+      title: textValue,
+      type: selectedValue || KEY_CHOOSE_SOMETHING.SELL_SOMETHING
     }
     try {
       const data = await postCreateTitleSample(body)
       if (data.status_code === 200) {
-        setContentSuggestProduct(data.data)
+        setContentSuggestProduct(data.data?.title)
+        const productNameAfterGenAI = data.data.product_name
+        const resDataProductName = t('currentProductPrice', { productName: productNameAfterGenAI })
+        CreateAiSearchPriceProduct(resDataProductName)
         setIsLoading(false)
       } else {
         setIsLoading(false)
@@ -136,6 +142,26 @@ const OnBoarding = () => {
     updateStepStatus(2, true)
     // đợi ai trả về content price
     setIsSuggestPrice(true)
+  }
+
+  // get ai create search engine price
+  const CreateAiSearchPriceProduct = async (productName: string) => {
+    setIsLoading(true)
+    const body: IBodyCreateSearchPrice = {
+      title: productName
+    }
+    try {
+      const data = await postCreateSearchPrice(body)
+      if (data.status_code === 200) {
+        setIsLoading(false)
+        setContentSuggestPrice(data.data)
+      } else {
+        setIsLoading(false)
+      }
+    } catch (error) {
+      setIsLoading(false)
+      console.error('Error fetching data:', error)
+    }
   }
 
   // step 3
@@ -409,7 +435,7 @@ const OnBoarding = () => {
             <TypingAnimation />
           ) : (
             <>
-              <TextAnimation text={t('sampleSuggestProduct') + ' ' + contentSuggestProduct} /> 
+              <TextAnimation text={t('sampleSuggestProduct') + ' ' + contentSuggestProduct} />
               <div className="flex items-center justify-center gap-2 mt-2">
                 <Button
                   key="yes"
@@ -440,7 +466,7 @@ const OnBoarding = () => {
       </div>
       <div className="flex flex-col md:flex-row gap-4">
         <div className="bg-gray-200 ml-4 rounded-3xl p-4 text-gray-800 max-w-screen-xl">
-          {isLoading ? <TypingAnimation /> : <>{t('callToAction')}</>}
+          {isLoading ? <TypingAnimation /> : <TextAnimation text={t('currentMarket') + ' ' + contentSuggestPrice} />}
         </div>
       </div>
     </div>
@@ -515,7 +541,7 @@ const OnBoarding = () => {
                 </div>
               </div>
               {!steps[2].isCompleted && step.id === 2 && isSuggestProduct && renderAiSuggestProduct()}
-              {step.id === 3 && isSuggestPrice && renderAiSuggestPrice()}
+              {step.id === 3 && isSuggestPrice && contentSuggestPrice && renderAiSuggestPrice()}
             </div>
           ))}
         </div>

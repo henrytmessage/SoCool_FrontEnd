@@ -57,5 +57,7 @@
   "phoneNumber": "Nhập số điện thoại của bạn",
   "negotiation": "Mời bạn trả giá",
   "sampleSuggestProduct": "Đây là mẫu chúng tôi đề xuất, bạn có muốn dùng thử ngay không?",
-  "tryAgain": "Có lỗi xảy ra, bạn vui lòng thử lại"
+  "tryAgain": "Có lỗi xảy ra, bạn vui lòng thử lại",
+  "currentProductPrice": "Giá {{productName}} hiện tại",
+  "currentMarket": "Khoảng giá tham khảo thị trường hiện tại dao động."
 }

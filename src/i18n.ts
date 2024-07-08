@@ -29,8 +29,10 @@ if (storedLanguage) {
       const lng = position.coords.longitude;
       if (checkLocationInVietnam(lat, lng)) {
         i18n.changeLanguage('vn'); 
+        localStorage.setItem('language', 'vn')
       } else {
         i18n.changeLanguage('en');
+        localStorage.setItem('language', 'en')
       }
     },
     (err) => {

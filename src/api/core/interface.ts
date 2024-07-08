@@ -36,5 +36,10 @@ export interface IBodySendMessage {
 }
 
 export interface IBodyCreateTitle {
+  title: string;
+  type: string
+}
+
+export interface IBodyCreateSearchPrice {
   title: string
 }

@@ -3,6 +3,7 @@ import {
   IBodyAuthOTP,
   IBodyAuthRegister,
   IBodyConversation,
+  IBodyCreateSearchPrice,
   IBodyCreateTitle,
   IBodyPostLink,
   IBodySendMessage
@@ -35,4 +36,8 @@ export const postConversationSendMessage = (body: IBodySendMessage) => {
 
 export const postConversationCreateTitle = (body: IBodyCreateTitle) => {
   return axiosInstance.post('/conversation/create-title-sample', body)
+}
+
+export const postConversationCreateSearchPrice = (body: IBodyCreateSearchPrice) => {
+  return axiosInstance.post('/conversation/create-search-price', body)
 }
