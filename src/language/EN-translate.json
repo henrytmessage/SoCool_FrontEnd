@@ -63,5 +63,5 @@
   "tryAgain8Hour": "You have already confirmed once, please wait 8 hours to continue using this link again",
   "loginSuccessful": "Login successful!",
   "invalidOTP": "Invalid OTP",
-  "pleaseAnotherEmail ": "You are the owner of this link, Please provide another email address to continue using."
+  "pleaseAnotherEmail": "You are the owner of this link, Please provide another email address to continue using."
 }
