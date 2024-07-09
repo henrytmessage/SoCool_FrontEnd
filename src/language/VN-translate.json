@@ -62,5 +62,6 @@
   "currentMarket": "Khoảng giá tham khảo thị trường hiện tại dao động.",
   "tryAgain8Hour": "Bạn đã xác nhận một lần, vui lòng đợi 8 giờ để tiếp tục sử dụng liên kết này",
   "loginSuccessful": "Đăng nhập thành công!",
-  "invalidOTP": "Sai OTP"
+  "invalidOTP": "Sai OTP",
+  "pleaseAnotherEmail ": "Bạn là chủ sở hữu của liên kết này, Vui lòng cung cấp một địa chỉ email khác để tiếp tục sử dụng."
 }
