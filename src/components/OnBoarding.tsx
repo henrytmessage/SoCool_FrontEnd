@@ -303,9 +303,9 @@ const OnBoarding = () => {
         <Avatar src={<img src={logoSoCool} alt="avatar" />} />
       </div>
       <div className="flex flex-col md:flex-row gap-4">
-        <div className="bg-gray-200 ml-4 rounded-3xl p-4 text-gray-800 max-w-screen-xl">{t('callToAction')}</div>
+        <div className="bg-gray-200 ml-4 rounded-3xl p-4 text-gray-800 max-w-screen-xl font-medium text-lg">{t('callToAction')}</div>
         <div className="flex">
-          <div className="bg-gray-200 ml-4 rounded-xl p-[0.5rem] text-gray-800 flex space-x-2">
+          <div className="bg-gray-200 ml-4 rounded-xl p-[0.5rem] text-gray-800 flex space-x-2 items-center">
             <CustomButton onClick={() => changeLanguage('en')}>{t('EN')}</CustomButton>
             <CustomButton onClick={() => changeLanguage('vn')} classNameCustom="bg-violet-400 hover:bg-violet-500">
               {t('VN')}
@@ -435,7 +435,7 @@ const OnBoarding = () => {
             <TypingAnimation />
           ) : (
             <>
-              <TextAnimation text={t('sampleSuggestProduct') + ' ' + contentSuggestProduct} />
+              <TextAnimation text={`${t('sampleSuggestProduct')}\n${contentSuggestProduct}`}/>
               <div className="flex items-center justify-center gap-2 mt-2">
                 <Button
                   key="yes"
