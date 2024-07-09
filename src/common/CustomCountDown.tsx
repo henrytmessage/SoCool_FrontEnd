@@ -15,14 +15,14 @@ const CustomCountUp: React.FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const startTime = localStorage.getItem('startTime');
+    const startTime = sessionStorage.getItem('startTime');
 
     if (!startTime) {
-      localStorage.setItem('startTime', Date.now().toString());
+      sessionStorage.setItem('startTime', Date.now().toString());
     }
 
     const interval = setInterval(() => {
-      const startTime = parseInt(localStorage.getItem('startTime') || '0', 10);
+      const startTime = parseInt(sessionStorage.getItem('startTime') || '0', 10);
       const currentTime = Date.now();
       const elapsedSeconds = Math.floor((currentTime - startTime) / 1000);
 
@@ -36,7 +36,7 @@ const CustomCountUp: React.FC = () => {
 
       if (elapsedSeconds >= maxTime) {
         setShowFinalText(true);
-        localStorage.removeItem('startTime');
+        sessionStorage.removeItem('startTime');
         setTimeout(() => {
           navigate('/login');
         }, 3000);
