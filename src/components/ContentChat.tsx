@@ -243,9 +243,11 @@ const ContentChat = () => {
             if (data.data.link.currency === 'USD') {
               i18n.changeLanguage('en')
               setLanguage('en')
+              localStorage.setItem('language', 'en')
             } else {
               i18n.changeLanguage('vn')
               setLanguage('vn')
+              localStorage.setItem('language', 'vn')
             }
             setIsLoading(false)
           } else if (data.status_code === 421) {
@@ -352,7 +354,7 @@ const ContentChat = () => {
             type="primary"
             htmlType="submit"
             size="large"
-            className={`rounded-3xl ${(!inputChat && !phoneNumber && !inputPrice && 'opacity-80')}`}
+            className={`rounded-3xl ${!inputChat && !phoneNumber && !inputPrice && 'opacity-80'}`}
             loading={isLoading}
           >
             {t('send')}
