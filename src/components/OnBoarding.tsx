@@ -563,7 +563,7 @@ const OnBoarding = () => {
           textButtonConfirm={t('confirm')}
           onCloseModalSuccess={handleCloseModalSuccess}
         />
-         <CustomModalWarning
+        <CustomModalWarning
           isOpen={isModalWarning}
           titleWarning={t('warningMaximumLink')}
           textButtonConfirm={t('confirm')}

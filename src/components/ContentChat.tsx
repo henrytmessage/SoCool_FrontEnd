@@ -10,6 +10,7 @@ import { postConversation } from '../api/core'
 import { useNavigate } from 'react-router-dom'
 import { ACTION_CHAT } from '../constant'
 import { formatVND, removeSpaces } from '../function'
+import CustomModalWarning from '../common/CustomModalWarning'
 
 interface IChatLog {
   type: string
@@ -69,6 +70,8 @@ const ContentChat = () => {
   const [inputPrice, setInputPrice] = useState('')
   const [phoneNumber, setPhoneNumber] = useState('')
   const [disableInputPhoneNumber, setDisableInputPhoneNumber] = useState(false)
+  const [isModalWarning, setIsModalWarning] = useState(false)
+  const [titleWarning, setTitleWarning] = useState('')
 
   const handleChangeInputChat = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputChat(e.target.value)
@@ -221,6 +224,11 @@ const ContentChat = () => {
     }
   }
 
+  const handleCloseModalWarning = () => {
+    setIsModalWarning(false)
+    navigate('/')
+  }
+
   useEffect(() => {
     const fetchDataConversation = async () => {
       const urlConversation = sessionStorage.getItem('url_conversation')
@@ -254,6 +262,12 @@ const ContentChat = () => {
             setIsLoading(false)
             setIsAnimating(false)
             navigate('/not-found')
+          } else if (data.status_code === 406) {
+            if (data.data === 'You are owner of this link') {
+              setTitleWarning(t('pleaseAnotherEmail'))
+            } else {
+              setTitleWarning(t('tryAgain8Hour'))
+            }
           }
         } catch (error) {
           console.error('Error fetching data:', error)
@@ -362,6 +376,12 @@ const ContentChat = () => {
         </div>
       </form>
       {/* )} */}
+      <CustomModalWarning
+        isOpen={isModalWarning}
+        titleWarning={titleWarning}
+        textButtonConfirm={t('confirm')}
+        onCloseModalWarning={handleCloseModalWarning}
+      />
     </div>
   )
 }

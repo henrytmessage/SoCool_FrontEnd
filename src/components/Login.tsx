@@ -54,12 +54,6 @@ const Login: React.FC = () => {
           navigate('/chat')
         } else if (data.status_code === 400) {
           message.error(t('tryAgain'))
-        } else if (data.status_code === 406) {
-          if (data.data === 'You are owner of this link') {
-            message.warning(t('pleaseAnotherEmail'))
-          } else {
-            message.warning(t('tryAgain8Hour'))
-          }
         } else {
           message.error(t('invalidOTP!'))
         }
