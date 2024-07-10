@@ -1,11 +1,8 @@
-// src/i18n.ts
-
 import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
 
 import ENTranslate from './language/EN-translate.json'
 import VNTranslate from './language/VN-translate.json'
-import { checkLocationInVietnam } from './function'
 
 // Translations
 i18n.use(initReactI18next).init({
@@ -13,8 +10,8 @@ i18n.use(initReactI18next).init({
     en: { translation: ENTranslate },
     vn: { translation: VNTranslate }
   },
-  lng: 'en', // Ngôn ngữ mặc định
-  fallbackLng: 'en', // Ngôn ngữ dự phòng
+  lng: 'en', // Default language
+  fallbackLng: 'en', // Fallback language
   interpolation: { escapeValue: false }
 })
 
@@ -35,7 +32,7 @@ if (storedLanguage) {
 
   const fetchLocation = async (ip: string) => {
     try {
-      const response = await fetch(`http://ip-api.com/json/${ip}`)
+      const response = await fetch(`https://ip-api.com/json/${ip}`)
       const data = await response.json()
       if (data.countryCode === 'VN') {
         i18n.changeLanguage('vn')

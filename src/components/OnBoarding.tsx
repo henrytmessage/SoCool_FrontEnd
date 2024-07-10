@@ -19,6 +19,7 @@ import CustomAlert from '../common/CustomAlert'
 import TextAnimation from './TextAnimation'
 import TypingAnimation from './TypingAnimation'
 import { removeSpaces } from '../function'
+import CustomModalWarning from '../common/CustomModalWarning'
 
 const OnBoarding = () => {
   const { t, i18n } = useTranslation()
@@ -55,6 +56,7 @@ const OnBoarding = () => {
   const [isOpenModal, setIsOpenModal] = useState(false)
   const [isEdit, setIsEdit] = useState(false)
   const [isModalSuccess, setIsModalSuccess] = useState(false)
+  const [isModalWarning, setIsModalWarning] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
 
   const [steps, setSteps] = useState([
@@ -133,6 +135,7 @@ const OnBoarding = () => {
     setTextValue(contentSuggestProduct)
     setIsSuggestProduct(false)
     updateStepStatus(2, true)
+    setIsRequiredStep2(false)
     // đợi ai trả về content price
     setIsSuggestPrice(true)
   }
@@ -248,6 +251,9 @@ const OnBoarding = () => {
       if (data.status_code === 200) {
         setIsOpenModal(false)
         setIsModalSuccess(true)
+      } else if (data.status_code === 406) {
+        setIsOpenModal(false)
+        setIsModalWarning(true)
       }
     } catch (error) {
       console.error('Error fetching data:', error)
@@ -256,6 +262,10 @@ const OnBoarding = () => {
 
   const handleCloseModalSuccess = () => {
     window.location.reload()
+  }
+
+  const handleCloseModalWarning = () => {
+    setIsModalWarning(false)
   }
 
   const handleFormSubmit = () => {
@@ -303,7 +313,9 @@ const OnBoarding = () => {
         <Avatar src={<img src={logoSoCool} alt="avatar" />} />
       </div>
       <div className="flex flex-col md:flex-row gap-4">
-        <div className="bg-gray-200 ml-4 rounded-3xl p-4 text-gray-800 max-w-screen-xl font-medium text-lg">{t('callToAction')}</div>
+        <div className="bg-gray-200 ml-4 rounded-3xl p-4 text-gray-800 max-w-screen-xl font-medium text-lg">
+          {t('callToAction')}
+        </div>
         <div className="flex">
           <div className="bg-gray-200 ml-4 rounded-xl p-[0.5rem] text-gray-800 flex space-x-2 items-center">
             <CustomButton onClick={() => changeLanguage('en')}>{t('EN')}</CustomButton>
@@ -435,7 +447,7 @@ const OnBoarding = () => {
             <TypingAnimation />
           ) : (
             <>
-              <TextAnimation text={`${t('sampleSuggestProduct')}\n${contentSuggestProduct}`}/>
+              <TextAnimation text={`${t('sampleSuggestProduct')}\n${contentSuggestProduct}`} />
               <div className="flex items-center justify-center gap-2 mt-2">
                 <Button
                   key="yes"
@@ -550,6 +562,12 @@ const OnBoarding = () => {
           titleSuccess={t('alertCheckMail')}
           textButtonConfirm={t('confirm')}
           onCloseModalSuccess={handleCloseModalSuccess}
+        />
+         <CustomModalWarning
+          isOpen={isModalWarning}
+          titleWarning={t('warningMaximumLink')}
+          textButtonConfirm={t('confirm')}
+          onCloseModalWarning={handleCloseModalWarning}
         />
         <CustomModal
           open={isOpenModal}
