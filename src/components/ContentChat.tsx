@@ -263,11 +263,16 @@ const ContentChat = () => {
             setIsAnimating(false)
             navigate('/not-found')
           } else if (data.status_code === 406) {
-            if (data.data === 'You are owner of this link') {
+            if (data.errors.message === 'You are owner of this link') {
+              setIsModalWarning(true)
               setTitleWarning(t('pleaseAnotherEmail'))
             } else {
+              setIsModalWarning(true)
               setTitleWarning(t('tryAgain8Hour'))
             }
+          } else if (data.status_code === 404){
+            setIsModalWarning(true)
+            setTitleWarning(data.errors.message)
           }
         } catch (error) {
           console.error('Error fetching data:', error)
