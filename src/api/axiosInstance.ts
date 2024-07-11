@@ -2,7 +2,7 @@ import axios, { AxiosInstance, AxiosResponse, AxiosError } from 'axios';
 
 const axiosInstance: AxiosInstance = axios.create({
   baseURL: process.env.REACT_APP_API_URL, // Replace with your API base URL
-  timeout: 10000, // Example timeout configuration
+  timeout: 20000, // Example timeout configuration
   headers: {
     'Content-Type': 'application/json',
     'accept-language': localStorage.getItem('language')
