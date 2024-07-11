@@ -65,5 +65,8 @@
   "invalidOTP": "Sai OTP",
   "pleaseAnotherEmail": "Bạn là chủ sở hữu của liên kết này, Vui lòng cung cấp một địa chỉ email khác để tiếp tục sử dụng.",
   "continueExperience": "Thời gian trò chuyện của bạn đã kết thúc. Chúng tôi rất vui khi bạn đã sử dụng dịch vụ của SoCool. Hãy tiếp tục trải nghiệm thêm!",
-  "warningMaximumLink": "Bạn đã đạt đến giới hạn tạo liên kết tối đa cho ngày hôm nay"
+  "warningMaximumLink": "Bạn đã đạt đến giới hạn tạo liên kết tối đa cho ngày hôm nay",
+  "selectTemplate": "Chọn mẫu này",
+  "notSelected": "Không chọn",
+  "changeTemplate": "Thay đổi mẫu"
 }

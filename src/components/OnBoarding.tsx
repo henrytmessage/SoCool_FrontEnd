@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Avatar, Button } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { logoSoCool } from '../assets'
@@ -23,6 +23,7 @@ import CustomModalWarning from '../common/CustomModalWarning'
 
 const OnBoarding = () => {
   const { t, i18n } = useTranslation()
+  const textareaStep2Ref = useRef<HTMLTextAreaElement>(null);
 
   const dataChooseHere = [
     { key: KEY_CHOOSE_SOMETHING.SELL_SOMETHING, label: t('sellSomething') },
@@ -138,6 +139,15 @@ const OnBoarding = () => {
     setIsRequiredStep2(false)
     // đợi ai trả về content price
     setIsSuggestPrice(true)
+  }
+
+  const handleClickChangeSuggestProduct = () => {
+    updateStepStatus(1, true)
+    // updateStepStatus(2, false)
+    setIsSuggestProduct(false)
+    if (textareaStep2Ref.current) {
+      textareaStep2Ref.current.focus();
+    }
   }
 
   const handleClickNoSuggestProduct = () => {
@@ -346,6 +356,7 @@ const OnBoarding = () => {
         return (
           <div className="flex gap-4 flex-col md:flex-row">
             <CustomTextArea
+              ref={textareaStep2Ref}
               value={textValue}
               placeholder={t('writeSomethingHere')}
               required={isRequiredStep2}
@@ -448,20 +459,27 @@ const OnBoarding = () => {
           ) : (
             <>
               <TextAnimation text={`${t('sampleSuggestProduct')}\n${contentSuggestProduct}`} />
-              <div className="flex items-center justify-center gap-2 mt-2">
+              <div className="flex items-center justify-center gap-2 mt-2 flex-wrap">
                 <Button
-                  key="yes"
+                  key="Select this template"
                   onClick={handleClickYesSuggestProduct}
                   className="outline outline-0 bg-[#F4F4F4] text-gray-800 hover:bg-gray-300"
                 >
-                  {t('yes')}
+                  {t('selectTemplate')}
                 </Button>
                 <Button
-                  key="no"
+                  key="Change the template"
+                  onClick={handleClickChangeSuggestProduct}
+                  className="outline outline-0 bg-[#F4F4F4] text-gray-800 hover:bg-gray-300"
+                >
+                  {t('changeTemplate')}
+                </Button>
+                <Button
+                  key="Not selected"
                   onClick={handleClickNoSuggestProduct}
                   className="outline outline-0 bg-[#F4F4F4] text-gray-800 hover:bg-gray-300"
                 >
-                  {t('no')}
+                  {t('notSelected')}
                 </Button>
               </div>
             </>

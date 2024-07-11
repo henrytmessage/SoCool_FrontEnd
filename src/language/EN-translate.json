@@ -65,5 +65,8 @@
   "invalidOTP": "Invalid OTP",
   "pleaseAnotherEmail": "You are the owner of this link, Please provide another email address to continue using.",
   "continueExperience": "Your chat time has ended. We are happy that you have used SoCool's services. Let's continue to experience more!",
-  "warningMaximumLink": "You have reached your maximum link creation limit for today"
+  "warningMaximumLink": "You have reached your maximum link creation limit for today",
+  "selectTemplate": "Select this template",
+  "notSelected": "Not selected",
+  "changeTemplate": "Change the template"
 }
