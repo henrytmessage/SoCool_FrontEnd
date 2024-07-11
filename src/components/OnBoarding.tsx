@@ -120,8 +120,8 @@ const OnBoarding = () => {
       if (data.status_code === 200) {
         setContentSuggestProduct(data.data?.title)
         const productNameAfterGenAI = data.data.product_name
-        const resDataProductName = t('currentProductPrice', { productName: productNameAfterGenAI })
-        CreateAiSearchPriceProduct(resDataProductName)
+        // const resDataProductName = t('currentProductPrice', { productName: productNameAfterGenAI })
+        CreateAiSearchPriceProduct(productNameAfterGenAI)
         setIsLoading(false)
       } else {
         setIsLoading(false)
@@ -478,7 +478,7 @@ const OnBoarding = () => {
       </div>
       <div className="flex flex-col md:flex-row gap-4">
         <div className="bg-gray-200 ml-4 rounded-3xl p-4 text-gray-800 max-w-screen-xl">
-          {isLoading ? <TypingAnimation /> : <TextAnimation text={t('currentMarket') + ' ' + contentSuggestPrice} />}
+          {isLoading ? <TypingAnimation /> : <TextAnimation text={contentSuggestPrice} />}
         </div>
       </div>
     </div>

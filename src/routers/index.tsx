@@ -12,7 +12,7 @@ const AppRouters = () => {
       <Route path="/test" element={<Test />} />
       <Route path="/" element={<OnBoarding />} />
       <Route path="/chat" element={<ContentChat />} />
-      <Route path="/login" element={<Login />} />
+      <Route path="/go" element={<Login />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   )
