@@ -23,7 +23,7 @@ import CustomModalWarning from '../common/CustomModalWarning'
 
 const OnBoarding = () => {
   const { t, i18n } = useTranslation()
-  const textareaStep2Ref = useRef<HTMLTextAreaElement>(null);
+  const textareaStep2Ref = useRef<HTMLTextAreaElement>(null)
 
   const dataChooseHere = [
     { key: KEY_CHOOSE_SOMETHING.SELL_SOMETHING, label: t('sellSomething') },
@@ -36,7 +36,9 @@ const OnBoarding = () => {
   const currencyOptions = Object.keys(PRICE_CURRENCY)
 
   const [selectedValue, setSelectedValue] = useState<string | undefined>(undefined)
+  const [textFirstInfo, setTextFirstInfo] = useState('')
   const [textValue, setTextValue] = useState<string>('')
+  const [informationProduct, setInformationProduct] = useState('')
   const [inputValuePrice, setInputValuePrice] = useState<string>('')
   const [inputValueCurrency, setInputValueCurrency] = useState<string>(
     i18n.language === 'en' ? currencyOptions[0] : currencyOptions[1]
@@ -44,6 +46,7 @@ const OnBoarding = () => {
   const [textValueAddress, setTextValueAddress] = useState<string>('')
   const [selectedDelivery, setSelectedDelivery] = useState(dataChooseDelivery[0].key)
   const [inputEmail, setInputEmail] = useState<string>('')
+  const [isRequiredStepFirst, setIsRequiredStepFirst] = useState<boolean>(false)
   const [isRequiredStep2, setIsRequiredStep2] = useState<boolean>(false)
   const [isRequiredStep3, setIsRequiredStep3] = useState<boolean>(false)
   const [isRequiredStep4, setIsRequiredStep4] = useState<boolean>(false)
@@ -54,6 +57,7 @@ const OnBoarding = () => {
   const [isSuggestPrice, setIsSuggestPrice] = useState(false)
   const [contentSuggestPrice, setContentSuggestPrice] = useState('')
 
+  const [isChooseSuggestProduct, setIsChooseSuggestProduct] = useState(false)
   const [isOpenModal, setIsOpenModal] = useState(false)
   const [isEdit, setIsEdit] = useState(false)
   const [isModalSuccess, setIsModalSuccess] = useState(false)
@@ -63,18 +67,39 @@ const OnBoarding = () => {
   const [steps, setSteps] = useState([
     { id: 1, content: t('questionHelp'), isCompleted: false },
     {
-      id: 2,
+      id: 1.5,
       content: selectedValue === KEY_CHOOSE_SOMETHING.SELL_SOMETHING ? t('questionSell') : t('questionBuy'),
+      isCompleted: false
+    },
+    {
+      id: 2,
+      content: t('questionCondition'),
       isCompleted: false
     },
     { id: 3, content: t('questionPrice'), isCompleted: false },
     {
       id: 4,
-      content: t('questionYourAddress'),
+      content:
+        selectedValue === KEY_CHOOSE_SOMETHING.SELL_SOMETHING
+          ? t('questionYourAddressSell')
+          : t('questionYourAddressBuy'),
       isCompleted: false
     },
     { id: 5, content: t('chooseShipping'), isCompleted: false },
-    { id: 6, content: t('inputEmailAddress'), isCompleted: false }
+    {
+      id: 6,
+      content: (
+        <>
+          {t('inputEmailAddress')}
+          <span className="text-gray-800 font-medium">
+            {selectedValue === KEY_CHOOSE_SOMETHING.SELL_SOMETHING
+              ? t('inputEmailAddressSell')
+              : t('inputEmailAddressBuy')}
+          </span>
+        </>
+      ),
+      isCompleted: false
+    }
   ])
 
   const changeLanguage = (lang: string) => {
@@ -87,6 +112,23 @@ const OnBoarding = () => {
   const handleSelectChange = (value: string) => {
     setSelectedValue(value)
     updateStepStatus(1, true)
+  }
+
+  // step 1.5
+  const handleTextStepFirstChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    if (e.target.value !== '') {
+      setIsRequiredStepFirst(false)
+    } else {
+      setIsRequiredStepFirst(true)
+    }
+    setTextFirstInfo(e.target.value)
+  }
+  const handleConfirmTextFirst = () => {
+    if (textFirstInfo) {
+      updateStepStatus(1.5, true)
+    } else {
+      setIsRequiredStepFirst(true)
+    }
   }
 
   // step 2
@@ -103,6 +145,7 @@ const OnBoarding = () => {
     if (textValue) {
       // updateStepStatus(2, true)
       setIsSuggestProduct(true)
+      setInformationProduct(textFirstInfo + textValue)
       CreateAiProductTitle()
     } else {
       setIsRequiredStep2(true)
@@ -113,7 +156,7 @@ const OnBoarding = () => {
   const CreateAiProductTitle = async () => {
     setIsLoading(true)
     const body: IBodyCreateTitle = {
-      title: textValue,
+      title: textFirstInfo + ' ' + textValue,
       type: selectedValue || KEY_CHOOSE_SOMETHING.SELL_SOMETHING
     }
     try {
@@ -137,6 +180,7 @@ const OnBoarding = () => {
     setIsSuggestProduct(false)
     updateStepStatus(2, true)
     setIsRequiredStep2(false)
+    setIsChooseSuggestProduct(true)
     // đợi ai trả về content price
     setIsSuggestPrice(true)
   }
@@ -146,7 +190,7 @@ const OnBoarding = () => {
     // updateStepStatus(2, false)
     setIsSuggestProduct(false)
     if (textareaStep2Ref.current) {
-      textareaStep2Ref.current.focus();
+      textareaStep2Ref.current.focus()
     }
   }
 
@@ -202,7 +246,7 @@ const OnBoarding = () => {
 
   // step 4
   const handleTextValueAddress = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    if (e.target.value != '') {
+    if (e.target.value !== '') {
       setIsRequiredStep4(false)
     } else {
       setIsRequiredStep4(true)
@@ -283,7 +327,7 @@ const OnBoarding = () => {
       setIsRequiredStep3(true)
       return
     }
-    if (isRequiredStep2 || isRequiredStep3 || isRequiredStep4 || isRequiredStep6) {
+    if (isRequiredStepFirst || isRequiredStep2 || isRequiredStep3 || isRequiredStep4 || isRequiredStep6) {
       return
     } else {
       setIsEdit(false)
@@ -298,22 +342,43 @@ const OnBoarding = () => {
   useEffect(() => {
     // Cập nhật lại nội dung của các bước khi thay đổi ngôn ngữ hoặc selectedValue
     setInputValuePrice('')
-    setInputValueCurrency(i18n.language == 'en' ? currencyOptions[0] : currencyOptions[1])
+    setInputValueCurrency(i18n.language === 'en' ? currencyOptions[0] : currencyOptions[1])
     setSteps([
       { id: 1, content: t('questionHelp'), isCompleted: steps[0].isCompleted },
       {
-        id: 2,
+        id: 1.5,
         content: selectedValue === KEY_CHOOSE_SOMETHING.SELL_SOMETHING ? t('questionSell') : t('questionBuy'),
         isCompleted: steps[1].isCompleted
       },
-      { id: 3, content: t('questionPrice'), isCompleted: steps[2].isCompleted },
+      {
+        id: 2,
+        content: t('questionCondition'),
+        isCompleted: steps[2].isCompleted
+      },
+      { id: 3, content: t('questionPrice'), isCompleted: steps[3].isCompleted },
       {
         id: 4,
-        content: t('questionYourAddress'),
-        isCompleted: steps[3].isCompleted
+        content:
+          selectedValue === KEY_CHOOSE_SOMETHING.SELL_SOMETHING
+            ? t('questionYourAddressSell')
+            : t('questionYourAddressBuy'),
+        isCompleted: steps[4].isCompleted
       },
-      { id: 5, content: t('chooseShipping'), isCompleted: steps[4].isCompleted },
-      { id: 6, content: t('inputEmailAddress'), isCompleted: steps[5].isCompleted }
+      { id: 5, content: t('chooseShipping'), isCompleted: steps[5].isCompleted },
+      {
+        id: 6,
+        content: (
+          <>
+            {t('inputEmailAddress')}
+            <span className="text-gray-800 font-medium">
+              {selectedValue === KEY_CHOOSE_SOMETHING.SELL_SOMETHING
+                ? t('inputEmailAddressSell')
+                : t('inputEmailAddressBuy')}
+            </span>
+          </>
+        ),
+        isCompleted: steps[6].isCompleted
+      }
     ])
   }, [i18n.language, selectedValue])
 
@@ -328,8 +393,10 @@ const OnBoarding = () => {
         </div>
         <div className="flex">
           <div className="bg-gray-200 ml-4 rounded-xl p-[0.5rem] text-gray-800 flex space-x-2 items-center">
-            <CustomButton onClick={() => changeLanguage('en')}>{t('EN')}</CustomButton>
-            <CustomButton onClick={() => changeLanguage('vn')} classNameCustom="bg-violet-400 hover:bg-violet-500">
+            <CustomButton onClick={() => changeLanguage('en')} type={i18n.language === 'en' ? 'primary' : 'default'}>
+              {t('EN')}
+            </CustomButton>
+            <CustomButton onClick={() => changeLanguage('vn')} type={i18n.language === 'vn' ? 'primary' : 'default'}>
               {t('VN')}
             </CustomButton>
           </div>
@@ -347,8 +414,25 @@ const OnBoarding = () => {
               value={selectedValue}
               onChange={handleSelectChange}
               options={dataChooseHere}
+              disabled={isEdit}
+            />
+          </div>
+        )
+      case 1.5:
+        return (
+          <div className="flex gap-4 flex-col md:flex-row">
+            <CustomTextArea
+              value={textFirstInfo}
+              placeholder={t('writeSomethingHere')}
+              required={isRequiredStepFirst}
+              onChange={handleTextStepFirstChange}
               isEdit={isEdit}
             />
+            {!steps[1].isCompleted && (
+              <div>
+                <CustomButton onClick={handleConfirmTextFirst}>{t('confirm')}</CustomButton>
+              </div>
+            )}
             {isEdit && renderEditHere}
           </div>
         )
@@ -358,12 +442,12 @@ const OnBoarding = () => {
             <CustomTextArea
               ref={textareaStep2Ref}
               value={textValue}
-              placeholder={t('writeSomethingHere')}
+              placeholder={t('exampleCondition')}
               required={isRequiredStep2}
               onChange={handleTextAreaChange}
               isEdit={isEdit}
             />
-            {!steps[1].isCompleted && !isSuggestProduct && (
+            {!steps[2].isCompleted && !isSuggestProduct && (
               <div>
                 <CustomButton onClick={handleConfirmText}>{t('confirm')}</CustomButton>
               </div>
@@ -384,7 +468,7 @@ const OnBoarding = () => {
               onChangeSelect={handleChangeCurrency}
               isEdit={isEdit}
             />
-            {!steps[2].isCompleted && (
+            {!steps[3].isCompleted && (
               <div>
                 <CustomButton onClick={handleConfirmPriceCurrency}>{t('confirm')}</CustomButton>
               </div>
@@ -402,7 +486,7 @@ const OnBoarding = () => {
               onChange={handleTextValueAddress}
               isEdit={isEdit}
             />
-            {!steps[3].isCompleted && (
+            {!steps[4].isCompleted && (
               <div>
                 <CustomButton onClick={handleConfirmCriteria}>{t('confirm')}</CustomButton>
               </div>
@@ -419,7 +503,7 @@ const OnBoarding = () => {
               options={dataChooseDelivery}
               isEdit={isEdit}
             />
-            {!steps[4].isCompleted && (
+            {!steps[5].isCompleted && (
               <div>
                 <CustomButton onClick={handleConfirmDelivery}>{t('confirm')}</CustomButton>
               </div>
@@ -519,7 +603,7 @@ const OnBoarding = () => {
             title: t('youWant'),
             value: selectedValue === KEY_CHOOSE_SOMETHING.SELL_SOMETHING ? t('sellSomething') : t('buySomething')
           },
-          { title: t('product'), value: textValue },
+          { title: t('product'), value: isChooseSuggestProduct ? textValue : informationProduct },
           { title: t('priceRange'), value: `${inputValuePrice} ${inputValueCurrency}` },
           { title: t('address'), value: textValueAddress },
           {
@@ -571,7 +655,7 @@ const OnBoarding = () => {
                 </div>
               </div>
               {!steps[2].isCompleted && step.id === 2 && isSuggestProduct && renderAiSuggestProduct()}
-              {step.id === 3 && isSuggestPrice && contentSuggestPrice && renderAiSuggestPrice()}
+              {step.id === 2 && isSuggestPrice && contentSuggestPrice && renderAiSuggestPrice()}
             </div>
           ))}
         </div>
