@@ -248,7 +248,7 @@ const ContentChat = () => {
               event: 'conversation_created',
               url: urlConversation,
             })
-      
+            console.log('window',window)
             setInitConversation(data.data)
             setConversationId(data.data.id)
             setInitCurrency(data.data.link.currency)
