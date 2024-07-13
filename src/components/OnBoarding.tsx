@@ -303,6 +303,11 @@ const OnBoarding = () => {
     try {
       const data = await postGenerateLink(body)
       if (data.status_code === 200) {
+        window.dataLayer.push({
+          event: 'link_generated',
+          email: inputEmail,
+        })
+  
         setIsOpenModal(false)
         setIsModalSuccess(true)
       } else if (data.status_code === 406) {
