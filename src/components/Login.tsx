@@ -1,10 +1,13 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom' // or useNavigate for react-router v6
-import { Button, Form, Input, message } from 'antd'
+import { Avatar, Button, Form, Input, message } from 'antd'
 import type { FormProps } from 'antd'
-import { IBodyAuthOTP, IBodyAuthRegister } from '../api/core/interface'
-import { postAuthOTP, postAuthRegisterService } from '../service'
+import { IBodyAuthOTP, IBodyAuthRegister, IBodyConversation } from '../api/core/interface'
+import { getConversationService, postAuthOTP, postAuthRegisterService } from '../service'
 import { useTranslation } from 'react-i18next'
+import { logoSoCool } from '../assets'
+import TypingAnimation from './TypingAnimation'
+import TextAnimation from './TextAnimation'
 
 type FieldType = {
   email?: string
@@ -13,12 +16,13 @@ type FieldType = {
 
 const Login: React.FC = () => {
   const { t } = useTranslation()
-  const [showOtp, setShowOtp] = useState(false)
-  const [loading, setLoading] = useState(false)
   const [form] = Form.useForm()
   const navigate = useNavigate() // or useNavigate for react-router v6
   const currentUrl = window.location.href
   sessionStorage.setItem('url_conversation', JSON.stringify(currentUrl))
+  const [showOtp, setShowOtp] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [textInitInfo, setTextInitInfo] = useState('')
 
   const handleEmailSubmit: FormProps<FieldType>['onFinish'] = async values => {
     if (values.email) {
@@ -64,6 +68,45 @@ const Login: React.FC = () => {
     }
   }
 
+  const renderInitInfoLogin = () => (
+    <div className="flex justify-start mb-8">
+      <div>
+        <Avatar src={<img src={logoSoCool} alt="avatar" />} />
+      </div>
+      <div className="flex flex-col md:flex-row gap-4">
+        <div className="bg-gray-200 ml-4 rounded-3xl p-4 text-gray-800 max-w-screen-xl">
+          {loading ? <TypingAnimation /> : <TextAnimation text={textInitInfo} />}
+        </div>
+      </div>
+    </div>
+  )
+
+  useEffect(() => {
+    const fetchDataConversation = async () => {
+      setLoading(true)
+
+      const bodyConversation: IBodyConversation = {
+        url: currentUrl
+      }
+      try {
+        const response = await getConversationService(bodyConversation)
+        if (response.status_code === 200) {
+          setTextInitInfo(response.data)
+          setLoading(false)
+        } else {
+          setTextInitInfo(t('startConversation'))
+          setLoading(false)
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error)
+        setTextInitInfo(t('startConversation'))
+        setLoading(false)
+      }
+    }
+
+    fetchDataConversation()
+  }, [])
+
   return (
     <Form
       form={form}
@@ -75,6 +118,7 @@ const Login: React.FC = () => {
       autoComplete="off"
       className="flex flex-col w-[80%] max-w-[500px] mt-20 mx-auto"
     >
+      {renderInitInfoLogin()}
       <Form.Item<FieldType>
         label="Email"
         name="email"

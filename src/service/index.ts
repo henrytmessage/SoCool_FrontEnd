@@ -1,4 +1,4 @@
-import { getApiExample, postAuthOtp, postAuthRegister, postConversation, postConversationCreateSearchPrice, postConversationCreateTitle, postConversationSendMessage, postLink } from "../api/core";
+import { getApiExample, getConversation, postAuthOtp, postAuthRegister, postConversation, postConversationCreateSearchPrice, postConversationCreateTitle, postConversationSendMessage, postLink } from "../api/core";
 import { IBodyAuthOTP, IBodyAuthRegister, IBodyConversation, IBodyCreateSearchPrice, IBodyCreateTitle, IBodyPostLink, IBodySendMessage } from "../api/core/interface";
 
 export const getExample = async (messageChat: string) => {
@@ -45,6 +45,16 @@ export const postAuthRegisterService = async (body: IBodyAuthRegister) => {
 export const postConversationService = async (body: IBodyConversation) => {
   try {
     const response = await postConversation(body)
+    return response?.data;
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    throw error;
+  }
+}
+
+export const getConversationService = async (body: IBodyConversation) => {
+  try {
+    const response = await getConversation(body)
     return response?.data;
   } catch (error) {
     console.error('Error fetching data:', error);
