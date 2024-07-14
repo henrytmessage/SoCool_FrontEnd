@@ -9,7 +9,7 @@
   "chooseHere": "Chọn ở đây",
   "sellSomething": "Bán một số thứ",
   "buySomething": "Mua một số thứ",
-  "callToAction": "SoCool - Tạo trợ lý AI chỉ bằng vài cú click chuột",
+  "callToAction": "SoCool - Trợ lý AI của bạn khi kinh doanh Online",
   "questionHelp": "Tôi có thể giúp gì được cho bạn?",
   "questionSell": "Bạn đang muốn bán sản phẩm nào?",
   "questionBuy": "Bạn đang muốn mua sản phẩm nào?",
@@ -73,5 +73,6 @@
   "notSelected": "Không chọn",
   "changeTemplate": "Thay đổi mẫu",
   "questionCondition": "Cho mình xin thông tin về tình trạng của sản phẩm nhé?",
-  "exampleCondition": "Ví dụ: Tình trạng sản phẩm: hơi xước, màn nguyên zin,\nCòn bảo hành không?\nCó bao test không?"
+  "exampleCondition": "Ví dụ: Tình trạng sản phẩm: hơi xước, màn nguyên zin,\nCòn bảo hành không?\nCó bao test không?",
+  "startConversation": "Để bắt đầu cuộc trò chuyện, vui lòng cung cấp email của bạn."
 }

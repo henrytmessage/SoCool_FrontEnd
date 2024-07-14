@@ -9,7 +9,7 @@
   "chooseHere": "Choose here",
   "sellSomething": "Sell something",
   "buySomething": "Buy something",
-  "callToAction": "SoCool - Create an AI assistant with just a few clicks",
+  "callToAction": "SoCool - Your AI Assistant for Social Commerce",
   "questionHelp": "What do you want me to help?",
   "questionSell": "Which product do you want to sell?",
   "questionBuy": "Which product do you want to buy?",
@@ -18,7 +18,7 @@
   "questionCriteriaSell": "Do you have any seller criteria I should pay attention to? Please list them out",
   "writeSomethingHere": "Please enter the name and product type. Please describe specifically! \nFor example: 24k gold-plated iPhone 15 Pro Max, version 512G, still in original box...",
   "writeNumberHere": "Please enter price here?",
-  "inputEmailAddress": "Please leave your email to receive: ",
+  "inputEmailAddress": "please share your email: ",
   "inputEmailAddressSell": "1 link for selling with AI assistant",
   "inputEmailAddressBuy": "1 link for buying with AI assistant",
   "emailHere": "your email here",
@@ -73,6 +73,6 @@
   "notSelected": "Not selected",
   "changeTemplate": "Change the template",
   "questionCondition": "Could you please provide me with information regarding the condition of the product?",
-  "exampleCondition": "Product condition: has minor scratches, screen is original.\nIs it still under warranty?\nCan I test it before purchasing?"
-
+  "exampleCondition": "Product condition: has minor scratches, screen is original.\nIs it still under warranty?\nCan I test it before purchasing?",
+  "startConversation": "To start the conversation, please provide your email."
 }

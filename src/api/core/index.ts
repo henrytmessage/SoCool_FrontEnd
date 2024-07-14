@@ -30,6 +30,10 @@ export const postConversation = (body: IBodyConversation) => {
   return axiosInstance.post('/conversation', body)
 }
 
+export const getConversation = (params: IBodyConversation) => {
+  return axiosInstance.get('/conversation', { params });
+};
+
 export const postConversationSendMessage = (body: IBodySendMessage) => {
   return axiosInstance.post('/conversation/send-message', body)
 }
