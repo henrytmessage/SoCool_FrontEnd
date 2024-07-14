@@ -13,6 +13,7 @@ const axiosInstance: AxiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
   (config: any) => {
     // Perform actions before request is sent
+
     const accessToken = sessionStorage.getItem('access_token');
     const token = accessToken && JSON.parse(accessToken).token;
     if (token) {
