@@ -154,7 +154,7 @@ const OnBoarding = () => {
 
   // get ai create title sample
   const CreateAiProductTitle = async () => {
-    setIsLoading(true)
+    setIsLoading(true) 
     const body: IBodyCreateTitle = {
       title: textFirstInfo + ' ' + textValue,
       type: selectedValue || KEY_CHOOSE_SOMETHING.SELL_SOMETHING
