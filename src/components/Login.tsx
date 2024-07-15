@@ -18,8 +18,6 @@ const Login: React.FC = () => {
   const { t } = useTranslation()
   const [form] = Form.useForm()
   const navigate = useNavigate() // or useNavigate for react-router v6
-  const currentUrl = window.location.href
-  sessionStorage.setItem('url_conversation', JSON.stringify(currentUrl))
   const [showOtp, setShowOtp] = useState(false)
   const [loading, setLoading] = useState(false)
   const [isLoadingInfo, setIsLoadingInfo] = useState(false)
@@ -83,6 +81,13 @@ const Login: React.FC = () => {
   )
 
   useEffect(() => {
+    let currentUrl = window.location.href;
+    // clean url when click from facebook
+    if (currentUrl.includes('&')) {
+      currentUrl = currentUrl.split('?')[0] + '?' + currentUrl.split('?')[1].split('&')[0];
+      window.history.replaceState({}, document.title, currentUrl);
+    }
+    sessionStorage.setItem('url_conversation', JSON.stringify(currentUrl));
     const fetchDataConversation = async () => {
       setIsLoadingInfo(true)
 
