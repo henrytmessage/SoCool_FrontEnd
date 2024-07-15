@@ -74,5 +74,6 @@
   "changeTemplate": "Thay đổi mẫu",
   "questionCondition": "Cho mình xin thông tin về tình trạng của sản phẩm nhé?",
   "exampleCondition": "Ví dụ: Tình trạng sản phẩm: hơi xước, màn nguyên zin,\nCòn bảo hành không?\nCó bao test không?",
-  "startConversation": "Để bắt đầu cuộc trò chuyện, vui lòng cung cấp email của bạn."
+  "startConversation": "Để bắt đầu cuộc trò chuyện, vui lòng cung cấp email của bạn.",
+  "metaDescription": "Cung cấp trợ lý AI dùng một lần cho thương mại xã hội"
 }

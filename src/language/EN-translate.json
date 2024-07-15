@@ -74,5 +74,6 @@
   "changeTemplate": "Change the template",
   "questionCondition": "Could you please provide me with information regarding the condition of the product?",
   "exampleCondition": "Product condition: has minor scratches, screen is original.\nIs it still under warranty?\nCan I test it before purchasing?",
-  "startConversation": "To start the conversation, please provide your email."
+  "startConversation": "To start the conversation, please provide your email.",
+  "metaDescription": "Provide the disposable AI assistant for social commerce"
 }
