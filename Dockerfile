@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY . .
 #ARG STAGE=dev
-RUN npm install
+RUN npm install --force
 RUN npm run build
 
 #RUN if [ "$STAGE" = "production" ] ; then npm run build:prod ; fi
