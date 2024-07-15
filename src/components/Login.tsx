@@ -22,6 +22,7 @@ const Login: React.FC = () => {
   sessionStorage.setItem('url_conversation', JSON.stringify(currentUrl))
   const [showOtp, setShowOtp] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [isLoadingInfo, setIsLoadingInfo] = useState(false)
   const [textInitInfo, setTextInitInfo] = useState('')
 
   const handleEmailSubmit: FormProps<FieldType>['onFinish'] = async values => {
@@ -75,7 +76,7 @@ const Login: React.FC = () => {
       </div>
       <div className="flex flex-col md:flex-row gap-4">
         <div className="bg-gray-200 ml-4 rounded-3xl p-4 text-gray-800 max-w-screen-xl">
-          {loading ? <TypingAnimation /> : <TextAnimation text={textInitInfo} />}
+          {isLoadingInfo ? <TypingAnimation /> : <TextAnimation text={textInitInfo} />}
         </div>
       </div>
     </div>
@@ -83,7 +84,7 @@ const Login: React.FC = () => {
 
   useEffect(() => {
     const fetchDataConversation = async () => {
-      setLoading(true)
+      setIsLoadingInfo(true)
 
       const bodyConversation: IBodyConversation = {
         url: currentUrl
@@ -92,15 +93,15 @@ const Login: React.FC = () => {
         const response = await getConversationService(bodyConversation)
         if (response.status_code === 200) {
           setTextInitInfo(response.data)
-          setLoading(false)
+          setIsLoadingInfo(false)
         } else {
           setTextInitInfo(t('startConversation'))
-          setLoading(false)
+          setIsLoadingInfo(false)
         }
       } catch (error) {
         console.error('Error fetching data:', error)
         setTextInitInfo(t('startConversation'))
-        setLoading(false)
+        setIsLoadingInfo(false)
       }
     }
 
