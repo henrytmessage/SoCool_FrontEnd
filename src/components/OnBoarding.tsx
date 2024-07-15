@@ -29,13 +29,22 @@ const OnBoarding = () => {
     { key: KEY_CHOOSE_SOMETHING.SELL_SOMETHING, label: t('sellSomething') },
     { key: KEY_CHOOSE_SOMETHING.BUY_SOMETHING, label: t('buySomething') }
   ]
-  const dataChooseDelivery = [
-    { key: KEY_CHOOSE_DELIVERY.SUPPORTEDDELIVERY, label: t('supportedDelivery') },
-    { key: KEY_CHOOSE_DELIVERY.NOTSUPPORTEDDELIVERY, label: t('notSupportedDelivery') }
-  ]
+
   const currencyOptions = Object.keys(PRICE_CURRENCY)
 
   const [selectedValue, setSelectedValue] = useState<string | undefined>(undefined)
+  let dataChooseDelivery = [
+    {
+      key: KEY_CHOOSE_DELIVERY.SUPPORTEDDELIVERY,
+      label: selectedValue === KEY_CHOOSE_SOMETHING.SELL_SOMETHING ? t('supportedDelivery') : t('supportedDeliveryBuy')
+    },
+
+    {
+      key: KEY_CHOOSE_DELIVERY.NOTSUPPORTEDDELIVERY,
+      label:
+        selectedValue === KEY_CHOOSE_SOMETHING.SELL_SOMETHING ? t('notSupportedDelivery') : t('notSupportedDeliveryBuy')
+    }
+  ]
   const [textFirstInfo, setTextFirstInfo] = useState('')
   const [textValue, setTextValue] = useState<string>('')
   const [informationProduct, setInformationProduct] = useState('')
@@ -64,6 +73,23 @@ const OnBoarding = () => {
   const [isModalWarning, setIsModalWarning] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
 
+  // useEffect(() => {
+  //   dataChooseDelivery = [
+  //     {
+  //       key: KEY_CHOOSE_DELIVERY.SUPPORTEDDELIVERY,
+  //       label:
+  //         selectedValue === KEY_CHOOSE_SOMETHING.SELL_SOMETHING ? t('supportedDelivery') : t('supportedDeliveryBuy')
+  //     },
+  //     {
+  //       key: KEY_CHOOSE_DELIVERY.NOTSUPPORTEDDELIVERY, 
+  //       label:
+  //         selectedValue === KEY_CHOOSE_SOMETHING.SELL_SOMETHING
+  //           ? t('notSupportedDelivery')
+  //           : t('notSupportedDeliveryBuy')
+  //     }
+  //   ]
+  // }, [selectedValue])
+
   const [steps, setSteps] = useState([
     { id: 1, content: t('questionHelp'), isCompleted: false },
     {
@@ -85,7 +111,11 @@ const OnBoarding = () => {
           : t('questionYourAddressBuy'),
       isCompleted: false
     },
-    { id: 5, content: t('chooseShipping'), isCompleted: false },
+    {
+      id: 5,
+      content: selectedValue === KEY_CHOOSE_SOMETHING.SELL_SOMETHING ? t('chooseShippingSell') : t('chooseShippingBuy'),
+      isCompleted: false
+    },
     {
       id: 6,
       content: (
@@ -112,6 +142,7 @@ const OnBoarding = () => {
   const handleSelectChange = (value: string) => {
     setSelectedValue(value)
     updateStepStatus(1, true)
+    setSelectedDelivery(dataChooseDelivery[0].key)
   }
 
   // step 1.5
@@ -154,7 +185,7 @@ const OnBoarding = () => {
 
   // get ai create title sample
   const CreateAiProductTitle = async () => {
-    setIsLoading(true) 
+    setIsLoading(true)
     const body: IBodyCreateTitle = {
       title: textFirstInfo + ' ' + textValue,
       type: selectedValue || KEY_CHOOSE_SOMETHING.SELL_SOMETHING
@@ -305,9 +336,9 @@ const OnBoarding = () => {
       if (data.status_code === 200) {
         window.dataLayer.push({
           event: 'link_generated',
-          email: inputEmail,
+          email: inputEmail
         })
-  
+
         setIsOpenModal(false)
         setIsModalSuccess(true)
       } else if (data.status_code === 406) {
@@ -369,7 +400,12 @@ const OnBoarding = () => {
             : t('questionYourAddressBuy'),
         isCompleted: steps[4].isCompleted
       },
-      { id: 5, content: t('chooseShipping'), isCompleted: steps[5].isCompleted },
+      {
+        id: 5,
+        content:
+          selectedValue === KEY_CHOOSE_SOMETHING.SELL_SOMETHING ? t('chooseShippingSell') : t('chooseShippingBuy'),
+        isCompleted: steps[5].isCompleted
+      },
       {
         id: 6,
         content: (
@@ -614,9 +650,9 @@ const OnBoarding = () => {
           {
             title: t('delivery'),
             value:
-              selectedDelivery === KEY_CHOOSE_DELIVERY.SUPPORTEDDELIVERY
-                ? t('supportedDelivery')
-                : t('notSupportedDelivery')
+              selectedDelivery === KEY_CHOOSE_DELIVERY.SUPPORTEDDELIVERY 
+              ? (selectedValue === KEY_CHOOSE_SOMETHING.SELL_SOMETHING ? t('supportedDelivery') : t('supportedDeliveryBuy'))
+              : (selectedValue === KEY_CHOOSE_SOMETHING.SELL_SOMETHING ? t('notSupportedDelivery') : t('notSupportedDeliveryBuy'))
           },
           { title: t('yourEmail'), value: inputEmail }
         ].map((item, index) => (

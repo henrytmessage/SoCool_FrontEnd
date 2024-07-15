@@ -8,7 +8,7 @@ import TextAnimation from './TextAnimation'
 import { IBodyConversation } from '../api/core/interface'
 import { postConversation } from '../api/core'
 import { useNavigate } from 'react-router-dom'
-import { ACTION_CHAT } from '../constant'
+import { ACTION_CHAT, KEY_CHOOSE_SOMETHING } from '../constant'
 import { formatVND, removeSpaces } from '../function'
 import CustomModalWarning from '../common/CustomModalWarning'
 
@@ -72,6 +72,7 @@ const ContentChat = () => {
   const [disableInputPhoneNumber, setDisableInputPhoneNumber] = useState(false)
   const [isModalWarning, setIsModalWarning] = useState(false)
   const [titleWarning, setTitleWarning] = useState('')
+  const [negotiation, setNegotiation] = useState('')
 
   const handleChangeInputChat = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputChat(e.target.value)
@@ -253,6 +254,11 @@ const ContentChat = () => {
             setConversationId(data.data.id)
             setInitCurrency(data.data.link.currency)
             setActionMessage(data.data.link.action)
+            if (data.data.link.type === KEY_CHOOSE_SOMETHING.SELL_SOMETHING) {
+              setNegotiation(t('negotiationSell'))
+            } else {
+              setNegotiation(t('negotiationBuy'))
+            }
             if (data.data.link.currency === 'USD') {
               i18n.changeLanguage('en')
               setLanguage('en')
@@ -278,6 +284,9 @@ const ContentChat = () => {
           } else if (data.status_code === 404) {
             setIsModalWarning(true)
             setTitleWarning(data.errors.message)
+          } else {
+            setIsModalWarning(true)
+            setTitleWarning(t('linkNotActive'))
           }
         } catch (error) {
           console.error('Error fetching data:', error)
@@ -309,7 +318,7 @@ const ContentChat = () => {
               </div>
               <div className={'bg-[#F4F4F4] ml-4 rounded-3xl p-4 text-[#0D0D0D] max-w-lg'}>
                 <TextAnimation
-                  text={initConversation.link.initChat + '. ' + t('negotiation')}
+                  text={initConversation.link.initChat + '. ' + negotiation}
                   setIsAnimating={setIsAnimating}
                 />
               </div>

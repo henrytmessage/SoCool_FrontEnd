@@ -51,14 +51,18 @@
   "placeholderAddress": "Bạn có thể cho chúng tôi biết địa chỉ của mình không? \nVí dụ: Số nhà 123, quận Thanh Xuân, Thành phố Hà Nội, Việt Nam",
   "questionYourAddressSell": "Nếu người mua muốn đến trực tiếp xem hàng, bạn vui lòng cho tôi biết địa chỉ của bạn",
   "questionYourAddressBuy": "Nếu người bán muốn ship hàng cho bạn, vui lòng cho tôi biết địa chỉ của bạn",
-  "chooseShipping" : "Bạn có hỗ trợ giao hàng không?",
+  "chooseShippingSell" : "Bạn có hỗ trợ giao hàng không?",
+  "chooseShippingBuy": "Bạn có cần hỗ trợ giao hàng không?",
   "supportedDelivery": "Có hỗ trợ giao hàng",
   "notSupportedDelivery": "Không, chỉ muốn giao dịch trực tiếp",
+  "supportedDeliveryBuy": "Có, tôi cần hỗ trợ giao hàng",
+  "notSupportedDeliveryBuy": "Không, tôi muốn đến xem hàng trực tiếp",
   "yes": "Có",
   "no": "Không",
   "confirmDeal": "Chốt đơn",
   "phoneNumber": "Nhập số điện thoại của bạn",
-  "negotiation": "Mời bạn trả giá",
+  "negotiationSell": "Bạn sẵn sàng trả bao nhiêu?",
+  "negotiationBuy": "Bạn sẵn sàng bán với giá bao nhiêu?",
   "sampleSuggestProduct": "Đây là mẫu chúng tôi đề xuất, bạn có muốn dùng thử ngay không?",
   "tryAgain": "Có lỗi xảy ra, bạn vui lòng thử lại",
   "currentProductPrice": "Giá {{productName}} hiện tại",
@@ -74,5 +78,6 @@
   "changeTemplate": "Thay đổi mẫu",
   "questionCondition": "Cho mình xin thông tin về tình trạng của sản phẩm nhé?",
   "exampleCondition": "Ví dụ: Tình trạng sản phẩm: hơi xước, màn nguyên zin,\nCòn bảo hành không?\nCó bao test không?",
-  "startConversation": "Để bắt đầu cuộc trò chuyện, vui lòng cung cấp email của bạn."
+  "startConversation": "Để bắt đầu cuộc trò chuyện, vui lòng cung cấp email của bạn.",
+  "linkNotActive": "Link không còn hoạt động"
 }
