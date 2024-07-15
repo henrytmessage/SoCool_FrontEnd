@@ -2,6 +2,8 @@ FROM node:16.18.0 as build-stage
 
 WORKDIR /app
 
+COPY package*.json ./
+
 COPY . .
 #ARG STAGE=dev
 RUN npm install --force
