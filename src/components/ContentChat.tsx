@@ -246,9 +246,9 @@ const ContentChat = () => {
           if (data.status_code === 200) {
             window.dataLayer.push({
               event: 'conversation_created',
-              url: urlConversation,
+              url: urlConversation
             })
-            console.log('window',window)
+            console.log('window', window)
             setInitConversation(data.data)
             setConversationId(data.data.id)
             setInitCurrency(data.data.link.currency)
@@ -275,7 +275,7 @@ const ContentChat = () => {
               setIsModalWarning(true)
               setTitleWarning(t('tryAgain8Hour'))
             }
-          } else if (data.status_code === 404){
+          } else if (data.status_code === 404) {
             setIsModalWarning(true)
             setTitleWarning(data.errors.message)
           }
@@ -370,22 +370,22 @@ const ContentChat = () => {
         </div>
       </div>
 
-      {/* {actionMessage !== ACTION_CHAT.CONFIRM_DEAL && ( */}
-      <form onSubmit={event => handleSubmit(event)} className="flex-none p-6">
-        <div className="flex rounded-3xl border border-[#b6b5b5] bg-[#F4F4F4]">
-          {renderInputField()}
-          <Button
-            type="primary"
-            htmlType="submit"
-            size="large"
-            className={`rounded-3xl ${!inputChat && !phoneNumber && !inputPrice && 'opacity-80'}`}
-            loading={isLoading}
-          >
-            {t('send')}
-          </Button>
-        </div>
-      </form>
-      {/* )} */}
+      {actionMessage !== ACTION_CHAT.CONFIRM_DEAL && (
+        <form onSubmit={event => handleSubmit(event)} className="flex-none p-6">
+          <div className="flex rounded-3xl border border-[#b6b5b5] bg-[#F4F4F4]">
+            {renderInputField()}
+            <Button
+              type="primary"
+              htmlType="submit"
+              size="large"
+              className={`rounded-3xl ${!inputChat && !phoneNumber && !inputPrice && 'opacity-80'}`}
+              loading={isLoading}
+            >
+              {t('send')}
+            </Button>
+          </div>
+        </form>
+      )}
       <CustomModalWarning
         isOpen={isModalWarning}
         titleWarning={titleWarning}
