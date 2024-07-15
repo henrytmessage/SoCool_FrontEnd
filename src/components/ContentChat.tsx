@@ -299,7 +299,7 @@ const ContentChat = () => {
   }, [chatLog])
 
   return (
-    <div className="flex flex-col h-full bg-grey-900 sm:mx-40">
+    <div className="flex flex-col h-[90%] bg-grey-900 sm:mx-40">
       <div className="flex-grow p-6 overflow-y-auto" ref={chatRef}>
         <div className="flex flex-col space-y-4">
           {initConversation && (
