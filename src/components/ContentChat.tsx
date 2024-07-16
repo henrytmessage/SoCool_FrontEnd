@@ -303,7 +303,7 @@ const ContentChat = () => {
 
     const timer = setTimeout(() => {
       fetchDataConversation();
-    }, 1000); // Delay by 1 second
+    }, 1500); // Delay by 1 second
 
     return () => clearTimeout(timer); // Clean up the timer on component unmount
   }, []);
