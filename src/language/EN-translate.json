@@ -67,7 +67,7 @@
   "tryAgain": "An error occurred, please try again.",
   "currentProductPrice": "current {{productName}} price",
   "currentMarket": "The current market reference price range fluctuates.",
-  "tryAgain8Hour": "You have already confirmed once, please wait 8 hours to continue using this link again",
+  "tryAgain3Hour": "You have already confirmed once, please wait 3 hours to continue using this link again",
   "loginSuccessful": "Login successful!",
   "invalidOTP": "Invalid OTP",
   "pleaseAnotherEmail": "You are the owner of this link, Please provide another email address to continue using.",

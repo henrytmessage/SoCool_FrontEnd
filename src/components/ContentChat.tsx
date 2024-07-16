@@ -284,7 +284,7 @@ const ContentChat = () => {
               setTitleWarning(t('pleaseAnotherEmail'));
             } else {
               setIsModalWarning(true);
-              setTitleWarning(t('tryAgain8Hour'));
+              setTitleWarning(t('tryAgain3Hour'));
             }
           } else if (data.status_code === 404) {
             setIsModalWarning(true);

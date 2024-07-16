@@ -67,7 +67,7 @@
   "tryAgain": "Có lỗi xảy ra, bạn vui lòng thử lại",
   "currentProductPrice": "Giá {{productName}} hiện tại",
   "currentMarket": "Khoảng giá tham khảo thị trường hiện tại dao động.",
-  "tryAgain8Hour": "Bạn đã xác nhận một lần, vui lòng đợi 8 giờ để tiếp tục sử dụng liên kết này",
+  "tryAgain3Hour": "Bạn đã xác nhận một lần, vui lòng đợi 3 giờ để tiếp tục sử dụng liên kết này",
   "loginSuccessful": "Đăng nhập thành công!",
   "invalidOTP": "Sai OTP",
   "pleaseAnotherEmail": "Bạn là chủ sở hữu của liên kết này, Vui lòng cung cấp một địa chỉ email khác để tiếp tục sử dụng.",
