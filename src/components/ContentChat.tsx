@@ -167,6 +167,9 @@ const ContentChat = () => {
           { type: 'bot', message: data.data.message, action: isEnterPhone ? ACTION_CHAT.ENTER_PHONE : '' }
         ])
         setActionMessage(data.data.action)
+      } else if (data.status_code === 406) {
+        setIsModalWarning(true)
+        setTitleWarning(t('linkNotActive'))
       } else {
         setChatLog(prevChatLog => [...prevChatLog, { type: 'bot', message: t('tryAgain') }])
       }
@@ -284,9 +287,6 @@ const ContentChat = () => {
           } else if (data.status_code === 404) {
             setIsModalWarning(true)
             setTitleWarning(data.errors.message)
-          } else {
-            setIsModalWarning(true)
-            setTitleWarning(t('linkNotActive'))
           }
         } catch (error) {
           console.error('Error fetching data:', error)

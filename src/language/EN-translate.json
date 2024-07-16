@@ -79,5 +79,5 @@
   "questionCondition": "Could you please provide me with information regarding the condition of the product?",
   "exampleCondition": "Product condition: has minor scratches, screen is original.\nIs it still under warranty?\nCan I test it before purchasing?",
   "startConversation": "To start the conversation, please provide your email.",
-  "linkNotActive": "Link is not active"
+  "linkNotActive": "You are opening a new session, so this session will be closed."
 }
