@@ -5,6 +5,7 @@ import {
   IBodyConversation,
   IBodyCreateSearchPrice,
   IBodyCreateTitle,
+  IBodyLinkAnswer,
   IBodyPostLink,
   IBodySendMessage
 } from './interface'
@@ -44,4 +45,12 @@ export const postConversationCreateTitle = (body: IBodyCreateTitle) => {
 
 export const postConversationCreateSearchPrice = (body: IBodyCreateSearchPrice) => {
   return axiosInstance.post('/conversation/create-search-price', body)
+}
+
+export const postLinkDeactivate = (id: string) => {
+  return axiosInstance.post(`/link/deactive-link/${id}`)
+}
+
+export const postLinkAnswer = (body: IBodyLinkAnswer) => {
+  return axiosInstance.post('/conversation/answer', body)
 }

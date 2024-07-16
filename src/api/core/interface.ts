@@ -43,3 +43,8 @@ export interface IBodyCreateTitle {
 export interface IBodyCreateSearchPrice {
   title: string
 }
+
+export interface IBodyLinkAnswer {
+  id: string,
+  answer: string
+}
