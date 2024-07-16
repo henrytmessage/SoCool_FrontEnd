@@ -234,72 +234,78 @@ const ContentChat = () => {
   }
 
   useEffect(() => {
+    setIsLoading(true);
     const fetchDataConversation = async () => {
-      const urlConversation = sessionStorage.getItem('url_conversation')
+      const urlConversation = sessionStorage.getItem('url_conversation');
       if (urlConversation) {
-        setIsLoading(true)
-        setIsAnimating(true)
+        setIsLoading(true);
+        setIsAnimating(true);
 
-        const bodyConversation: IBodyConversation = {
+        const bodyConversation = {
           url: JSON.parse(urlConversation)
-        }
+        };
+
         try {
-          const response = await postConversation(bodyConversation)
-          const data = response.data
+          const response = await postConversation(bodyConversation);
+          const data = response.data;
 
           if (data.status_code === 200) {
             window.dataLayer.push({
               event: 'conversation_created',
               url: urlConversation
-            })
-            console.log('window', window)
-            setInitConversation(data.data)
-            setConversationId(data.data.id)
-            setInitCurrency(data.data.link.currency)
-            setActionMessage(data.data.link.action)
+            });
+            console.log('window', window);
+            setInitConversation(data.data);
+            setConversationId(data.data.id);
+            setInitCurrency(data.data.link.currency);
+            setActionMessage(data.data.link.action);
             if (data.data.link.type === KEY_CHOOSE_SOMETHING.SELL_SOMETHING) {
-              setNegotiation(t('negotiationSell'))
+              setNegotiation(t('negotiationSell'));
             } else {
-              setNegotiation(t('negotiationBuy'))
+              setNegotiation(t('negotiationBuy'));
             }
             if (data.data.link.currency === 'USD') {
-              i18n.changeLanguage('en')
-              setLanguage('en')
-              localStorage.setItem('language', 'en')
+              i18n.changeLanguage('en');
+              setLanguage('en');
+              localStorage.setItem('language', 'en');
             } else {
-              i18n.changeLanguage('vn')
-              setLanguage('vn')
-              localStorage.setItem('language', 'vn')
+              i18n.changeLanguage('vn');
+              setLanguage('vn');
+              localStorage.setItem('language', 'vn');
             }
-            setIsLoading(false)
+            setIsLoading(false);
           } else if (data.status_code === 421) {
-            setIsLoading(false)
-            setIsAnimating(false)
-            navigate('/not-found')
+            setIsLoading(false);
+            setIsAnimating(false);
+            navigate('/not-found');
           } else if (data.status_code === 406) {
             if (data.errors.message === 'You are owner of this link') {
-              setIsModalWarning(true)
-              setTitleWarning(t('pleaseAnotherEmail'))
+              setIsModalWarning(true);
+              setTitleWarning(t('pleaseAnotherEmail'));
             } else {
-              setIsModalWarning(true)
-              setTitleWarning(t('tryAgain8Hour'))
+              setIsModalWarning(true);
+              setTitleWarning(t('tryAgain8Hour'));
             }
           } else if (data.status_code === 404) {
-            setIsModalWarning(true)
-            setTitleWarning(data.errors.message)
+            setIsModalWarning(true);
+            setTitleWarning(data.errors.message);
           }
         } catch (error) {
-          console.error('Error fetching data:', error)
-          setIsLoading(false)
-          navigate('/not-found')
+          console.error('Error fetching data:', error);
+          setIsLoading(false);
+          navigate('/not-found');
         }
       } else {
         // navigate('/not-found');
       }
-    }
+    };
 
-    fetchDataConversation()
-  }, [])
+    const timer = setTimeout(() => {
+      fetchDataConversation();
+    }, 1000); // Delay by 1 second
+
+    return () => clearTimeout(timer); // Clean up the timer on component unmount
+  }, []);
 
   useEffect(() => {
     if (chatRef.current) {

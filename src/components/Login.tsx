@@ -22,6 +22,7 @@ const Login: React.FC = () => {
   const [loading, setLoading] = useState(false)
   const [isLoadingInfo, setIsLoadingInfo] = useState(false)
   const [textInitInfo, setTextInitInfo] = useState('')
+  let currentUrl = window.location.href;
 
   const handleEmailSubmit: FormProps<FieldType>['onFinish'] = async values => {
     if (values.email) {
@@ -81,7 +82,6 @@ const Login: React.FC = () => {
   )
 
   useEffect(() => {
-    let currentUrl = window.location.href;
     // clean url when click from facebook
     if (currentUrl.includes('&')) {
       currentUrl = currentUrl.split('?')[0] + '?' + currentUrl.split('?')[1].split('&')[0];
