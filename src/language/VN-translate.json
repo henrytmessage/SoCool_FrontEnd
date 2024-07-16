@@ -79,5 +79,7 @@
   "questionCondition": "Cho mình xin thông tin về tình trạng của sản phẩm nhé?",
   "exampleCondition": "Ví dụ: Tình trạng sản phẩm: hơi xước, màn nguyên zin,\nCòn bảo hành không?\nCó bao test không?",
   "startConversation": "Để bắt đầu cuộc trò chuyện, vui lòng cung cấp email của bạn.",
-  "linkNotActive": "Bạn đang mở 1 trình duyệt mới trên đường link này, vì vậy trình duyệt hiện tại này sẽ được đóng."
+  "linkNotActive": "Bạn đang mở 1 trình duyệt mới trên đường link này, vì vậy trình duyệt hiện tại này sẽ được đóng.",
+  "deletedLinkTitle": "Xóa liên kết thành công! Hy vọng bạn tiếp tục có trải nghiệm tuyệt vời với Socool.",
+  "backToHome": "Trở về trang chủ"
 }

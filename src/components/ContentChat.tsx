@@ -186,7 +186,8 @@ const ContentChat = () => {
   }
 
   const handleClickNo = () => {
-    onSendMessage(t('confirmDeal'), ACTION_CHAT.CONFIRM_DEAL)
+    setPhoneNumber(t('no'))
+    onSendMessage('', ACTION_CHAT.CONFIRM_DEAL)
   }
 
   const renderInputField = () => {
