@@ -6,7 +6,8 @@ import OnBoarding from '../components/OnBoarding'
 import Login from '../components/Login'
 import NotFound from '../components/NotFound'
 import Deactivate from '../components/Deactivate'
-
+import Terms from '../components/Terms'
+import PrivatePolicy from '../components/PrivatePolicy'
 const AppRouters = () => {
   return (
     <Routes>
@@ -15,6 +16,8 @@ const AppRouters = () => {
       <Route path="/chat" element={<ContentChat />} />
       <Route path="/go" element={<Login />} />
       <Route path="/deactivate" element={<Deactivate />} />
+      <Route path="/Terms" element={<Terms />} />
+      <Route path="/Policy" element={<PrivatePolicy />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   )

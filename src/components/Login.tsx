@@ -22,7 +22,7 @@ const Login: React.FC = () => {
   const [loading, setLoading] = useState(false)
   const [isLoadingInfo, setIsLoadingInfo] = useState(false)
   const [textInitInfo, setTextInitInfo] = useState('')
-  let currentUrl = window.location.href;
+  let currentUrl = window.location.href
 
   const handleEmailSubmit: FormProps<FieldType>['onFinish'] = async values => {
     if (values.email) {
@@ -84,10 +84,10 @@ const Login: React.FC = () => {
   useEffect(() => {
     // clean url when click from facebook
     if (currentUrl.includes('&')) {
-      currentUrl = currentUrl.split('?')[0] + '?' + currentUrl.split('?')[1].split('&')[0];
-      window.history.replaceState({}, document.title, currentUrl);
+      currentUrl = currentUrl.split('?')[0] + '?' + currentUrl.split('?')[1].split('&')[0]
+      window.history.replaceState({}, document.title, currentUrl)
     }
-    sessionStorage.setItem('url_conversation', JSON.stringify(currentUrl));
+    sessionStorage.setItem('url_conversation', JSON.stringify(currentUrl))
     const fetchDataConversation = async () => {
       setIsLoadingInfo(true)
 
@@ -114,45 +114,58 @@ const Login: React.FC = () => {
   }, [])
 
   return (
-    <Form
-      form={form}
-      name="login"
-      // labelCol={{ span: 4 }}
-      // wrapperCol={{ span: 22 }}
-      style={{ maxWidth: 500 }}
-      onFinish={showOtp ? handleOtpSubmit : handleEmailSubmit}
-      autoComplete="off"
-      className="flex flex-col w-[80%] max-w-[500px] mt-20 mx-auto"
-    >
-      {renderInitInfoLogin()}
-      <Form.Item<FieldType>
-        label="Email"
-        name="email"
-        rules={[{ required: true, message: 'Please input your email!', type: 'email' }]}
-        labelCol={{ span: 4 }}
-        wrapperCol={{ span: 20 }}
+    <div className="flex flex-col h-[100%] justify-between">
+      <Form
+        form={form}
+        name="login"
+        // labelCol={{ span: 4 }}
+        // wrapperCol={{ span: 22 }}
+        style={{ maxWidth: 500 }}
+        onFinish={showOtp ? handleOtpSubmit : handleEmailSubmit}
+        autoComplete="off"
+        className="flex flex-col w-[80%] max-w-[500px] mt-20 mx-auto"
       >
-        <Input disabled={showOtp} size="large" />
-      </Form.Item>
-
-      {showOtp && (
+        {renderInitInfoLogin()}
         <Form.Item<FieldType>
-          label="OTP"
-          name="otp"
-          rules={[{ required: true, message: 'Please input your OTP!' }]}
+          label="Email"
+          name="email"
+          rules={[{ required: true, message: 'Please input your email!', type: 'email' }]}
           labelCol={{ span: 4 }}
           wrapperCol={{ span: 20 }}
         >
-          <Input.OTP formatter={str => str.toUpperCase()} size="large" />
+          <Input disabled={showOtp} size="large" />
         </Form.Item>
-      )}
 
-      <Form.Item className="mx-auto">
-        <Button type="primary" htmlType="submit" loading={loading} size="large">
-          {showOtp ? 'Verify OTP' : 'Send OTP'}
-        </Button>
-      </Form.Item>
-    </Form>
+        {showOtp && (
+          <Form.Item<FieldType>
+            label="OTP"
+            name="otp"
+            rules={[{ required: true, message: 'Please input your OTP!' }]}
+            labelCol={{ span: 4 }}
+            wrapperCol={{ span: 20 }}
+          >
+            <Input.OTP formatter={str => str.toUpperCase()} size="large" />
+          </Form.Item>
+        )}
+
+        <Form.Item className="mx-auto">
+          <Button type="primary" htmlType="submit" loading={loading} size="large">
+            {showOtp ? 'Verify OTP' : 'Send OTP'}
+          </Button>
+        </Form.Item>
+      </Form>
+      <div className="text-center">
+        By using Socool, you agree to our{' '}
+        <span className="font-bold">
+          <a href="Terms">Terms</a>
+        </span>{' '}
+        and have read our Privacy{' '}
+        <span className="font-bold">
+          <a href="Policy">Policy</a>
+        </span>
+        .
+      </div>
+    </div>
   )
 }
 

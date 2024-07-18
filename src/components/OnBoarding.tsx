@@ -20,6 +20,7 @@ import TextAnimation from './TextAnimation'
 import TypingAnimation from './TypingAnimation'
 import { removeSpaces } from '../function'
 import CustomModalWarning from '../common/CustomModalWarning'
+import CustomDropDown from '../common/CustomDropDown'
 
 const OnBoarding = () => {
   const { t, i18n } = useTranslation()
@@ -666,7 +667,7 @@ const OnBoarding = () => {
   )
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col h-[100%]">
       <div className="flex-grow p-6">
         <div className="flex flex-col space-y-4">
           {renderCallToAction()}
@@ -722,6 +723,10 @@ const OnBoarding = () => {
           children={renderInformation}
         />
       </div>
+      <div className='absolute bottom-1 right-5'>
+        <CustomDropDown/>
+      </div>
+      <div className='text-center pb-2'>By using Socool, you agree to our <span className='font-bold'><a href='Terms'>Terms</a></span> and have read our Privacy <span className='font-bold'><a href="Policy">Policy</a></span>.</div>
     </div>
   )
 }
