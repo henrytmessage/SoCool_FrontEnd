@@ -6,11 +6,7 @@ import { QuestionCircleOutlined } from '@ant-design/icons'
 const items: MenuProps['items'] = [
   {
     key: '1',
-    label: (
-      <a target="_blank" rel="noopener noreferrer" href="contact@socool.ai">
-        contact@socool.ai
-      </a>
-    )
+    label: <p>contact@socool.ai</p>
   }
   // {
   //   key: '2',

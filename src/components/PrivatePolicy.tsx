@@ -16,7 +16,7 @@ const PrivatePolicy = () => {
         governed by our customer agreements covering access to and use of those offerings. For information about how we
         collect and use training information to develop our language models that power SoCool AI and other Services, and
         your choices with respect to that information.
-        <div className="font-medium">1. Personal information we collect</div>
+        <div className="font-medium py-5">1. Personal information we collect</div>
         <div>We collect personal information relating to you (“Personal Information”) as follows:</div>
         <ul className="list-disc pl-5">
           <li>
@@ -74,7 +74,7 @@ const PrivatePolicy = () => {
             use our Services and enhance your experience when you use the Services.
           </li>
         </ul>
-        <div className="font-medium">2. How we use personal information</div>
+        <div className="font-medium py-5">2. How we use personal information</div>
         <div>We may use Personal Information for the following purposes:</div>
         <ul className="list-disc pl-5">
           <li>To provide, administer, maintain and/or analyze the Services;</li>
@@ -103,7 +103,7 @@ const PrivatePolicy = () => {
           information, unless required by law. As noted above, we may use Content you provide us to improve our
           Services, for example to train the models that power SoCool AI.
         </div>
-        <div className="font-medium">3. Disclosure of personal information</div>
+        <div className="font-medium py-5">3. Disclosure of personal information</div>
         <div>
           In certain circumstances we may provide your Personal Information to third parties without further notice to
           you, unless required by the law: Vendors and Service Providers: To assist us in meeting business operations
@@ -129,7 +129,7 @@ const PrivatePolicy = () => {
           conversations with other users via shared links or send information to third-party applications via custom
           actions for GPTs. Be sure you trust any user or third party with whom you share information.
         </div>
-        <div className="font-medium">4. Your rights</div>
+        <div className="font-medium py-5">4. Your rights</div>
         <div>
           Depending on location, individuals may have certain statutory rights in relation to their Personal
           Information. For example, you may have the right to:
