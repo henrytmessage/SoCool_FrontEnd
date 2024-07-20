@@ -82,5 +82,6 @@
   "linkNotActive": "You are opening a new session, so this session will be closed.",
   "deletedLinkTitle": "Link successfully deleted! We hope you continue to have a great experience with Socool.",
   "backToHome": "Back to home",
-  "thanksSharing": "Thank you for sharing this information. Wishing you even greater success in finding potential customers with our SoCool AI!"
+  "thanksSharing": "Thank you for sharing this information. Wishing you even greater success in finding potential customers with our SoCool AI!",
+  "linkHasExpired": "Sorry, this link has expired. Please try again later. Thank you for your understanding!"
 }

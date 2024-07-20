@@ -292,7 +292,7 @@ const ContentChat = () => {
             setTitleWarning(data.errors.message)
           } else {
             setIsModalWarning(true)
-            setTitleWarning(t('linkNotActive'))
+            setTitleWarning(t('linkHasExpired'))
           }
         } catch (error) {
           console.error('Error fetching data:', error)
