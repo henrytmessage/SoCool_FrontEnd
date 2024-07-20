@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next'
 import { logoSoCool } from '../assets'
 import TypingAnimation from './TypingAnimation'
 import TextAnimation from './TextAnimation'
+import CustomModalWarning from '../common/CustomModalWarning'
 
 type FieldType = {
   email?: string
@@ -22,6 +23,9 @@ const Login: React.FC = () => {
   const [loading, setLoading] = useState(false)
   const [isLoadingInfo, setIsLoadingInfo] = useState(false)
   const [textInitInfo, setTextInitInfo] = useState('')
+  const [titleWarning, setTitleWarning] = useState('')
+  const [isModalWarning, setIsModalWarning] = useState(false)
+
   let currentUrl = window.location.href
 
   const handleEmailSubmit: FormProps<FieldType>['onFinish'] = async values => {
@@ -81,6 +85,11 @@ const Login: React.FC = () => {
     </div>
   )
 
+  const handleCloseModalWarning = () => {
+    setIsModalWarning(false)
+    navigate('/')
+  }
+
   useEffect(() => {
     // clean url when click from facebook
     if (currentUrl.includes('&')) {
@@ -99,6 +108,10 @@ const Login: React.FC = () => {
         if (response.status_code === 200) {
           setTextInitInfo(response.data)
           setIsLoadingInfo(false)
+        } else if (response.status_code === 400) {
+          setTitleWarning(t('linkHasExpired'))
+          setIsLoadingInfo(false)
+          setIsModalWarning(true)
         } else {
           setTextInitInfo(t('startConversation'))
           setIsLoadingInfo(false)
@@ -154,6 +167,12 @@ const Login: React.FC = () => {
           </Button>
         </Form.Item>
       </Form>
+      <CustomModalWarning
+        isOpen={isModalWarning}
+        titleWarning={titleWarning}
+        textButtonConfirm={t('confirm')}
+        onCloseModalWarning={handleCloseModalWarning}
+      />
       <div className="text-center">
         By using Socool, you agree to our{' '}
         <span className="font-bold">
