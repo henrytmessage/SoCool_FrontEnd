@@ -9,6 +9,7 @@ import { logoSoCool } from '../assets'
 import TypingAnimation from './TypingAnimation'
 import TextAnimation from './TextAnimation'
 import CustomModalWarning from '../common/CustomModalWarning'
+import CustomDropDown from '../common/CustomDropDown'
 
 type FieldType = {
   email?: string
@@ -183,6 +184,7 @@ const Login: React.FC = () => {
           <a href="Policy">Policy</a>
         </span>
         .
+        <CustomDropDown />
       </div>
     </div>
   )

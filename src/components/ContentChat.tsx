@@ -260,7 +260,7 @@ const ContentChat = () => {
             setConversationId(data.data.id)
             setInitCurrency(data.data.link.currency)
             setActionMessage(data.data.link.action)
-            if (data.data.link.type === KEY_CHOOSE_SOMETHING.SELL_SOMETHING) {
+            if (data.data.link.type === KEY_CHOOSE_SOMETHING.PRODUCT) {
               setNegotiation(t('negotiationSell'))
             } else {
               setNegotiation(t('negotiationBuy'))

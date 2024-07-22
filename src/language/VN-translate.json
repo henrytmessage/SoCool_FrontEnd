@@ -7,10 +7,10 @@
   "placeHolderMessage": "Nhập tin nhắn của bạn...",
   "send": "Gửi",
   "chooseHere": "Chọn ở đây",
-  "sellSomething": "Bán một số thứ",
+  "aProduct": "1 sản phẩm",
   "buySomething": "Mua một số thứ",
-  "callToAction": "SoCool - Trợ lý AI của bạn khi kinh doanh Online",
-  "questionHelp": "Tôi có thể giúp gì được cho bạn?",
+  "callToAction": "SoCool tạo ra link dùng một lần với trợ lý AI, giúp bạn bán bất cứ thứ gì bạn muốn. ❤️",
+  "questionHelp": "Bạn cần tôi bán thứ gì?",
   "questionSell": "Bạn đang muốn bán sản phẩm nào?",
   "questionBuy": "Bạn đang muốn mua sản phẩm nào?",
   "questionPrice": "Bạn hài lòng với mức giá nào?",
@@ -83,5 +83,10 @@
   "deletedLinkTitle": "Xóa liên kết thành công! Hy vọng bạn tiếp tục có trải nghiệm tuyệt vời với Socool.",
   "backToHome": "Trở về trang chủ",
   "thanksSharing": "Cảm ơn bạn đã chia sẻ thông tin này. Chúc bạn thành công hơn nữa trong việc tìm kiếm khách hàng tiềm năng với SoCool AI của chúng tôi!",
-  "linkHasExpired": "Xin lỗi, liên kết này đã hết hạn. Vui lòng thử lại sau. Cảm ơn bạn đã thông cảm!"
+  "linkHasExpired": "Xin lỗi, liên kết này đã hết hạn. Vui lòng thử lại sau. Cảm ơn bạn đã thông cảm!",
+  "aService": "1 dịch vụ",
+  "aJob": "1 việc làm",
+  "aCV": "1 CV",
+  "aIdea": "1 ý tưởng",
+  "comingSoon": "Các tính năng mới đang được hoàn thiện - sẽ sớm ra mắt! ⏳"
 }

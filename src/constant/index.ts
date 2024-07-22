@@ -1,6 +1,10 @@
 export const KEY_CHOOSE_SOMETHING = {
-  SELL_SOMETHING: 'SELL',
+  PRODUCT: 'SELL',
   BUY_SOMETHING: 'BUY',
+  SERVICE: 'SERVICE',
+  JOBS: 'JOBS',
+  CV: 'CV',
+  IDEA: 'IDEA'
 }
 
 export const PRICE_CURRENCY = {

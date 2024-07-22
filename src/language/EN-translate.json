@@ -7,10 +7,10 @@
   "placeHolderMessage": "Type your message...",
   "send": "Send",
   "chooseHere": "Choose here",
-  "sellSomething": "Sell something",
+  "aProduct": "a product",
   "buySomething": "Buy something",
-  "callToAction": "SoCool - Your AI Assistant for Social Commerce",
-  "questionHelp": "What do you want me to help?",
+  "callToAction": "SoCool generates disposable links with AI assistants, to help you sell anything you want. ❤️",
+  "questionHelp": "What do you want me to sell?",
   "questionSell": "Which product do you want to sell?",
   "questionBuy": "Which product do you want to buy?",
   "questionPrice": "Which price are you happy with?",
@@ -83,5 +83,10 @@
   "deletedLinkTitle": "Link successfully deleted! We hope you continue to have a great experience with Socool.",
   "backToHome": "Back to home",
   "thanksSharing": "Thank you for sharing this information. Wishing you even greater success in finding potential customers with our SoCool AI!",
-  "linkHasExpired": "Sorry, this link has expired. Please try again later. Thank you for your understanding!"
+  "linkHasExpired": "Sorry, this link has expired. Please try again later. Thank you for your understanding!",
+  "aService": "a service",
+  "aJob": "a job",
+  "aCV": "a CV",
+  "aIdea": "a Idea",
+  "comingSoon": "New features are on the way - coming soon! ⏳"
 }
