@@ -107,8 +107,8 @@ const Login: React.FC = () => {
       currentUrl = currentUrl.split('?')[0] + '?' + currentUrl.split('?')[1].split('&')[0]
       window.history.replaceState({}, document.title, currentUrl)
     }
+    setCode(currentUrl.split('?')[1])
     sessionStorage.setItem('url_conversation', JSON.stringify(currentUrl))
-    setCode(currentUrl.slice(1))
     const fetchDataConversation = async () => {
       setIsLoadingInfo(true)
 
