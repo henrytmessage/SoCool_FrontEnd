@@ -666,7 +666,7 @@ const OnBoarding = () => {
   )
 
   return (
-    <div className="flex flex-col h-[100%]">
+    <div className="flex flex-col h-[calc(100vh-84px)]">
       <div className="flex-grow p-6">
         <div className="flex flex-col space-y-4">
           {renderCallToAction()}

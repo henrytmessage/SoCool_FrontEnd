@@ -10,6 +10,7 @@ export interface IBodyPostLink {
 
 export interface IBodyAuthOTP {
   email: string
+  code: string
 }
 
 export interface IBodyAuthRegister {

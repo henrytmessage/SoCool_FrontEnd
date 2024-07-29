@@ -9,10 +9,10 @@ function App() {
   return (
     <div className="App">
       <div className=''>
-        <div className='flex flex-col bg-grey-900 h-[100vh]'>
+        <div className='flex flex-col bg-grey-900'>
           <BrowserRouter>
             <Header/>
-            <div className='mt-20 w-full h-[100%]' >
+            <div className='mt-20 w-full h-[calc(100vh-84px)]' >
               <AppRouters/>
             </div>
           </BrowserRouter>

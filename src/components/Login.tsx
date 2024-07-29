@@ -26,6 +26,7 @@ const Login: React.FC = () => {
   const [textInitInfo, setTextInitInfo] = useState('')
   const [titleWarning, setTitleWarning] = useState('')
   const [isModalWarning, setIsModalWarning] = useState(false)
+  const [code, setCode] = useState('')
 
   let currentUrl = window.location.href
 
@@ -33,13 +34,22 @@ const Login: React.FC = () => {
     if (values.email) {
       setLoading(true)
       const bodyAuthOTP: IBodyAuthOTP = {
-        email: values.email
+        email: values.email,
+        code: code
       }
       try {
         const data = await postAuthOTP(bodyAuthOTP)
-        if (data.status_code == 200) {
+        if (data.status_code === 200) {
           setShowOtp(true)
           message.success('OTP sent to your email!')
+        } else if (data.status_code === 406) {
+          if (data.errors.message === 'You are owner of this link') {
+            setIsModalWarning(true)
+            setTitleWarning(t('pleaseAnotherEmail'))
+          } else {
+            setIsModalWarning(true)
+            setTitleWarning(t('tryAgain3Hour'))
+          }
         }
       } catch (error) {
         message.error('Failed to send OTP!')
@@ -98,6 +108,7 @@ const Login: React.FC = () => {
       window.history.replaceState({}, document.title, currentUrl)
     }
     sessionStorage.setItem('url_conversation', JSON.stringify(currentUrl))
+    setCode(currentUrl.slice(1))
     const fetchDataConversation = async () => {
       setIsLoadingInfo(true)
 
@@ -113,6 +124,9 @@ const Login: React.FC = () => {
           setTitleWarning(t('linkHasExpired'))
           setIsLoadingInfo(false)
           setIsModalWarning(true)
+        } else if (response.status_code === 404) {
+          setIsModalWarning(true)
+          setTitleWarning(response.errors.message)
         } else {
           setTextInitInfo(t('startConversation'))
           setIsLoadingInfo(false)
