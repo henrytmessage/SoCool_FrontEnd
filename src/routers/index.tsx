@@ -8,12 +8,14 @@ import NotFound from '../components/NotFound'
 import Deactivate from '../components/Deactivate'
 import Terms from '../components/Terms'
 import PrivatePolicy from '../components/PrivatePolicy'
+import ChatTest from '../components/ChatTest'
 const AppRouters = () => {
   return (
     <Routes>
       <Route path="/test" element={<Test />} />
       <Route path="/" element={<OnBoarding />} />
       <Route path="/chat" element={<ContentChat />} />
+      <Route path="/testChat" element={<ChatTest />} />
       <Route path="/go" element={<Login />} />
       <Route path="/deactivate" element={<Deactivate />} />
       <Route path="/Terms" element={<Terms />} />
