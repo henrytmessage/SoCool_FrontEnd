@@ -15,7 +15,6 @@ import { KEY_CHOOSE_DELIVERY, KEY_CHOOSE_SOMETHING, PRICE_CURRENCY } from '../co
 import { ArrowLeftOutlined } from '@ant-design/icons'
 import { postCreateSearchPrice, postCreateTitleSample, postGenerateLink } from '../service'
 import { IBodyCreateSearchPrice, IBodyCreateTitle, IBodyPostLink } from '../api/core/interface'
-import CustomAlert from '../common/CustomAlert'
 import TextAnimation from './TextAnimation'
 import TypingAnimation from './TypingAnimation'
 import { removeSpaces } from '../function'
@@ -68,6 +67,7 @@ const OnBoarding = () => {
   const [contentSuggestProduct, setContentSuggestProduct] = useState('')
   const [isSuggestPrice, setIsSuggestPrice] = useState(false)
   const [contentSuggestPrice, setContentSuggestPrice] = useState('')
+  const [linkAi, setLinkAi] = useState('')
 
   const [isChooseSuggestProduct, setIsChooseSuggestProduct] = useState(false)
   const [isOpenModal, setIsOpenModal] = useState(false)
@@ -337,7 +337,7 @@ const OnBoarding = () => {
           event: 'link_generated',
           email: inputEmail
         })
-
+        setLinkAi(data.data.url)
         setIsOpenModal(false)
         setIsModalSuccess(true)
       } else if (data.status_code === 406) {
@@ -666,7 +666,7 @@ const OnBoarding = () => {
   )
 
   return (
-    <div className="flex flex-col h-[calc(100vh-84px)]">
+    <div className="flex flex-col h-[calc(100vh-108px)]">
       <div className="flex-grow p-6">
         <div className="flex flex-col space-y-4">
           {renderCallToAction()}
@@ -704,6 +704,7 @@ const OnBoarding = () => {
           isOpen={isModalSuccess}
           titleSuccess={t('alertCheckMail')}
           textButtonConfirm={t('confirm')}
+          linkAi={linkAi}
           onCloseModalSuccess={handleCloseModalSuccess}
         />
         <CustomModalWarning

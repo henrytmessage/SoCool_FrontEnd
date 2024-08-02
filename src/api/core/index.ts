@@ -19,6 +19,10 @@ export const postLink = (body: IBodyPostLink) => {
   return axiosInstance.post('/link', body)
 }
 
+export const getLink = () => {
+  return axiosInstance.get('/link')
+}
+
 export const postAuthOtp = (body: IBodyAuthOTP) => {
   return axiosInstance.post('/auth/otp', body)
 }

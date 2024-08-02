@@ -88,5 +88,8 @@
   "aJob": "a job",
   "aCV": "a CV",
   "aIdea": "an idea",
-  "comingSoon": "New features are on the way - coming soon! ⏳"
+  "comingSoon": "New features are on the way - coming soon! ⏳",
+  "hereLinkAi": "Here is the link with an AI assistant helping you to sell your product:",
+  "hereLinkDemo": "Here's the link to the product demo:",
+  "haveSpawnedLink": "✨ {{number}} links have been created in 10 minutes!"
 }

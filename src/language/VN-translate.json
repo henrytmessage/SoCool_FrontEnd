@@ -88,5 +88,8 @@
   "aJob": "1 việc làm",
   "aCV": "1 CV",
   "aIdea": "1 ý tưởng",
-  "comingSoon": "Các tính năng mới đang được hoàn thiện - sẽ sớm ra mắt! ⏳"
+  "comingSoon": "Các tính năng mới đang được hoàn thiện - sẽ sớm ra mắt! ⏳",
+  "hereLinkAi": "Đây là link bán hàng có kèm trợ lí ảo (AI assistant) của bạn:",
+  "hereLinkDemo": "Đây là link demo sản phẩm: ",
+  "haveSpawnedLink": "✨ {{number}} links have been created in 10 minutes!"
 }
