@@ -1,11 +1,15 @@
 export interface IBodyPostLink {
-  type: string | undefined
-  title: string
-  price: string
-  currency: string
-  address: string
-  email: string
-  can_ship: boolean
+  type?: string | undefined
+  title?: string
+  price?: string
+  currency?: string
+  address?: string
+  email?: string
+  can_ship?: boolean
+  evidence?: string
+  question1?: string
+  question2?: string
+  question3?: string
 }
 
 export interface IBodyAuthOTP {
@@ -48,4 +52,8 @@ export interface IBodyCreateSearchPrice {
 export interface IBodyLinkAnswer {
   id: string,
   answer: string
+}
+
+export interface IBodyGenerateNextQuestion {
+  argument: string
 }

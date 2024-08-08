@@ -5,6 +5,7 @@ import {
   IBodyConversation,
   IBodyCreateSearchPrice,
   IBodyCreateTitle,
+  IBodyGenerateNextQuestion,
   IBodyLinkAnswer,
   IBodyPostLink,
   IBodySendMessage
@@ -57,4 +58,8 @@ export const postLinkDeactivate = (id: string) => {
 
 export const postLinkAnswer = (body: IBodyLinkAnswer) => {
   return axiosInstance.post('/conversation/answer', body)
+}
+
+export const postGenerateQuestion = (body: IBodyGenerateNextQuestion) => {
+  return axiosInstance.post('/conversation/generate-next-question', body)
 }
