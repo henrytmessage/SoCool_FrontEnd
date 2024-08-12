@@ -1,11 +1,11 @@
 export interface IBodyPostLink {
-  type: string | undefined
-  title: string
-  price: string
-  currency: string
-  address: string
-  email: string
-  can_ship: boolean
+  type?: string | undefined
+  title?: string
+  price?: string
+  currency?: string
+  address?: string
+  email?: string
+  can_ship?: boolean
 }
 
 export interface IBodyAuthOTP {

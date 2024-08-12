@@ -22,3 +22,9 @@ export const ACTION_CHAT = {
   ENTER_PRICE: 'enter_price',
   ENTER_PHONE: 'enter_phone'
 }
+
+
+export const KEY_SELECT_SELL_OR_BUY = {
+  SELL: 'SELL',
+  BUY: 'BUY'
+}

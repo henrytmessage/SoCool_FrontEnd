@@ -3,6 +3,7 @@ import { BrowserRouter } from 'react-router-dom';
 import './App.css';
 import AppRouters from './routers';
 import Header from './components/Header';
+import './i18n'
 
 function App() {
 
