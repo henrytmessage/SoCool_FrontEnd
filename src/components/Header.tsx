@@ -39,12 +39,12 @@ const Header = () => {
           </h3>
         </a>
       </div>
-      {location.pathname === '/' && (
+      {/* {location.pathname === '/' && (
         <div className="text-center md:flex justify-center">
           <div className="mr-2">{t('haveSpawnedLink', { number: randomNumber })}</div>
         </div>
-      )}
-      {location.pathname === '/chat' && <CustomCountUp />}
+      )} */}
+      {/* {location.pathname === '/chat' && <CustomCountUp />} */}
     </div>
   )
 }

@@ -210,7 +210,7 @@ const Home = () => {
         onCloseModalSuccess={handleCloseModalSuccess}
       />
       <div className="text-center pb-2">
-        By using Socool, you agree to our{' '}
+        By using SoCool, you agree to our{' '}
         <span className="font-bold">
           <a href="Terms">Terms</a>
         </span>{' '}
