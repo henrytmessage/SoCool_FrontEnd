@@ -21,7 +21,7 @@
   "inputEmailAddress": "please share your email to receive: ",
   "inputEmailAddressSell": "A link with an AI assistant to sell your product 😀",
   "inputEmailAddressBuy": "A link with an AI assistant to buy what you desire 😀",
-  "emailHere": "your email here",
+  "emailHere": "Your email here",
   "sureInformation": "Are you sure 100% with information you input?",
   "yesOrNo": "Yes or No",
   "frequentEmail": "Please use your frequent email address to receive the result of the successful negotiation!",
@@ -42,7 +42,7 @@
   "address": "Address",
   "delivery": "Delivery",
   "yourEmail": "Your email",
-  "alertCheckMail": "You have successfully created the link, please check your email again",
+  "alertCheckMail": "You have successfully created the email. Please check your inbox again",
   "time": "Time:",
   "404NotFound": "Sorry, the page you are looking for does not exist.",
   "goBackHome": "Go back to the home page",
@@ -89,10 +89,12 @@
   "aCV": "a CV",
   "aIdea": "an idea",
   "comingSoon": "New features are on the way - coming soon! ⏳",
-  "hereLinkAi": "Here is the link with an AI assistant helping you to sell your product:",
+  "hereLinkAi": "Here is the email with an AI assistant helping you to sell your product:",
   "hereLinkDemo": "Here's the link to the product demo:",
-  "haveSpawnedLink": "✨ {{number}} links have been created!",
+  "haveSpawnedLink": "✨ {{number}} emails have been created!",
   "sellSomething": "Sell something",
   "necessary": "Could you please complete all the necessary information?",
-  "update16/8": "🌟 Thank you for being with us over the past month! 🚀 We are thrilled to announce that on August 16th, our upcoming update will introduce groundbreaking features, elevating your user experience to new heights. ❤️"
+  "update16/8": "🌟 Thank you for being with us over the past month! 🚀 We are thrilled to announce that on August 16th, our upcoming update will introduce groundbreaking features, elevating your user experience to new heights. ❤️",
+  "placeholderArea": "The city of Los Angeles",
+  "generateEmail": "Generate an email for me!"
 }

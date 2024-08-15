@@ -8,6 +8,7 @@ import { InfoCircleOutlined } from '@ant-design/icons'
 import CustomDropDown from '../common/CustomDropDown'
 import { IBodyPostLink } from '../api/core/interface'
 import { postGenerateLink } from '../service'
+import CustomModalWarning from '../common/CustomModalWarning'
 
 interface AvatarWithTextProps {
   text: string
@@ -16,23 +17,21 @@ interface AvatarWithTextProps {
 
 const AvatarWithText = ({ text, children }: AvatarWithTextProps) => (
   <>
-    {!children && (
-      <div className="flex justify-start w-full">
-        <div>
-          <Avatar src={<img src={logoSoCool} alt="avatar" />} />
-        </div>
-        <div className="flex flex-col md:flex-row gap-4 ml-4 md:items-center">
-          <div
-            className={`bg-gray-200 rounded-3xl p-4 text-gray-800 max-w-screen-xl ${
-              children ? '' : 'font-medium'
-            } text-lg`}
-          >
-            {text}
-          </div>
-          {children}
-        </div>
+    <div className="flex justify-start w-full">
+      <div>
+        <Avatar src={<img src={logoSoCool} alt="avatar" />} />
       </div>
-    )}
+      <div className="flex flex-col md:flex-row gap-4 ml-4 md:items-center">
+        <div
+          className={`bg-gray-200 rounded-3xl p-4 text-gray-800 max-w-screen-xl ${
+            children ? '' : 'font-medium'
+          } text-lg`}
+        >
+          {text}
+        </div>
+        {children}
+      </div>
+    </div>
   </>
 )
 
@@ -43,12 +42,14 @@ const Home = () => {
     { key: KEY_SELECT_SELL_OR_BUY.BUY, label: t('buySomething') }
   ]
   const [selectedValue, setSelectedValue] = useState<string | undefined>(undefined)
-  const [productName, setProductName] = useState('')
   const [productDescription, setProductDescription] = useState('')
+  const [productArea, setProductArea] = useState('')
   const [inputProductPrice, setInputProductPrice] = useState('')
   const [inputProductEmail, setInputProductEmail] = useState('')
-  const [isModalSuccess, setIsModalSuccess] = useState(false)
   const [tempMail, setTempMail] = useState('')
+  const [titleWarning, setTitleWarning] = useState('')
+  const [isModalSuccess, setIsModalSuccess] = useState(false)
+  const [isModalWarning, setIsModalWarning] = useState(false)
 
   const handleChangePrice = (e: React.ChangeEvent<HTMLInputElement>) => {
     let newValue = e.target.value
@@ -71,7 +72,7 @@ const Home = () => {
   }
 
   const handleChangeProductName = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setProductName(e.target.value)
+    setProductArea(e.target.value)
   }
 
   const handleChangeProductDescription = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -86,13 +87,17 @@ const Home = () => {
     window.location.reload()
   }
 
+  const handleCloseModalWarning = () => {
+    setIsModalWarning(false)
+  }
+
   const handleGenerateEmail = async () => {
     const body: IBodyPostLink = {
       type: selectedValue,
-      title: productName,
+      title: productDescription,
       price: inputProductPrice,
-      currency: 'USD',
-      email: inputProductEmail
+      email: inputProductEmail,
+      address: productArea
     }
     try {
       const data = await postGenerateLink(body)
@@ -102,9 +107,13 @@ const Home = () => {
           email: inputProductEmail
         })
         setIsModalSuccess(true)
-        setTempMail(data.data)
+        setTempMail(data.data.alias.alias)
       } else if (data.status_code === 406) {
-        setIsModalSuccess(false)
+        setTitleWarning(data.errors.message)
+        setIsModalWarning(true)
+      } else {
+        setTitleWarning(t('tryAgain'))
+        setIsModalWarning(true)
       }
     } catch (error) {
       console.error('Error fetching data:', error)
@@ -139,21 +148,7 @@ const Home = () => {
                   layout="vertical"
                   label="Product name"
                   name="Product name"
-                  rules={[{ required: true, message: 'Please enter the name of your product!' }]}
-                >
-                  <Input
-                    size="large"
-                    placeholder={t('writeSomethingHere')}
-                    value={productName}
-                    onChange={handleChangeProductName}
-                  />
-                </Form.Item>
-
-                <Form.Item
-                  layout="vertical"
-                  label="Product description"
-                  name="Product description"
-                  rules={[{ required: true, message: 'Please enter your product description!' }]}
+                  rules={[{ required: true, message: 'Please enter your product name!' }]}
                 >
                   <CustomTextArea
                     value={productDescription}
@@ -161,7 +156,19 @@ const Home = () => {
                     onChange={handleChangeProductDescription}
                   />
                 </Form.Item>
-
+                <Form.Item
+                  layout="vertical"
+                  label="Product area"
+                  name="Product area"
+                  rules={[{ required: true, message: 'Please enter the name of your area!' }]}
+                >
+                  <Input
+                    size="large"
+                    placeholder={t('placeholderArea')}
+                    value={productArea}
+                    onChange={handleChangeProductName}
+                  />
+                </Form.Item>
                 <Form.Item
                   layout="vertical"
                   label="Enter price"
@@ -194,7 +201,7 @@ const Home = () => {
 
                 <Form.Item className="m-auto flex justify-center">
                   <CustomButton type="primary" htmlType="submit" onClick={handleGenerateEmail}>
-                    {t('generateLink')}
+                    {t('generateEmail')}
                   </CustomButton>
                 </Form.Item>
               </Form>
@@ -209,6 +216,12 @@ const Home = () => {
         linkAi={tempMail}
         onCloseModalSuccess={handleCloseModalSuccess}
       />
+       <CustomModalWarning
+          isOpen={isModalWarning}
+          titleWarning={titleWarning}
+          textButtonConfirm={t('confirm')}
+          onCloseModalWarning={handleCloseModalWarning}
+        />
       <div className="text-center pb-2">
         By using SoCool, you agree to our{' '}
         <span className="font-bold">

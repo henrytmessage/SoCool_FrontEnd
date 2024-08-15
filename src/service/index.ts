@@ -1,5 +1,5 @@
-import { getApiExample, getConversation, getLink, postAuthOtp, postAuthRegister, postConversation, postConversationCreateSearchPrice, postConversationCreateTitle, postConversationSendMessage, postLink, postLinkAnswer, postLinkDeactivate } from "../api/core";
-import { IBodyAuthOTP, IBodyAuthRegister, IBodyConversation, IBodyCreateSearchPrice, IBodyCreateTitle, IBodyLinkAnswer, IBodyPostLink, IBodySendMessage } from "../api/core/interface";
+import { getApiExample, getConversation, getConversationList, getDetailConversation, getLink, postAuthOtp, postAuthRegister, postConversation, postConversationCreateSearchPrice, postConversationCreateTitle, postConversationSendMessage, postLink, postLinkAnswer, postLinkDeactivate, postSendEmailRunOnRice } from "../api/core";
+import { IBodyAuthOTP, IBodyAuthRegister, IBodyConversation, IBodyConversationList, IBodyCreateSearchPrice, IBodyCreateTitle, IBodyDetailConversation, IBodyLinkAnswer, IBodyPostLink, IBodySendEmailRunOnRice, IBodySendMessage } from "../api/core/interface";
 
 export const getExample = async (messageChat: string) => {
   try {
@@ -115,6 +115,36 @@ export const postServiceLinkAnswer = async (body: IBodyLinkAnswer) => {
 export const getLinkDemo = async () => {
   try {
     const response = await getLink()
+    return response?.data;
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    throw error;
+  }
+}
+
+export const getConversationListService = async (body: IBodyConversationList) => {
+  try {
+    const response = await getConversationList(body)
+    return response?.data;
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    throw error;
+  }
+}
+
+export const postSendEmailRunOnRiceService = async (body: IBodySendEmailRunOnRice) => {
+  try {
+    const response = await postSendEmailRunOnRice(body)
+    return response?.data;
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    throw error;
+  }
+}
+
+export const getConversationDetailService= async (body: IBodyDetailConversation) => {
+  try {
+    const response = await getDetailConversation(body)
     return response?.data;
   } catch (error) {
     console.error('Error fetching data:', error);

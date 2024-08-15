@@ -1,17 +1,30 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import ListItem from './ListItem'
 import { useTranslation } from 'react-i18next'
-import { Button, Form, Input } from 'antd'
+import { Button, Form, Input, Pagination } from 'antd'
+import { getConversationListService } from '../service'
+
+export interface IItemConversation {
+  id?: number;
+  last_message_id?: string;
+  link?: {
+    address?: string;
+    owner?: { email?: string };
+    price?: string;
+    title?: string;
+  };
+  ticket?: string;
+  user?: { email?: string };
+}
 
 const AiRunOnRice: React.FC = () => {
-  const data = [
-    { id: 1, title: 'Item 1', description: 'This is the detail of Item 1' },
-    { id: 2, title: 'Item 2', description: 'This is the detail of Item 2' },
-    { id: 3, title: 'Item 3', description: 'This is the detail of Item 3' }
-  ]
   const { t } = useTranslation()
   const [keyInput, setKeyInput] = useState('')
   const [doneKey, setDoneKey] = useState(false)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [totalItemConversation, setTotalItemConversation] = useState(1)
+  const [dataList, setDataList] = useState<IItemConversation[]>([]);
+  const itemsPerPage = 10
   const keyEmail = process.env.REACT_APP_KEY_INPUT
 
   const handleChangeKeyInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -23,6 +36,29 @@ const AiRunOnRice: React.FC = () => {
       setDoneKey(true)
     }
   }
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page)
+  }
+
+  useEffect(() => {
+    const getListConversation = async () => {
+      const body = {
+        page: currentPage,
+        page_size: 10
+      }
+      try {
+        const response = await getConversationListService(body);
+        console.log("response", response);
+        setDataList(response.data.data)
+        setTotalItemConversation(response.data.total)
+      } catch (error) {
+        console.error('Error fetching response:', error);
+      }
+    };
+
+    getListConversation();
+  }, [currentPage]);
 
   return (
     <>
@@ -49,11 +85,24 @@ const AiRunOnRice: React.FC = () => {
           </Form.Item>
         </Form>
       ) : (
-        <div className="max-w-3xl mx-auto mt-10">
-          {data.map(item => (
-            <ListItem key={item.id} item={item} />
-          ))}
+        <>
+        <div className="max-w-7xl mx-auto ">
+          <div className='pb-10'>
+            {dataList.map(item => (
+              <ListItem key={item.id} item={item} />
+            ))}
+          </div>
         </div>
+          <div className='fixed bottom-0 w-full bg-cyan-100 mx-auto '>
+          <Pagination
+            current={currentPage}
+            pageSize={itemsPerPage}
+            total={totalItemConversation}
+            onChange={handlePageChange}
+            className="mt-4"
+          />
+          </div>
+        </>
       )}
     </>
   )

@@ -40,15 +40,8 @@ const CustomModalSuccess: React.FC<IModalSuccessProps> = ({
         subTitle={
           <span className="text-xl text-black font-semibold">
             {t('hereLinkAi')}{' '}
-            <div className="my-2 text-xl">
-              <a
-                href={linkAi}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-[#1677ff] underline decoration-1"
-              >
-                ✨ {linkAi} ✨
-              </a>
+            <div className="my-2 text-xl text-[#1677ff]">
+              ✨ {linkAi} ✨
             </div>
           </span>
         }
@@ -57,7 +50,7 @@ const CustomModalSuccess: React.FC<IModalSuccessProps> = ({
             <Button key={textButtonConfirm} onClick={handleCancel}>
               {textButtonConfirm}
             </Button>
-            <div className='mt-4'>
+            {/* <div className='mt-4'>
               {t('hereLinkDemo')}{' '}
               <a
                 href="https://www.youtube.com/watch?v=dMEWQaTTWyA"
@@ -67,7 +60,7 @@ const CustomModalSuccess: React.FC<IModalSuccessProps> = ({
               >
                 ✨ Demo ✨
               </a>
-            </div>
+            </div> */}
           </>
         ]}
       />

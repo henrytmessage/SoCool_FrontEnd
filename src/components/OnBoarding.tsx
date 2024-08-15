@@ -322,13 +322,13 @@ const OnBoarding = () => {
 
   const handleOKModal = async () => {
     const body: IBodyPostLink = {
-      type: selectedValue,
-      title: textValue,
-      price: removeSpaces(inputValuePrice),
-      currency: inputValueCurrency,
-      address: textValueAddress,
-      can_ship: selectedDelivery === KEY_CHOOSE_DELIVERY.SUPPORTEDDELIVERY ? true : false,
-      email: inputEmail
+      // type: selectedValue,
+      // title: textValue,
+      // price: removeSpaces(inputValuePrice),
+      // currency: inputValueCurrency,
+      // address: textValueAddress,
+      // can_ship: selectedDelivery === KEY_CHOOSE_DELIVERY.SUPPORTEDDELIVERY ? true : false,
+      // email: inputEmail
     }
     try {
       const data = await postGenerateLink(body)
