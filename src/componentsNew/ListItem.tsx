@@ -93,6 +93,9 @@ const ListItem: React.FC<ListItemProps> = ({ item }) => {
       >
         <Input placeholder="Recipient Email" value={recipientEmail} onChange={e => setRecipientEmail(e.target.value)} className="mb-4" />
         <Input placeholder="Subject" value={subject} onChange={e => setSubject(e.target.value)} className="mb-4" />
+        {
+          item.last_message_id && <Input value={item.last_message_id} disabled className="mb-4" />
+        }
         <AutoComplete
           options={options}
           className='w-full'
