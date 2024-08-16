@@ -48,7 +48,7 @@ const ListItem: React.FC<ListItemProps> = ({ item }) => {
       recipient: recipientEmail || '',
       subject: subject || '',
       content: bodyContent,
-      ...(item.last_message_id && { last_message_id: item.last_message_id }),
+      ...(item.last_message_id && { lastMessageId: item.last_message_id }),
     }
       try {
         const response = await postSendEmailRunOnRiceService(body);

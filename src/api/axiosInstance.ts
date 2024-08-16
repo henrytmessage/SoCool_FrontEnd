@@ -3,7 +3,7 @@ import axios, { AxiosInstance, AxiosResponse, AxiosError } from 'axios';
 // let currentLanguage = localStorage.getItem('language');
 
 const axiosInstance: AxiosInstance = axios.create({
-  baseURL: 'http://localhost:5003', // Replace with your API base URL
+  baseURL: process.env.REACT_APP_API_URL, // Replace with your API base URL
   timeout: 20000, // Example timeout configuration
   headers: {
     'Content-Type': 'application/json',
