@@ -3,7 +3,7 @@ import { Avatar, Form, Input } from 'antd'
 import { logoSoCool } from '../assets'
 import { useTranslation } from 'react-i18next'
 import { CustomButton, CustomModalSuccess, CustomSelect, CustomTextArea } from '../common'
-import { KEY_SELECT_SELL_OR_BUY } from '../constant'
+import { KEY_SELECT_PAYMENT, KEY_SELECT_SELL_OR_BUY } from '../constant'
 import { InfoCircleOutlined } from '@ant-design/icons'
 import CustomDropDown from '../common/CustomDropDown'
 import { IBodyPostLink } from '../api/core/interface'
@@ -41,15 +41,22 @@ const Home = () => {
     { key: KEY_SELECT_SELL_OR_BUY.SELL, label: t('sellSomething') },
     { key: KEY_SELECT_SELL_OR_BUY.BUY, label: t('buySomething') }
   ]
+  const dataPreferredPayment = [
+    { key: KEY_SELECT_PAYMENT.CASH, label: 'Cash' },
+    { key: KEY_SELECT_PAYMENT.DIGITAL_WALLETS, label: 'Digital Wallets' },
+    { key: KEY_SELECT_PAYMENT.OTHERS, label: 'Others' }
+  ]
   const [selectedValue, setSelectedValue] = useState<string | undefined>(undefined)
   const [productDescription, setProductDescription] = useState('')
   const [productArea, setProductArea] = useState('')
   const [inputProductPrice, setInputProductPrice] = useState('')
+  const [selectedValuePayment, setSelectedValuePayment] = useState<string>(dataPreferredPayment[0].key)
   const [inputProductEmail, setInputProductEmail] = useState('')
   const [tempMail, setTempMail] = useState('')
   const [titleWarning, setTitleWarning] = useState('')
   const [isModalSuccess, setIsModalSuccess] = useState(false)
   const [isModalWarning, setIsModalWarning] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
 
   const handleChangePrice = (e: React.ChangeEvent<HTMLInputElement>) => {
     let newValue = e.target.value
@@ -69,6 +76,10 @@ const Home = () => {
 
   const handleSelectChange = (value: string) => {
     setSelectedValue(value)
+  }
+
+  const handleSelectChangePayment = (value: string) => {
+    setSelectedValuePayment(value)
   }
 
   const handleChangeProductName = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -97,9 +108,12 @@ const Home = () => {
       title: productDescription,
       price: inputProductPrice,
       email: inputProductEmail,
-      address: productArea
+      address: productArea,
+      payment_method: selectedValuePayment
     }
     try {
+    setIsLoading(true)
+
       const data = await postGenerateLink(body)
       if (data.status_code === 200) {
         window.dataLayer.push({
@@ -115,7 +129,11 @@ const Home = () => {
         setTitleWarning(t('tryAgain'))
         setIsModalWarning(true)
       }
+    setIsLoading(false)
+
     } catch (error) {
+    setIsLoading(false)
+
       console.error('Error fetching data:', error)
     }
   }
@@ -123,7 +141,7 @@ const Home = () => {
   return (
     <div className="flex flex-col h-[calc(100vh-108px)]">
       <div className="flex-grow flex-col p-6 gap-6 flex m-auto max-w-3xl">
-        <AvatarWithText text={t('update16/8')} />
+        <AvatarWithText text={t('provideSmart')} />
         <AvatarWithText text={t('questionHelp')}>
           <CustomSelect value={selectedValue} onChange={handleSelectChange} options={dataSelectSellOrBuy} />
         </AvatarWithText>
@@ -146,9 +164,9 @@ const Home = () => {
               >
                 <Form.Item
                   layout="vertical"
-                  label="Product name"
-                  name="Product name"
-                  rules={[{ required: true, message: 'Please enter your product name!' }]}
+                  label="Product description"
+                  name="Product description"
+                  rules={[{ required: true, message: 'Please enter your product description!' }]}
                 >
                   <CustomTextArea
                     value={productDescription}
@@ -158,9 +176,9 @@ const Home = () => {
                 </Form.Item>
                 <Form.Item
                   layout="vertical"
-                  label="Product area"
-                  name="Product area"
-                  rules={[{ required: true, message: 'Please enter the name of your area!' }]}
+                  label="Safe exchange location"
+                  name="Safe exchange location"
+                  rules={[{ required: true, message: 'Please enter the name of your safe exchange location!' }]}
                 >
                   <Input
                     size="large"
@@ -171,14 +189,14 @@ const Home = () => {
                 </Form.Item>
                 <Form.Item
                   layout="vertical"
-                  label="Enter price"
-                  name="Enter price"
+                  label="Product price"
+                  name="Product price"
                   rules={[{ required: true, message: 'Please enter your product price!' }]}
                 >
                   <Input
                     size="large"
                     suffix="USD"
-                    placeholder="Enter price"
+                    placeholder="Product price"
                     value={inputProductPrice}
                     onChange={handleChangePrice}
                     onBeforeInput={handleBeforeInput}
@@ -186,10 +204,18 @@ const Home = () => {
                 </Form.Item>
                 <Form.Item
                   layout="vertical"
-                  label="Email"
-                  name="Email"
-                  rules={[{ required: true, message: 'Please input your email!', type: 'email' }]}
-                  tooltip={{ title: 'Please input your email!', icon: <InfoCircleOutlined /> }}
+                  label=" Your preferred payment method"
+                  name=" Your preferred payment method"
+                  rules={[{ required: true, message: 'Please enter your preferred payment method!' }]}
+                >
+                  <CustomSelect value={selectedValuePayment} onChange={handleSelectChangePayment} options={dataPreferredPayment} />
+                </Form.Item>
+                <Form.Item
+                  layout="vertical"
+                  label="Your email"
+                  name="Your email"
+                  rules={[{ required: true, message: 'Please input your your email!', type: 'email' }]}
+                  tooltip={{ title: 'Register your email to communicate with the smart email!', icon: <InfoCircleOutlined /> }}
                 >
                   <Input
                     size="large"
@@ -200,7 +226,7 @@ const Home = () => {
                 </Form.Item>
 
                 <Form.Item className="m-auto flex justify-center">
-                  <CustomButton type="primary" htmlType="submit" onClick={handleGenerateEmail}>
+                  <CustomButton type="primary" htmlType="submit" onClick={handleGenerateEmail} loading={isLoading}>
                     {t('generateEmail')}
                   </CustomButton>
                 </Form.Item>

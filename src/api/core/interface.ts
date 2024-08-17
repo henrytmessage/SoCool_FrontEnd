@@ -4,6 +4,7 @@ export interface IBodyPostLink {
   price?: string
   address?: string
   email?: string
+  payment_method?: string
 }
 
 export interface IBodyAuthOTP {

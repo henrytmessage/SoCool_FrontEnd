@@ -20,7 +20,7 @@ const ListItem: React.FC<ListItemProps> = ({ item }) => {
   const [recipientEmail, setRecipientEmail] = useState(item.user?.email)
   const [subject, setSubject] = useState(item.ticket)
   const [bodyContent, setBodyContent] = useState('')
-  const [listChatDetail, setListChatDetail] = useState('')
+  const [listChatDetail, setListChatDetail] = useState([])
 
   const showDetails = async () => {
     const body = {
@@ -30,7 +30,15 @@ const ListItem: React.FC<ListItemProps> = ({ item }) => {
       const response = await getConversationDetailService(body);
         if(response.status_code == 200) {
           setIsDetailVisible(true)
-          setListChatDetail(response.data)
+          setListChatDetail(response.data.map((email: any, index: number) => (
+            <div key={index} className="mb-4">
+              <p><strong>From:</strong> {email.from}</p>
+              <p><strong>To:</strong> {email.to}</p>
+              <p><strong>Subject:</strong> {email.subject}</p>
+              <p><strong>Content:</strong> {email.content}</p>
+              <hr />
+            </div>
+          )));
         } else{
           alert("Error, check log")
         }

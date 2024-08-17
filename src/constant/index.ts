@@ -28,3 +28,9 @@ export const KEY_SELECT_SELL_OR_BUY = {
   SELL: 'SELL',
   BUY: 'BUY'
 }
+
+export const KEY_SELECT_PAYMENT = {
+  CASH: 'CASH',
+  DIGITAL_WALLETS: 'DIGITAL WALLETS',
+  OTHERS: 'OTHERS'
+}
