@@ -6,7 +6,8 @@ import { getExample } from '../service';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { textState } from '../recoil/atom';
 import { charCountState } from '../recoil/selector';
-
+import { Avatar } from 'antd';
+import { logoThumbnail } from '../assets'
 interface ITestData {
   id: number
   name: string
@@ -45,6 +46,7 @@ const Test = () => {
       <div>
         {t('VietNam')}
       </div>
+      <Avatar src={<img src={logoThumbnail} alt="logoThumbnail" />} />
       <div>
         <button onClick={() => changeLanguage('en')}>English</button>
         <button onClick={() => changeLanguage('vn')}>VietNam</button>

@@ -8,7 +8,7 @@ import TextAnimation from './TextAnimation'
 import { IBodyConversation } from '../api/core/interface'
 import { postConversation } from '../api/core'
 import { useNavigate } from 'react-router-dom'
-import { ACTION_CHAT } from '../constant'
+import { ACTION_CHAT, KEY_CHOOSE_SOMETHING } from '../constant'
 import { formatVND, removeSpaces } from '../function'
 import CustomModalWarning from '../common/CustomModalWarning'
 
@@ -72,6 +72,7 @@ const ContentChat = () => {
   const [disableInputPhoneNumber, setDisableInputPhoneNumber] = useState(false)
   const [isModalWarning, setIsModalWarning] = useState(false)
   const [titleWarning, setTitleWarning] = useState('')
+  const [negotiation, setNegotiation] = useState('')
 
   const handleChangeInputChat = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputChat(e.target.value)
@@ -166,6 +167,9 @@ const ContentChat = () => {
           { type: 'bot', message: data.data.message, action: isEnterPhone ? ACTION_CHAT.ENTER_PHONE : '' }
         ])
         setActionMessage(data.data.action)
+      } else if (data.status_code === 406) {
+        setIsModalWarning(true)
+        setTitleWarning(t('linkNotActive'))
       } else {
         setChatLog(prevChatLog => [...prevChatLog, { type: 'bot', message: t('tryAgain') }])
       }
@@ -182,7 +186,8 @@ const ContentChat = () => {
   }
 
   const handleClickNo = () => {
-    onSendMessage(t('confirmDeal'), ACTION_CHAT.CONFIRM_DEAL)
+    setPhoneNumber(t('no'))
+    onSendMessage('')
   }
 
   const renderInputField = () => {
@@ -230,15 +235,17 @@ const ContentChat = () => {
   }
 
   useEffect(() => {
+    setIsLoading(true)
     const fetchDataConversation = async () => {
       const urlConversation = sessionStorage.getItem('url_conversation')
       if (urlConversation) {
         setIsLoading(true)
         setIsAnimating(true)
 
-        const bodyConversation: IBodyConversation = {
+        const bodyConversation = {
           url: JSON.parse(urlConversation)
         }
+
         try {
           const response = await postConversation(bodyConversation)
           const data = response.data
@@ -246,13 +253,18 @@ const ContentChat = () => {
           if (data.status_code === 200) {
             window.dataLayer.push({
               event: 'conversation_created',
-              url: urlConversation,
+              url: urlConversation
             })
-            console.log('window',window)
+            console.log('window', window)
             setInitConversation(data.data)
             setConversationId(data.data.id)
             setInitCurrency(data.data.link.currency)
             setActionMessage(data.data.link.action)
+            if (data.data.link.type === KEY_CHOOSE_SOMETHING.PRODUCT) {
+              setNegotiation(t('negotiationSell'))
+            } else {
+              setNegotiation(t('negotiationBuy'))
+            }
             if (data.data.link.currency === 'USD') {
               i18n.changeLanguage('en')
               setLanguage('en')
@@ -273,11 +285,14 @@ const ContentChat = () => {
               setTitleWarning(t('pleaseAnotherEmail'))
             } else {
               setIsModalWarning(true)
-              setTitleWarning(t('tryAgain8Hour'))
+              setTitleWarning(t('tryAgain3Hour'))
             }
-          } else if (data.status_code === 404){
+          } else if (data.status_code === 404) {
             setIsModalWarning(true)
             setTitleWarning(data.errors.message)
+          } else {
+            setIsModalWarning(true)
+            setTitleWarning(t('linkHasExpired'))
           }
         } catch (error) {
           console.error('Error fetching data:', error)
@@ -289,7 +304,11 @@ const ContentChat = () => {
       }
     }
 
-    fetchDataConversation()
+    const timer = setTimeout(() => {
+      fetchDataConversation()
+    }, 1500) // Delay by 1 second
+
+    return () => clearTimeout(timer) // Clean up the timer on component unmount
   }, [])
 
   useEffect(() => {
@@ -299,7 +318,7 @@ const ContentChat = () => {
   }, [chatLog])
 
   return (
-    <div className="flex flex-col h-full bg-grey-900 sm:mx-40">
+    <div className="flex flex-col h-[85%] md:h-full bg-grey-900 sm:mx-40">
       <div className="flex-grow p-6 overflow-y-auto" ref={chatRef}>
         <div className="flex flex-col space-y-4">
           {initConversation && (
@@ -308,10 +327,7 @@ const ContentChat = () => {
                 <Avatar src={<img src={logoSoCool} alt="avatar" />} />
               </div>
               <div className={'bg-[#F4F4F4] ml-4 rounded-3xl p-4 text-[#0D0D0D] max-w-lg'}>
-                <TextAnimation
-                  text={initConversation.link.initChat + '. ' + t('negotiation')}
-                  setIsAnimating={setIsAnimating}
-                />
+                <TextAnimation text={initConversation.link.initChat} setIsAnimating={setIsAnimating} />
               </div>
             </div>
           )}
@@ -370,22 +386,22 @@ const ContentChat = () => {
         </div>
       </div>
 
-      {/* {actionMessage !== ACTION_CHAT.CONFIRM_DEAL && ( */}
-      <form onSubmit={event => handleSubmit(event)} className="flex-none p-6">
-        <div className="flex rounded-3xl border border-[#b6b5b5] bg-[#F4F4F4]">
-          {renderInputField()}
-          <Button
-            type="primary"
-            htmlType="submit"
-            size="large"
-            className={`rounded-3xl ${!inputChat && !phoneNumber && !inputPrice && 'opacity-80'}`}
-            loading={isLoading}
-          >
-            {t('send')}
-          </Button>
-        </div>
-      </form>
-      {/* )} */}
+      {actionMessage !== ACTION_CHAT.CONFIRM_DEAL && (
+        <form onSubmit={event => handleSubmit(event)} className="flex-none p-6">
+          <div className="flex rounded-3xl border border-[#b6b5b5] bg-[#F4F4F4]">
+            {renderInputField()}
+            <Button
+              type="primary"
+              htmlType="submit"
+              size="large"
+              className={`rounded-3xl ${!inputChat && !phoneNumber && !inputPrice && 'opacity-80'}`}
+              loading={isLoading}
+            >
+              {t('send')}
+            </Button>
+          </div>
+        </form>
+      )}
       <CustomModalWarning
         isOpen={isModalWarning}
         titleWarning={titleWarning}

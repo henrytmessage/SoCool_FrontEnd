@@ -15,27 +15,38 @@ import { KEY_CHOOSE_DELIVERY, KEY_CHOOSE_SOMETHING, PRICE_CURRENCY } from '../co
 import { ArrowLeftOutlined } from '@ant-design/icons'
 import { postCreateSearchPrice, postCreateTitleSample, postGenerateLink } from '../service'
 import { IBodyCreateSearchPrice, IBodyCreateTitle, IBodyPostLink } from '../api/core/interface'
-import CustomAlert from '../common/CustomAlert'
 import TextAnimation from './TextAnimation'
 import TypingAnimation from './TypingAnimation'
 import { removeSpaces } from '../function'
 import CustomModalWarning from '../common/CustomModalWarning'
+import CustomDropDown from '../common/CustomDropDown'
 
 const OnBoarding = () => {
   const { t, i18n } = useTranslation()
   const textareaStep2Ref = useRef<HTMLTextAreaElement>(null)
 
   const dataChooseHere = [
-    { key: KEY_CHOOSE_SOMETHING.SELL_SOMETHING, label: t('sellSomething') },
-    { key: KEY_CHOOSE_SOMETHING.BUY_SOMETHING, label: t('buySomething') }
+    { key: KEY_CHOOSE_SOMETHING.PRODUCT, label: t('aProduct') },
+    { key: KEY_CHOOSE_SOMETHING.SERVICE, label: t('aService') },
+    { key: KEY_CHOOSE_SOMETHING.JOBS, label: t('aJob') },
+    { key: KEY_CHOOSE_SOMETHING.CV, label: t('aCV') },
+    { key: KEY_CHOOSE_SOMETHING.IDEA, label: t('aIdea') }
   ]
-  const dataChooseDelivery = [
-    { key: KEY_CHOOSE_DELIVERY.SUPPORTEDDELIVERY, label: t('supportedDelivery') },
-    { key: KEY_CHOOSE_DELIVERY.NOTSUPPORTEDDELIVERY, label: t('notSupportedDelivery') }
-  ]
+
   const currencyOptions = Object.keys(PRICE_CURRENCY)
 
   const [selectedValue, setSelectedValue] = useState<string | undefined>(undefined)
+  let dataChooseDelivery = [
+    {
+      key: KEY_CHOOSE_DELIVERY.SUPPORTEDDELIVERY,
+      label: selectedValue === KEY_CHOOSE_SOMETHING.PRODUCT ? t('supportedDelivery') : t('supportedDeliveryBuy')
+    },
+
+    {
+      key: KEY_CHOOSE_DELIVERY.NOTSUPPORTEDDELIVERY,
+      label: selectedValue === KEY_CHOOSE_SOMETHING.PRODUCT ? t('notSupportedDelivery') : t('notSupportedDeliveryBuy')
+    }
+  ]
   const [textFirstInfo, setTextFirstInfo] = useState('')
   const [textValue, setTextValue] = useState<string>('')
   const [informationProduct, setInformationProduct] = useState('')
@@ -56,6 +67,7 @@ const OnBoarding = () => {
   const [contentSuggestProduct, setContentSuggestProduct] = useState('')
   const [isSuggestPrice, setIsSuggestPrice] = useState(false)
   const [contentSuggestPrice, setContentSuggestPrice] = useState('')
+  const [linkAi, setLinkAi] = useState('')
 
   const [isChooseSuggestProduct, setIsChooseSuggestProduct] = useState(false)
   const [isOpenModal, setIsOpenModal] = useState(false)
@@ -64,11 +76,28 @@ const OnBoarding = () => {
   const [isModalWarning, setIsModalWarning] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
 
+  // useEffect(() => {
+  //   dataChooseDelivery = [
+  //     {
+  //       key: KEY_CHOOSE_DELIVERY.SUPPORTEDDELIVERY,
+  //       label:
+  //         selectedValue === KEY_CHOOSE_SOMETHING.PRODUCT ? t('supportedDelivery') : t('supportedDeliveryBuy')
+  //     },
+  //     {
+  //       key: KEY_CHOOSE_DELIVERY.NOTSUPPORTEDDELIVERY,
+  //       label:
+  //         selectedValue === KEY_CHOOSE_SOMETHING.PRODUCT
+  //           ? t('notSupportedDelivery')
+  //           : t('notSupportedDeliveryBuy')
+  //     }
+  //   ]
+  // }, [selectedValue])
+
   const [steps, setSteps] = useState([
     { id: 1, content: t('questionHelp'), isCompleted: false },
     {
       id: 1.5,
-      content: selectedValue === KEY_CHOOSE_SOMETHING.SELL_SOMETHING ? t('questionSell') : t('questionBuy'),
+      content: selectedValue === KEY_CHOOSE_SOMETHING.PRODUCT ? t('questionSell') : t('comingSoon'),
       isCompleted: false
     },
     {
@@ -80,21 +109,21 @@ const OnBoarding = () => {
     {
       id: 4,
       content:
-        selectedValue === KEY_CHOOSE_SOMETHING.SELL_SOMETHING
-          ? t('questionYourAddressSell')
-          : t('questionYourAddressBuy'),
+        selectedValue === KEY_CHOOSE_SOMETHING.PRODUCT ? t('questionYourAddressSell') : t('questionYourAddressBuy'),
       isCompleted: false
     },
-    { id: 5, content: t('chooseShipping'), isCompleted: false },
+    {
+      id: 5,
+      content: selectedValue === KEY_CHOOSE_SOMETHING.PRODUCT ? t('chooseShippingSell') : t('chooseShippingBuy'),
+      isCompleted: false
+    },
     {
       id: 6,
       content: (
         <>
           {t('inputEmailAddress')}
           <span className="text-gray-800 font-medium">
-            {selectedValue === KEY_CHOOSE_SOMETHING.SELL_SOMETHING
-              ? t('inputEmailAddressSell')
-              : t('inputEmailAddressBuy')}
+            {selectedValue === KEY_CHOOSE_SOMETHING.PRODUCT ? t('inputEmailAddressSell') : t('inputEmailAddressBuy')}
           </span>
         </>
       ),
@@ -112,6 +141,7 @@ const OnBoarding = () => {
   const handleSelectChange = (value: string) => {
     setSelectedValue(value)
     updateStepStatus(1, true)
+    setSelectedDelivery(dataChooseDelivery[0].key)
   }
 
   // step 1.5
@@ -157,7 +187,7 @@ const OnBoarding = () => {
     setIsLoading(true)
     const body: IBodyCreateTitle = {
       title: textFirstInfo + ' ' + textValue,
-      type: selectedValue || KEY_CHOOSE_SOMETHING.SELL_SOMETHING
+      type: selectedValue || KEY_CHOOSE_SOMETHING.PRODUCT
     }
     try {
       const data = await postCreateTitleSample(body)
@@ -292,22 +322,22 @@ const OnBoarding = () => {
 
   const handleOKModal = async () => {
     const body: IBodyPostLink = {
-      type: selectedValue,
-      title: textValue,
-      price: removeSpaces(inputValuePrice),
-      currency: inputValueCurrency,
-      address: textValueAddress,
-      can_ship: selectedDelivery === KEY_CHOOSE_DELIVERY.SUPPORTEDDELIVERY ? true : false,
-      email: inputEmail
+      // type: selectedValue,
+      // title: textValue,
+      // price: removeSpaces(inputValuePrice),
+      // currency: inputValueCurrency,
+      // address: textValueAddress,
+      // can_ship: selectedDelivery === KEY_CHOOSE_DELIVERY.SUPPORTEDDELIVERY ? true : false,
+      // email: inputEmail
     }
     try {
       const data = await postGenerateLink(body)
       if (data.status_code === 200) {
         window.dataLayer.push({
           event: 'link_generated',
-          email: inputEmail,
+          email: inputEmail
         })
-  
+        setLinkAi(data.data.url)
         setIsOpenModal(false)
         setIsModalSuccess(true)
       } else if (data.status_code === 406) {
@@ -352,7 +382,7 @@ const OnBoarding = () => {
       { id: 1, content: t('questionHelp'), isCompleted: steps[0].isCompleted },
       {
         id: 1.5,
-        content: selectedValue === KEY_CHOOSE_SOMETHING.SELL_SOMETHING ? t('questionSell') : t('questionBuy'),
+        content: selectedValue === KEY_CHOOSE_SOMETHING.PRODUCT ? t('questionSell') : t('comingSoon'),
         isCompleted: steps[1].isCompleted
       },
       {
@@ -364,21 +394,21 @@ const OnBoarding = () => {
       {
         id: 4,
         content:
-          selectedValue === KEY_CHOOSE_SOMETHING.SELL_SOMETHING
-            ? t('questionYourAddressSell')
-            : t('questionYourAddressBuy'),
+          selectedValue === KEY_CHOOSE_SOMETHING.PRODUCT ? t('questionYourAddressSell') : t('questionYourAddressBuy'),
         isCompleted: steps[4].isCompleted
       },
-      { id: 5, content: t('chooseShipping'), isCompleted: steps[5].isCompleted },
+      {
+        id: 5,
+        content: selectedValue === KEY_CHOOSE_SOMETHING.PRODUCT ? t('chooseShippingSell') : t('chooseShippingBuy'),
+        isCompleted: steps[5].isCompleted
+      },
       {
         id: 6,
         content: (
           <>
             {t('inputEmailAddress')}
             <span className="text-gray-800 font-medium">
-              {selectedValue === KEY_CHOOSE_SOMETHING.SELL_SOMETHING
-                ? t('inputEmailAddressSell')
-                : t('inputEmailAddressBuy')}
+              {selectedValue === KEY_CHOOSE_SOMETHING.PRODUCT ? t('inputEmailAddressSell') : t('inputEmailAddressBuy')}
             </span>
           </>
         ),
@@ -425,21 +455,23 @@ const OnBoarding = () => {
         )
       case 1.5:
         return (
-          <div className="flex gap-4 flex-col md:flex-row">
-            <CustomTextArea
-              value={textFirstInfo}
-              placeholder={t('writeSomethingHere')}
-              required={isRequiredStepFirst}
-              onChange={handleTextStepFirstChange}
-              isEdit={isEdit}
-            />
-            {!steps[1].isCompleted && (
-              <div>
-                <CustomButton onClick={handleConfirmTextFirst}>{t('confirm')}</CustomButton>
-              </div>
-            )}
-            {isEdit && renderEditHere}
-          </div>
+          selectedValue === KEY_CHOOSE_SOMETHING.PRODUCT && (
+            <div className="flex gap-4 flex-col md:flex-row">
+              <CustomTextArea
+                value={textFirstInfo}
+                placeholder={t('writeSomethingHere')}
+                required={isRequiredStepFirst}
+                onChange={handleTextStepFirstChange}
+                isEdit={isEdit}
+              />
+              {!steps[1].isCompleted && (
+                <div>
+                  <CustomButton onClick={handleConfirmTextFirst}>{t('confirm')}</CustomButton>
+                </div>
+              )}
+              {isEdit && renderEditHere}
+            </div>
+          )
         )
       case 2:
         return (
@@ -606,7 +638,7 @@ const OnBoarding = () => {
         {[
           {
             title: t('youWant'),
-            value: selectedValue === KEY_CHOOSE_SOMETHING.SELL_SOMETHING ? t('sellSomething') : t('buySomething')
+            value: selectedValue === KEY_CHOOSE_SOMETHING.PRODUCT ? t('aProduct') : t('buySomething')
           },
           { title: t('product'), value: isChooseSuggestProduct ? textValue : informationProduct },
           { title: t('priceRange'), value: `${inputValuePrice} ${inputValueCurrency}` },
@@ -615,8 +647,12 @@ const OnBoarding = () => {
             title: t('delivery'),
             value:
               selectedDelivery === KEY_CHOOSE_DELIVERY.SUPPORTEDDELIVERY
-                ? t('supportedDelivery')
-                : t('notSupportedDelivery')
+                ? selectedValue === KEY_CHOOSE_SOMETHING.PRODUCT
+                  ? t('supportedDelivery')
+                  : t('supportedDeliveryBuy')
+                : selectedValue === KEY_CHOOSE_SOMETHING.PRODUCT
+                ? t('notSupportedDelivery')
+                : t('notSupportedDeliveryBuy')
           },
           { title: t('yourEmail'), value: inputEmail }
         ].map((item, index) => (
@@ -630,7 +666,7 @@ const OnBoarding = () => {
   )
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col h-[calc(100vh-108px)]">
       <div className="flex-grow p-6">
         <div className="flex flex-col space-y-4">
           {renderCallToAction()}
@@ -668,6 +704,7 @@ const OnBoarding = () => {
           isOpen={isModalSuccess}
           titleSuccess={t('alertCheckMail')}
           textButtonConfirm={t('confirm')}
+          linkAi={linkAi}
           onCloseModalSuccess={handleCloseModalSuccess}
         />
         <CustomModalWarning
@@ -685,6 +722,19 @@ const OnBoarding = () => {
           title={t('hereInformation')}
           children={renderInformation}
         />
+      </div>
+      
+      <div className="text-center pb-2">
+        By using SoCool, you agree to our{' '}
+        <span className="font-bold">
+          <a href="Terms">Terms</a>
+        </span>{' '}
+        and have read our Privacy{' '}
+        <span className="font-bold">
+          <a href="Policy">Policy</a>
+        </span>
+        .
+        <CustomDropDown />
       </div>
     </div>
   )

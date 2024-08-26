@@ -1,9 +1,9 @@
 import { Modal, Result } from 'antd'
 import Button from './CustomButton'
-import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 interface IModalSuccessProps {
+  linkAi?: string
   isOpen?: boolean
   titleSuccess?: string
   textButtonConfirm?: string
@@ -12,6 +12,7 @@ interface IModalSuccessProps {
 }
 
 const CustomModalSuccess: React.FC<IModalSuccessProps> = ({
+  linkAi,
   isOpen,
   titleSuccess,
   textButtonConfirm,
@@ -19,43 +20,48 @@ const CustomModalSuccess: React.FC<IModalSuccessProps> = ({
   onCloseModalSuccess
 }) => {
   const { t } = useTranslation()
-  const [countdown, setCountdown] = useState(10)
-
-  useEffect(() => {
-    let timer: NodeJS.Timeout | null = null
-
-    if (isOpen && countdown > 0) {
-      timer = setTimeout(() => {
-        setCountdown(countdown - 1)
-      }, 1000)
-    } else if (countdown === 0) {
-      // Thực hiện hàm khi đếm ngược kết thúc
-      handleCountdownEnd()
-    }
-
-    return () => {
-      if (timer) clearTimeout(timer)
-    }
-  }, [isOpen, countdown])
-
-  const handleCountdownEnd = () => {
-    onCloseModalSuccess()
-  }
 
   const handleCancel = () => {
     onCloseModalSuccess()
   }
 
   return (
-    <Modal open={isOpen} style={{ minWidth: '40%' }} footer={null} onCancel={handleCancel} className={'w-4/5 md:w-3/5'}>
+    <Modal
+      open={isOpen}
+      style={{ minWidth: '40%' }}
+      footer={null}
+      onCancel={handleCancel}
+      className={'w-4/5 md:w-3/5 '}
+    >
       <Result
+        className="py-2"
         status={status}
-        title={titleSuccess}
-        subTitle={`${t('time')} ${countdown}`}
+        title={<span className="opacity-50 text-lg">{titleSuccess}</span>}
+        subTitle={
+          <span className="text-xl text-black font-semibold">
+            {t('hereLinkAi')}{' '}
+            <div className="my-2 text-xl text-[#1677ff]">
+              ✨ {linkAi} ✨
+            </div>
+          </span>
+        }
         extra={[
-          <Button key={textButtonConfirm} onClick={handleCancel}>
-            {textButtonConfirm}
-          </Button>
+          <>
+            <Button key={textButtonConfirm} onClick={handleCancel}>
+              {textButtonConfirm}
+            </Button>
+            {/* <div className='mt-4'>
+              {t('hereLinkDemo')}{' '}
+              <a
+                href="https://www.youtube.com/watch?v=dMEWQaTTWyA"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-normal text-[#1677ff] underline decoration-1"
+              >
+                ✨ Demo ✨
+              </a>
+            </div> */}
+          </>
         ]}
       />
     </Modal>

@@ -26,7 +26,7 @@ const CustomTextArea = forwardRef<HTMLTextAreaElement, CustomTextAreaProps>(({
 }, ref) => {
   const { t } = useTranslation();
   const isMobile = window.innerWidth <= 768;
-  const rows = value.length > 60 ? 4 : isMobile ? 2 : 4;
+  const rows = value?.length > 60 ? 4 : isMobile ? 2 : 4;
 
   return (
     <div className="flex flex-col">

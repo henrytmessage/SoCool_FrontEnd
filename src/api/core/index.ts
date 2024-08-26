@@ -3,9 +3,13 @@ import {
   IBodyAuthOTP,
   IBodyAuthRegister,
   IBodyConversation,
+  IBodyConversationList,
   IBodyCreateSearchPrice,
   IBodyCreateTitle,
+  IBodyDetailConversation,
+  IBodyLinkAnswer,
   IBodyPostLink,
+  IBodySendEmailRunOnRice,
   IBodySendMessage
 } from './interface'
 
@@ -16,6 +20,10 @@ export const getApiExample = (messageChat: string) => {
 
 export const postLink = (body: IBodyPostLink) => {
   return axiosInstance.post('/link', body)
+}
+
+export const getLink = () => {
+  return axiosInstance.get('/link')
 }
 
 export const postAuthOtp = (body: IBodyAuthOTP) => {
@@ -30,6 +38,10 @@ export const postConversation = (body: IBodyConversation) => {
   return axiosInstance.post('/conversation', body)
 }
 
+export const getConversation = (params: IBodyConversation) => {
+  return axiosInstance.get('/conversation', { params });
+};
+
 export const postConversationSendMessage = (body: IBodySendMessage) => {
   return axiosInstance.post('/conversation/send-message', body)
 }
@@ -40,4 +52,24 @@ export const postConversationCreateTitle = (body: IBodyCreateTitle) => {
 
 export const postConversationCreateSearchPrice = (body: IBodyCreateSearchPrice) => {
   return axiosInstance.post('/conversation/create-search-price', body)
+}
+
+export const postLinkDeactivate = (id: string) => {
+  return axiosInstance.post(`/link/deactive-link/${id}`)
+}
+
+export const postLinkAnswer = (body: IBodyLinkAnswer) => {
+  return axiosInstance.post('/conversation/answer', body)
+}
+
+export const getConversationList = (params: IBodyConversationList) => {
+  return axiosInstance.get('/conversation/list', { params });
+};
+
+export const postSendEmailRunOnRice = (body: IBodySendEmailRunOnRice) => {
+  return axiosInstance.post('/email/send-email-on-rice', body)
+}
+
+export const getDetailConversation = (params: IBodyDetailConversation) => {
+  return axiosInstance.get('/embedding/search-email-by-conversation-id', { params });
 }
