@@ -5,6 +5,7 @@ import ContentChat from '../components/ContentChat'
 import OnBoarding from '../components/OnBoarding'
 import Login from '../components/Login'
 import NotFound from '../components/NotFound'
+import UpComing from '../components/UpComing'
 import Deactivate from '../components/Deactivate'
 import Terms from '../components/Terms'
 import PrivatePolicy from '../components/PrivatePolicy'
@@ -16,6 +17,8 @@ import NewHome from '../componentsNew/NewHome'
 const AppRouters = () => {
   return (
     <Routes>
+      <Route path="/test" element={<Test />} />
+      <Route path="/" element={<UpComing />} />
       {/* <Route path="/test" element={<Test />} /> */}
       {/* <Route path="/" element={<Home />} /> */}
       <Route path="/" element={<NewHome />} />
