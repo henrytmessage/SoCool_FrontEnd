@@ -13,7 +13,7 @@ function App() {
         <div className='flex flex-col bg-grey-900'>
           <BrowserRouter>
             <Header/>
-            <div className='mt-28 md:mt-[108px] w-full h-[calc(100vh-108px)]' >
+            <div className='mt-28 md:mt-[80px] w-full h-[calc(100vh-80px)]' >
               <AppRouters/>
             </div>
           </BrowserRouter>

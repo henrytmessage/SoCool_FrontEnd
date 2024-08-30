@@ -64,3 +64,30 @@ export interface IBodySendEmailRunOnRice {
 export interface IBodyDetailConversation {
   id: number
 }
+
+export interface IBodyGenerateQuestion {
+  background_score: number,
+  expectation_score: number,
+  value_score: number,
+  ability_score: number,
+  personality_score: number
+}
+
+export interface IBodyGenerateAnswerByAi {
+  prompt: string
+}
+
+export interface IQuestion {
+  question?: string;
+  answer?: string;
+}
+
+export interface IBodyCreateLink {
+  email?: string,
+  background_score?: number,
+  expectation_score?: number,
+  value_score?: number,
+  ability_score?: number,
+  personality_score?: number,
+  questions: IQuestion[]
+}

@@ -42,3 +42,18 @@ body {
 .animate-typing {
   animation: typing 5s alternate;
 }
+
+@keyframes showSteps {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.animate-showSteps {
+  animation: showSteps 0.5s ease-out forwards;
+}

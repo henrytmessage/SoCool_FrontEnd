@@ -11,12 +11,14 @@ import PrivatePolicy from '../components/PrivatePolicy'
 import ChatTest from '../components/ChatTest'
 import Home from '../componentsNew/Home'
 import AiRunOnRice from '../componentsNew/AiRunOnRice'
+import NewHome from '../componentsNew/NewHome'
 
 const AppRouters = () => {
   return (
     <Routes>
       {/* <Route path="/test" element={<Test />} /> */}
-      <Route path="/" element={<Home />} />
+      {/* <Route path="/" element={<Home />} /> */}
+      <Route path="/" element={<NewHome />} />
       <Route path="/AiRunOnRice" element={<AiRunOnRice />} />
       {/* <Route path="/" element={<OnBoarding />} />
       <Route path="/chat" element={<ContentChat />} />

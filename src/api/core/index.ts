@@ -4,13 +4,16 @@ import {
   IBodyAuthRegister,
   IBodyConversation,
   IBodyConversationList,
+  IBodyCreateLink,
   IBodyCreateSearchPrice,
   IBodyCreateTitle,
   IBodyDetailConversation,
+  IBodyGenerateAnswerByAi,
+  IBodyGenerateQuestion,
   IBodyLinkAnswer,
   IBodyPostLink,
   IBodySendEmailRunOnRice,
-  IBodySendMessage
+  IBodySendMessage,
 } from './interface'
 
 // vi du
@@ -72,4 +75,24 @@ export const postSendEmailRunOnRice = (body: IBodySendEmailRunOnRice) => {
 
 export const getDetailConversation = (params: IBodyDetailConversation) => {
   return axiosInstance.get('/embedding/search-email-by-conversation-id', { params });
+}
+
+export const postLinkGenerateQuestion = (body: IBodyGenerateQuestion) => {
+  return axiosInstance.post('/link/generate-question', body)
+}
+
+export const postLinkUploadFile = (body: FormData) => {
+  return axiosInstance.post('/link/upload-file', body, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+}
+
+export const postLinkGenerateAnswerByAi = (body: IBodyGenerateAnswerByAi) => {
+  return axiosInstance.post('/link/generate-answer-by-AI', body)
+}
+
+export const postCreateLink = (body: IBodyCreateLink) => {
+  return axiosInstance.post('/link/create-link', body)
 }

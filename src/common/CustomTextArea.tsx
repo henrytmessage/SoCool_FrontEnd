@@ -3,7 +3,7 @@ import { Input } from 'antd';
 import { useTranslation } from 'react-i18next';
 
 interface CustomTextAreaProps {
-  value: string;
+  value?: string;
   disabled?: boolean;
   maxLength?: number;
   onChange?: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
@@ -12,6 +12,7 @@ interface CustomTextAreaProps {
   placeholder?: string;
   required?: boolean;
   isEdit?: boolean;
+  key?: string;
 }
 
 const CustomTextArea = forwardRef<HTMLTextAreaElement, CustomTextAreaProps>(({
@@ -22,11 +23,11 @@ const CustomTextArea = forwardRef<HTMLTextAreaElement, CustomTextAreaProps>(({
   width = 850,
   placeholder,
   required,
-  isEdit
+  isEdit,
+  key
 }, ref) => {
   const { t } = useTranslation();
-  const isMobile = window.innerWidth <= 768;
-  const rows = value?.length > 60 ? 4 : isMobile ? 2 : 4;
+  const rows = 3;
 
   return (
     <div className="flex flex-col">
@@ -40,6 +41,7 @@ const CustomTextArea = forwardRef<HTMLTextAreaElement, CustomTextAreaProps>(({
         status={required ? 'error' : isEdit ? 'warning' : ''}
         onChange={onChange}
         className="md:w-[850px]"
+        key={key}
       />
       {required && <span className="text-red-500 text-sm mt-1">{t('required')}</span>}
     </div>

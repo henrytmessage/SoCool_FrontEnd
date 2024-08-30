@@ -1,5 +1,5 @@
-import { getApiExample, getConversation, getConversationList, getDetailConversation, getLink, postAuthOtp, postAuthRegister, postConversation, postConversationCreateSearchPrice, postConversationCreateTitle, postConversationSendMessage, postLink, postLinkAnswer, postLinkDeactivate, postSendEmailRunOnRice } from "../api/core";
-import { IBodyAuthOTP, IBodyAuthRegister, IBodyConversation, IBodyConversationList, IBodyCreateSearchPrice, IBodyCreateTitle, IBodyDetailConversation, IBodyLinkAnswer, IBodyPostLink, IBodySendEmailRunOnRice, IBodySendMessage } from "../api/core/interface";
+import { getApiExample, getConversation, getConversationList, getDetailConversation, getLink, postAuthOtp, postAuthRegister, postConversation, postConversationCreateSearchPrice, postConversationCreateTitle, postConversationSendMessage, postCreateLink, postLink, postLinkAnswer, postLinkDeactivate, postLinkGenerateAnswerByAi, postLinkGenerateQuestion, postLinkUploadFile, postSendEmailRunOnRice } from "../api/core";
+import { IBodyAuthOTP, IBodyAuthRegister, IBodyConversation, IBodyConversationList, IBodyCreateLink, IBodyCreateSearchPrice, IBodyCreateTitle, IBodyDetailConversation, IBodyGenerateAnswerByAi, IBodyGenerateQuestion, IBodyLinkAnswer, IBodyPostLink, IBodySendEmailRunOnRice, IBodySendMessage } from "../api/core/interface";
 
 export const getExample = async (messageChat: string) => {
   try {
@@ -145,6 +145,46 @@ export const postSendEmailRunOnRiceService = async (body: IBodySendEmailRunOnRic
 export const getConversationDetailService= async (body: IBodyDetailConversation) => {
   try {
     const response = await getDetailConversation(body)
+    return response?.data;
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    throw error;
+  }
+}
+
+export const postLinkGenerateQuestionService = async (body: IBodyGenerateQuestion) => {
+  try {
+    const response = await postLinkGenerateQuestion(body)
+    return response?.data;
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    throw error;
+  }
+}
+
+export const postLinkUploadFileService = async (formData: FormData) => {
+  try {
+    const response = await postLinkUploadFile(formData)
+    return response?.data;
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    throw error;
+  }
+}
+
+export const postLinkGenerateAnswerByAiService = async (body: IBodyGenerateAnswerByAi) => {
+  try {
+    const response = await postLinkGenerateAnswerByAi(body)
+    return response?.data;
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    throw error;
+  }
+}
+
+export const postCreateLinkService = async (body: IBodyCreateLink) => {
+  try {
+    const response = await postCreateLink(body)
     return response?.data;
   } catch (error) {
     console.error('Error fetching data:', error);
