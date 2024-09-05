@@ -55,6 +55,7 @@ const NewHome: React.FC = () => {
 
   const [loading, setLoading] = useState(false)
   const [isLoadingGenerate, setIsLoadingGenerate] = useState(false)
+  const [loadingButtons, setLoadingButtons] = useState<{ [key: number]: boolean }>({});
 
   const renderSelectOptions = (minScore: number) => {
     const options = [];
@@ -132,17 +133,26 @@ const NewHome: React.FC = () => {
     const body: IBodyGenerateAnswerByAi = {
       prompt: prompt + answer0Value
     }
+    setLoadingButtons((prevState) => ({
+      ...prevState,
+      [index]: true,
+    }));
     try {
-      setLoading(true)
       const data = await postLinkGenerateAnswerByAiService(body)
       if (data.status_code === 200) {
         form?.setFieldsValue({
-          [`question_${index}`]: data?.data?.answer,
+          [`question_${index}`]: data?.data,
         });
       }
-      setLoading(false)
+      setLoadingButtons((prevState) => ({
+        ...prevState,
+        [index]: false,
+      }));
     } catch (error) {
-      setLoading(false)
+      setLoadingButtons((prevState) => ({
+        ...prevState,
+        [index]: false,
+      }));
       console.error('Error fetching data:', error)
     }
   }
@@ -391,6 +401,7 @@ const NewHome: React.FC = () => {
                   <Form.Item>
                     <CustomButton
                       type="primary"
+                      loading={loadingButtons[qs.id]}
                       onClick={() => handleGenerateAnswerAi(qs?.id, qs?.prompt)}
                     >
                       Generate Answer by Ai
