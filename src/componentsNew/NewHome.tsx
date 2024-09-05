@@ -23,11 +23,11 @@ const { Step } = Steps;
 const { Option } = Select;
 
 const scoreFields: ScoreField[] = [
-  { label: 'Background (include: ability, skill, religious)', minScore: 25, recommendScore: 25 },
-  { label: 'Value', minScore: 0, recommendScore: 30 },
-  { label: 'Personality (include: hobby, interest)', minScore: 0, recommendScore: 20 },
-  { label: 'Expectation (include: salary, benefit, growth)', minScore: 15, recommendScore: 15 },
-  { label: 'Logistic', minScore: 10, recommendScore: 10 },
+  { label: 'Background (include: ability, skill, religious)', minScore: 20, recommendScore: 30 },
+  { label: 'Expectation (include: salary, benefit, growth)', minScore: 20, recommendScore: 30 },
+  { label: 'Value', minScore: 0, recommendScore: 20 },
+  { label: 'Ability', minScore: 0, recommendScore: 10 },  
+  { label: 'Personality (include: hobby, interest)', minScore: 0, recommendScore: 10 },
 ];
 
 const NewHome: React.FC = () => {
@@ -42,8 +42,8 @@ const NewHome: React.FC = () => {
   const [questions3, setQuestions3] = useState<any[]>([]); 
   const answer0Value = Form.useWatch("question_1", form);
   const [dateString, setDateString] = useState('')
-  const [backgroundScore, setBackgroundScore] = useState(25)
-  const [expectationScore, setExpectationScore] = useState(0)
+  const [backgroundScore, setBackgroundScore] = useState(20)
+  const [expectationScore, setExpectationScore] = useState(20)
   const [valueScore, setValueScore] = useState(0)
   const [abilityScore, setAbilityScore] = useState(0)
   const [personalityScore, setPersonalityScore] = useState(0)
@@ -51,6 +51,7 @@ const NewHome: React.FC = () => {
   const [inputEmail, setInputEmail] = useState('')
   const [isModalSuccess, setIsModalSuccess] = useState(false)
   const [answersWithIds, setAnswersWithIds] = useState<IQuestion[]>([]);
+  const [totalScore, setTotalScore] = useState(0)
 
   const [loading, setLoading] = useState(false)
   const [isLoadingGenerate, setIsLoadingGenerate] = useState(false)
@@ -81,15 +82,15 @@ const NewHome: React.FC = () => {
 
   const onFinishStep1 = (values: any) => {
     const totalScore = values.decidedScore_0 + values.decidedScore_1 + values.decidedScore_2 + values.decidedScore_3 + values.decidedScore_4;
-  
+    setTotalScore(totalScore)
     if (totalScore > 100) {
       setHigher100(true)
       setBelow100(false)
-      message.error('The total score is higher than 100. Please reduce it to match exactly 100.');
+      message.error(`The total score is ${totalScore} which is higher than 100. Please reduce it to match exactly 100.`);
     } else if (totalScore < 100) {
       setBelow100(true)
       setHigher100(false)
-      message.error('The total score is below 100. Please increase it to match exactly 100.');
+      message.error(`The total score is ${totalScore} which is below 100. Please increase it to match exactly 100.`);
     } else {
       setHigher100(false);
       setBelow100(false);
@@ -326,10 +327,10 @@ const NewHome: React.FC = () => {
             </tbody>
           </table>
           {
-            higher100 && <div className='text-red-500'>The total score is higher than 100. Please reduce it to match exactly 100.</div>
+            higher100 && <div className='text-red-500'>{`The total score is ${totalScore} which is higher than 100. Please reduce it to match exactly 100.`}</div>
           }
           {
-            below100 && <div className='text-red-500'>The total score is below 100. Please increase it to match exactly 100.</div>
+            below100 && <div className='text-red-500'>{`The total score is ${totalScore} which is below 100. Please increase it to match exactly 100.`}</div>
           }
           <Form.Item className="mt-4">
             <CustomButton type="primary" htmlType="submit">
