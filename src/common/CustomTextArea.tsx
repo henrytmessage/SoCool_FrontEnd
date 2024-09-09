@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useEffect, useState } from 'react';
 import { Input } from 'antd';
 import { useTranslation } from 'react-i18next';
 
@@ -16,7 +16,7 @@ interface CustomTextAreaProps {
 }
 
 const CustomTextArea = forwardRef<HTMLTextAreaElement, CustomTextAreaProps>(({
-  value,
+  value='',
   disabled,
   maxLength,
   onChange,
@@ -27,7 +27,17 @@ const CustomTextArea = forwardRef<HTMLTextAreaElement, CustomTextAreaProps>(({
   key
 }, ref) => {
   const { t } = useTranslation();
-  const rows = 3;
+  const [rows, setRows] = useState(3);
+
+  useEffect(() => {
+    // Count the number of newline characters (\n)
+    const newLineCount = (value.match(/\n/g) || []).length;  // Count occurrences of '\n'
+    if (value.length > 250 || newLineCount >= 3) {
+      setRows(6);
+    } else {
+      setRows(3);
+    }
+  }, [value]);  // Update rows when value changes
 
   return (
     <div className="flex flex-col">

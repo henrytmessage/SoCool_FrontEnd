@@ -1,17 +1,19 @@
 import React, { ReactNode, useState } from 'react';
-import { Form, Input, Button, DatePicker, Upload, Steps, Avatar, message, Select, Row, Col, InputNumber, DatePickerProps } from 'antd';
-import { InfoCircleOutlined, UploadOutlined } from '@ant-design/icons';
+import { Form, Input, Button, DatePicker, Upload, Steps, Avatar, message, Select, DatePickerProps, Tooltip } from 'antd';
+import { InfoCircleOutlined, UploadOutlined, DeleteOutlined  } from '@ant-design/icons';
 import { logoSoCool } from '../assets'
 import { useTranslation } from 'react-i18next';
 import { CustomButton, CustomModalSuccess, CustomTextArea } from '../common';
 import { IBodyCreateLink, IBodyGenerateAnswerByAi, IBodyGenerateQuestion, IQuestion } from '../api/core/interface';
 import { postCreateLinkService, postLinkGenerateAnswerByAiService, postLinkGenerateQuestionService, postLinkUploadFileService } from '../service';
 import CustomDropDown from '../common/CustomDropDown';
-
+import dayjs from 'dayjs';
 interface ScoreField {
   label?: string;
   minScore: number;
   recommendScore?: number;
+  tooltip?: string;
+  selectedScore?: number;
 }
 
 interface AvatarWithTextProps {
@@ -23,12 +25,43 @@ const { Step } = Steps;
 const { Option } = Select;
 
 const scoreFields: ScoreField[] = [
-  { label: 'Background (include: ability, skill, religious)', minScore: 20, recommendScore: 30 },
-  { label: 'Expectation (include: salary, benefit, growth)', minScore: 20, recommendScore: 30 },
-  { label: 'Value', minScore: 0, recommendScore: 20 },
-  { label: 'Ability', minScore: 0, recommendScore: 10 },  
-  { label: 'Personality (include: hobby, interest)', minScore: 0, recommendScore: 10 },
+  {
+    label: 'Background',
+    minScore: 20,
+    recommendScore: 30,
+    tooltip: 'Background helps ensure people have the right experience, qualifications, and potential to succeed in the role'
+  },
+  {
+    label: 'Expectation',
+    minScore: 20,
+    recommendScore: 30,
+    tooltip: 'Expectation refer to various elements a candidate anticipates or hopes for in a job and how these align with what the role and company offer.'
+  },
+  {
+    label: 'Value',
+    minScore: 0,
+    recommendScore: 20,
+    tooltip: 'Values are what people believe, and rarely change. Shared values ensure that people are aligned on the most fundamental aspects of their relationship and decision-making'
+  },
+  {
+    label: 'Ability',
+    minScore: 0,
+    recommendScore: 10,
+    tooltip: 'Abilities are how people can perform in certain situations, which includes their inherent talents and competencies. Abilities generally change slowly and are harder to acquire or improve upon.'
+  },
+  {
+    label: 'Personality',
+    minScore: 0,
+    recommendScore: 10,
+    tooltip: 'Personality helps ensure a person will fit well with the team and contribute positively to the work environment.'
+  },
+  {
+    label: 'Total',
+    minScore: 40,
+    recommendScore: 100,
+  },
 ];
+
 
 const NewHome: React.FC = () => {
   const { t } = useTranslation()
@@ -52,14 +85,52 @@ const NewHome: React.FC = () => {
   const [isModalSuccess, setIsModalSuccess] = useState(false)
   const [answersWithIds, setAnswersWithIds] = useState<IQuestion[]>([]);
   const [totalScore, setTotalScore] = useState(0)
+  const [inputCompanyName, setInputCompanyName] = useState('')
+  const [expireTime, setExpireTime] = useState('')
 
   const [loading, setLoading] = useState(false)
   const [isLoadingGenerate, setIsLoadingGenerate] = useState(false)
   const [loadingButtons, setLoadingButtons] = useState<{ [key: number]: boolean }>({});
 
+  const [visibleQuestions1, setVisibleQuestions1] = useState(questions.slice(0, 3));
+  const [showMoreQuestions1, setShowMoreQuestion1] = useState(false)
+
+  const [visibleQuestions2, setVisibleQuestions2] = useState(questions2.slice(0, 4));
+  const [showMoreQuestions2, setShowMoreQuestion2] = useState(false)
+
+  const handleShowMoreQuestions1 = () => {
+    setShowMoreQuestion1(true);
+    setVisibleQuestions1(questions); 
+  };
+
+  const handleDeleteQuestions1 = (index: number) => {
+    // Xóa các câu hỏi từ vị trí thứ 5 trở đi
+    const updatedQuestions = visibleQuestions1.filter((_, i) => i !== index);
+    setVisibleQuestions1(updatedQuestions);
+
+    // Nếu tất cả các câu hỏi thêm đã bị xóa, hiện lại nút "Show More"
+    if (updatedQuestions.length <= 4) {
+      setShowMoreQuestion1(false);
+    }
+  };
+
+  const handleShowMoreQuestions2 = () => {
+    setShowMoreQuestion2(true);
+    setVisibleQuestions2(questions2); 
+  };
+
+  const handleDeleteQuestions2 = (index: number) => {
+    const updatedQuestions = visibleQuestions2.filter((_, i) => i !== index);
+    setVisibleQuestions2(updatedQuestions);
+
+    if (updatedQuestions.length <= 4) {
+      setShowMoreQuestion2(false);
+    }
+  };
+
   const renderSelectOptions = (minScore: number) => {
     const options = [];
-    for (let i = minScore; i <= minScore + 50; i += 5) {
+    for (let i = minScore; i <= minScore + 60; i += 5) {
       options.push(
         <Option key={i} value={i}>
           {i}
@@ -79,6 +150,25 @@ const NewHome: React.FC = () => {
 
   const prev = () => {
     setCurrent(current - 1);
+  };
+
+  const handleScoreChange = (value: number, index: number) => {
+    // Tính toán lại tổng điểm dựa trên giá trị mới
+    let newTotalScore = 0;
+  
+    // Cập nhật từng giá trị đã chọn
+    const updatedScores = scoreFields.map((field, i) => {
+      if (i === index) {
+        field.selectedScore = value;  // Cập nhật điểm đã chọn cho trường hiện tại
+      }
+      // Cộng dồn các giá trị đã chọn
+      if (field.selectedScore) {
+        newTotalScore += field.selectedScore;
+      }
+      return field;
+    });
+  
+    setTotalScore(newTotalScore);  // Cập nhật lại tổng điểm
   };
 
   const onFinishStep1 = (values: any) => {
@@ -102,7 +192,6 @@ const NewHome: React.FC = () => {
       setPersonalityScore(values.decidedScore_4)
       handleGenerateQuestion(values.decidedScore_0, values.decidedScore_1, values.decidedScore_2, values.decidedScore_3, values.decidedScore_4 )
       next();
-      
     }
   };
 
@@ -121,6 +210,8 @@ const NewHome: React.FC = () => {
         setQuestions(data.data.step1)
         setQuestions2(data.data.step2)
         setQuestions3(data.data.step3)
+        setVisibleQuestions1(data.data.step1.slice(0, 3))
+        setVisibleQuestions2(data.data.step2.slice(0, 4))
       }
       setLoading(false)
     } catch (error) {
@@ -160,10 +251,30 @@ const NewHome: React.FC = () => {
   const onFinishStep2 = (values: any) => {
     const newAnswersWithIds1 = questions.map((question, index) => ({
       question: question.alias,
-      answer: values[`question_${question?.id}`],
+      answer: String(values[`question_${question?.id}`]),
     }));
 
-    setAnswersWithIds(prevState => [...prevState, ...newAnswersWithIds1]);
+    setAnswersWithIds((prevState) => {
+      // Tạo một bản sao của prevState
+      const updatedAnswers = [...prevState];
+  
+      newAnswersWithIds1.forEach((newAnswer) => {
+        // Tìm xem câu hỏi đã có trong mảng chưa
+        const existingAnswerIndex = updatedAnswers.findIndex(
+          (answer) => answer.question === newAnswer.question
+        );
+  
+        if (existingAnswerIndex !== -1) {
+          // Nếu tồn tại, cập nhật câu trả lời
+          updatedAnswers[existingAnswerIndex].answer = newAnswer.answer;
+        } else {
+          // Nếu không tồn tại, thêm câu hỏi mới
+          updatedAnswers.push(newAnswer);
+        }
+      });
+  
+      return updatedAnswers;
+    });
     next();
   };
 
@@ -231,6 +342,10 @@ const NewHome: React.FC = () => {
     }
   };
 
+  const handleChangeCompanyName = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputCompanyName(e.target.value);
+  }
+
   const handleChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputEmail(e.target.value)
   }
@@ -238,10 +353,31 @@ const NewHome: React.FC = () => {
   const onFinishStep3 = (values: any) => {
     const newAnswersWithIds2 = questions2.map((question, index) => ({
       question: question.alias,
-      answer: question?.type === 'date' ? dateString : values[`question_${question?.id}`],
+      answer: question?.type === 'date' ? dateString : String(values[`question_${question?.id}`]),
     }));
 
-    setAnswersWithIds(prevState => [...prevState, ...newAnswersWithIds2]);
+    setAnswersWithIds((prevState) => {
+      // Tạo một bản sao của prevState
+      const updatedAnswers = [...prevState];
+  
+      newAnswersWithIds2.forEach((newAnswer) => {
+        // Tìm xem câu hỏi đã có trong mảng chưa
+        const existingAnswerIndex = updatedAnswers.findIndex(
+          (answer) => answer.question === newAnswer.question
+        );
+  
+        if (existingAnswerIndex !== -1) {
+          // Nếu tồn tại, cập nhật câu trả lời
+          updatedAnswers[existingAnswerIndex].answer = newAnswer.answer;
+        } else {
+          // Nếu không tồn tại, thêm câu hỏi mới
+          updatedAnswers.push(newAnswer);
+        }
+      });
+      
+      return updatedAnswers;
+    });
+    
     next();
   };
 
@@ -251,27 +387,47 @@ const NewHome: React.FC = () => {
       answer: values[`question_${question?.id}`],
     }));
     
-    setAnswersWithIds(prevState => [...prevState, ...newAnswersWithIds3]);
-    handleCreateLink()
+    setAnswersWithIds((prevState) => {
+      // Tạo một bản sao của prevState
+      const updatedAnswers = [...prevState];
+  
+      newAnswersWithIds3.forEach((newAnswer) => {
+        // Tìm xem câu hỏi đã có trong mảng chưa
+        const existingAnswerIndex = updatedAnswers.findIndex(
+          (answer) => answer.question === newAnswer.question
+        );
+  
+        if (existingAnswerIndex !== -1) {
+          // Nếu tồn tại, cập nhật câu trả lời
+          updatedAnswers[existingAnswerIndex].answer = newAnswer.answer;
+        } else {
+          // Nếu không tồn tại, thêm câu hỏi mới
+          updatedAnswers.push(newAnswer);
+        }
+      });
+      handleCreateLink(updatedAnswers);
+      return updatedAnswers;
+    });
   };
 
-  const handleCreateLink = async () => {
-
+  const handleCreateLink = async (updatedAnswers: IQuestion[]) => {
+    
     const body: IBodyCreateLink = {
       email: inputEmail,
+      company_project_name: inputCompanyName,
       background_score: backgroundScore,
       expectation_score: expectationScore,
       value_score: valueScore,
       ability_score: abilityScore,
       personality_score: personalityScore,
-      questions: answersWithIds
+      questions: updatedAnswers
     }
-    
+
     try {
       setIsLoadingGenerate(true)
       const data = await postCreateLinkService(body)
       if (data.status_code === 200) {
-        console.log(data.data);
+        setExpireTime(dayjs(data.data.alias.links[0].exp).format('DD/MM/YYYY'))
         setTempMail(data.data.alias.alias)
         setIsModalSuccess(true)
       }
@@ -294,48 +450,63 @@ const NewHome: React.FC = () => {
 
   const steps = [
     {
-      title: 'Step 1',
+      title: '',
       content: (
         <div >
         <Form form={form} onFinish={onFinishStep1} layout="vertical" >
-          <table className="w-full border-collapse border border-gray-300">
-            <thead>
-              <tr>
-                <th className="border border-gray-300 p-2">Screening Standard (SS)</th>
-                <th className="border border-gray-300 p-2">Min Score</th>
-                <th className="border border-gray-300 p-2 hidden md:block">Recommend Score</th>
-                <th className="border border-gray-300 p-2">Decided Score</th>
+        <table className="w-full border-collapse border border-gray-300 table-fixed">
+          <thead>
+            <tr>
+              <th className="border border-gray-300 p-2 w-1/2 md:w-1/4">Screening Standard</th>
+              <th className="border border-gray-300 p-2 w-1/4 md:w-1/4">Min Score</th>
+              <th className="border border-gray-300 p-2 hidden md:table-cell w-1/4">Recommended Score</th>
+              <th className="border border-gray-300 p-2 w-1/4 md:w-1/4">User's Score</th>
+            </tr>
+          </thead>
+          <tbody>
+            {scoreFields.map((field, index) => (
+              <tr key={index}>
+                <td className="border border-gray-300 p-4 w-1/2 md:w-1/4">
+                  {field.label}
+                  {field.tooltip && 
+                    <Tooltip title={field.tooltip} placement="top">
+                      <InfoCircleOutlined className="ml-1 text-gray-500 cursor-pointer" />
+                    </Tooltip>
+                  }
+                </td>
+                <td className="border border-gray-300 p-2 w-1/4 md:w-1/4">
+                  <Form.Item className="my-4 text-center">
+                    {field.minScore}
+                  </Form.Item>
+                </td>
+                <td className="border border-gray-300 p-2 hidden md:table-cell w-1/4">
+                  <Form.Item className="my-4 text-center">
+                    {field.recommendScore}
+                  </Form.Item>
+                </td>
+                {field.tooltip ?
+                <td className="border border-gray-300 p-2 w-1/4 md:w-1/4">
+                  <Form.Item
+                    className="m-0 text-center"
+                    name={`decidedScore_${index}`}
+                    rules={[{ required: true, message: 'Please select a decided score!' }]}
+                  >
+                    <Select placeholder="Select score"
+                     onChange={(value) => handleScoreChange(value, index)}
+                     >
+                      {renderSelectOptions(field.minScore)}
+                    </Select>
+                  </Form.Item>
+                </td>
+                : 
+                <td className="border border-gray-300 p-2 text-center md:table-cell w-1/4">
+                  {totalScore}
+                </td>
+                }
               </tr>
-            </thead>
-            <tbody>
-              {scoreFields.map((field, index) => (
-                <tr key={index}>
-                  <td className="border border-gray-300 p-4">{field.label}</td>
-                  <td className="border border-gray-300 p-2 mr-auto">
-                    <Form.Item className='my-4 text-center'>
-                      {field.minScore}
-                    </Form.Item>
-                  </td>
-                  <td className="border border-gray-300 p-2 hidden md:block">
-                    <Form.Item className='my-4 text-center'>
-                      {field.recommendScore}
-                    </Form.Item>
-                  </td>
-                  <td className="border border-gray-300 p-2">
-                    <Form.Item
-                      className='m-0'
-                      name={`decidedScore_${index}`}
-                      rules={[{ required: true, message: 'Please select a decided score!' }]}
-                    >
-                      <Select placeholder="Select score">
-                        {renderSelectOptions(field.minScore)}
-                      </Select>
-                    </Form.Item>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+            ))}
+          </tbody>
+        </table>
           {
             higher100 && <div className='text-red-500'>{`The total score is ${totalScore} which is higher than 100. Please reduce it to match exactly 100.`}</div>
           }
@@ -352,116 +523,98 @@ const NewHome: React.FC = () => {
       ),
     },
     {
-      title: 'Step 2',
+      title: '',
       content: (
         <div>
-         <Form form={form} onFinish={onFinishStep2} layout="vertical" className="px-12 py-4 border border-solid border-blue-500 rounded flex-col w-full mx-auto">
-          <Form.Item label="Basic Information" name="basicInfo">
-            <Upload
-              accept=".pdf,.doc,.docx"
-              maxCount={1}
-              beforeUpload={beforeUpload}
-              onChange={handleUploadChange}
-              customRequest={customUpload} 
+          <Form
+            form={form}
+            onFinish={onFinishStep2}
+            layout="vertical"
+            className="px-12 py-4 border border-solid border-blue-500 rounded flex-col w-full mx-auto"
+          >
+            <Form.Item
+              label="You can choose to upload your current job description (JD) or answer the following questions about your job requirements."
+              name="basicInfo"
             >
-              <Button icon={<UploadOutlined />}>Upload JD (pdf or doc)</Button>
-            </Upload>
-          </Form.Item>
-
-          {questions?.map((qs, index) => (
-            <React.Fragment key={index}>
-              <Form.Item
-                label={qs?.content}
-                name={`question_${qs?.id}`}
-                rules={[
-                  { required: true, message: 'Please answer this question!' },
-                  {
-                    validator(_, value) {
-                      const maxLength = qs.type === 'normal' ? 500 : qs.type === 'large' ? 3000 : undefined;
-                      if (value && value.length === maxLength) {
-                        return Promise.reject(new Error(`You have reached the maximum length of ${maxLength} characters!`));
-                      }
-                      return Promise.resolve();
-                    },
-                  },
-                ]}
+              <Upload
+                accept=".pdf,.doc,.docx"
+                maxCount={1}
+                beforeUpload={beforeUpload}
+                onChange={handleUploadChange}
+                customRequest={customUpload}
               >
-                <CustomTextArea
-                  placeholder={qs?.place_holder || 'Your answer here'}
-                  value={form.getFieldValue(`question_${qs?.id}`) || ''}
-                  maxLength={
-                    qs.type === 'normal' ? 500 : qs.type === 'large' ? 3000 : undefined
+                <Button icon={<UploadOutlined />}>Upload JD (pdf or doc)</Button>
+              </Upload>
+            </Form.Item>
+
+            {/* Hiển thị các câu hỏi */}
+            {visibleQuestions1.map((qs, index) => (
+              <React.Fragment key={index}>
+                <Form.Item
+                   label={
+                    <span style={{ display: 'flex',  justifyContent: 'space-between', width: '100%' }}>
+                      {qs?.content}
+                      {index >= 3 && (
+                        <Button
+                          icon={<DeleteOutlined />}
+                          onClick={() => handleDeleteQuestions1(index)}
+                          style={{ border: 'none', marginLeft: '8px' }} // Optional margin for spacing
+                        />
+                      )}
+                    </span>
                   }
-                  // onChange={(e) => handleTextAreaChange(index, e)}
-                />
-              </Form.Item>
-
-              {qs.id === 2 || qs.id === 3 ? (
-                form.getFieldValue('question_1') && form.getFieldValue('question_1').trim() !== '' && (
-                  <Form.Item>
-                    <CustomButton
-                      type="primary"
-                      loading={loadingButtons[qs.id]}
-                      onClick={() => handleGenerateAnswerAi(qs?.id, qs?.prompt)}
-                    >
-                      Generate Answer by Ai
-                    </CustomButton>
-                  </Form.Item>
-                )
-              ) : null}
-            </React.Fragment>
-          ))}
-
-          <Form.Item>
-            <div className="flex justify-around">
-              <CustomButton type="default" onClick={prev}>
-                Back
-              </CustomButton>
-              <CustomButton type="primary" htmlType="submit">
-                Next
-              </CustomButton>
-            </div>
-          </Form.Item>
-        </Form>
-
-        </div>
-      ),
-    },
-    {
-      title: 'Step 3',
-      content: (
-        <div>
-          <Form form={form} onFinish={onFinishStep3} layout="vertical" className="px-12 py-4 border border-solid border-blue-500 rounded flex-col w-full mx-auto">
-            {questions2?.map((qs, index) => (
-              qs.type != 'date'? 
-              <Form.Item key={index} label={qs?.content} name={`question_${qs?.id}`}  rules={[
-                  { required: true, message: 'Please answer this question!' },
-                  ({ }) => ({
-                    validator(_, value) {
-                      const maxLength = qs.type === 'normal' ? 500 : qs.type === 'large' ? 3000 : undefined;
-                      if (value && value.length === maxLength) {
-                        return Promise.reject(new Error(`You have reached the maximum length of ${maxLength} characters!`));
-                      }
-                      return Promise.resolve();
+                  name={`question_${qs?.id}`}
+                  rules={[
+                    { required: true, message: 'Please answer this question!' },
+                    {
+                      validator(_, value) {
+                        const maxLength =
+                          qs.type === 'normal' ? 500 : qs.type === 'large' ? 3000 : undefined;
+                        if (value && value.length === maxLength) {
+                          return Promise.reject(
+                            new Error(`You have reached the maximum length of ${maxLength} characters!`)
+                          );
+                        }
+                        return Promise.resolve();
+                      },
                     },
-                  }),
-                ]}
-              >
-               <CustomTextArea 
-                    placeholder={qs?.place_holder || 'Your answer here'} 
+                  ]}
+               
+                >
+                  <CustomTextArea
+                    placeholder={qs?.place_holder || 'Your answer here'}
                     value={form.getFieldValue(`question_${qs?.id}`) || ''}
                     maxLength={qs.type === 'normal' ? 500 : qs.type === 'large' ? 3000 : undefined}
-                  /> 
-              </Form.Item>
-              : 
-              <Form.Item key={index} label={qs?.content} name={`question_${qs?.id}`}  rules={[
-                { required: true, message: 'Please answer this question!' } ]}>
-                    <DatePicker onChange={onChangeDatePicker} />
-              </Form.Item>
+                  />
+                </Form.Item>
+
+                {qs.id === 2 || qs.id === 3 ? (
+                  form.getFieldValue('question_1') &&
+                  form.getFieldValue('question_1').trim() !== '' && (
+                    <Form.Item>
+                      <CustomButton
+                        type="primary"
+                        loading={loadingButtons[qs.id]}
+                        onClick={() => handleGenerateAnswerAi(qs?.id, qs?.prompt)}
+                      >
+                        Generate Example by AI
+                      </CustomButton>
+                    </Form.Item>
+                  )
+                ) : null}
+              </React.Fragment>
             ))}
+
+            {/* Nút Show More */}
+            {!showMoreQuestions1 && questions.length > 3 && (
+              <div className="flex justify-center">
+                <Button onClick={handleShowMoreQuestions1}>Show More Questions</Button>
+              </div>
+            )}
+
             <Form.Item>
-              <div className='flex justify-around'>
-                <CustomButton type="default" onClick={prev} >
+              <div className="flex justify-around">
+                <CustomButton type="default" onClick={prev}>
                   Back
                 </CustomButton>
                 <CustomButton type="primary" htmlType="submit">
@@ -474,7 +627,127 @@ const NewHome: React.FC = () => {
       ),
     },
     {
-      title: 'Step 4',
+      title: '',
+      content: (
+        <div>
+        <Form
+          form={form}
+          onFinish={onFinishStep3}
+          layout="vertical"
+          className="px-12 py-4 border border-solid border-blue-500 rounded flex-col w-full mx-auto"
+        >
+          {visibleQuestions2?.map((qs, index) => {
+            // Define the delete button
+            const deleteButton = (
+              <Button
+                icon={<DeleteOutlined />}
+                onClick={() => handleDeleteQuestions2(index)} // Call the delete function
+                style={{ border: 'none', marginLeft: '8px' }} // Optional margin for spacing
+              />
+            );
+  
+            // If the question type is 'number', render a Select input
+            if (qs.type === 'number') {
+              return (
+                <Form.Item
+                  key={index}
+                  label={
+                    <span style={{ display: 'flex',  justifyContent: 'space-between', width: '100%' }}>
+                      {qs?.content}
+                      {index > 4 && deleteButton} {/* Only show delete button if index > 4 */}
+                    </span>
+                  }
+                  name={`question_${qs?.id}`}
+                  rules={[{ required: true, message: 'Please select a value!' }]}
+                >
+                  <Select
+                    placeholder={qs?.place_holder || 'Select a number'}
+                    options={Array.from({ length: 10 }, (_, i) => ({ value: i + 1, label: i + 1 }))}
+                  />
+                </Form.Item>
+              );
+            }
+  
+            // If the question type is 'date', render a DatePicker
+            if (qs.type === 'date') {
+              return (
+                <Form.Item
+                  key={index}
+                  label={
+                    <span style={{ display: 'flex',  justifyContent: 'space-between', width: '100%' }}>
+                      {qs?.content}
+                      {index > 4 && deleteButton} {/* Only show delete button if index > 4 */}
+                    </span>
+                  }
+                  name={`question_${qs?.id}`}
+                  rules={[{ required: true, message: 'Please answer this question!' }]}
+                >
+                  <DatePicker onChange={onChangeDatePicker} />
+                </Form.Item>
+              );
+            }
+  
+            // For all other types (normal, large), render a TextArea input
+            return (
+              <Form.Item
+                key={index}
+                label={
+                  <span style={{ display: 'flex',  justifyContent: 'space-between', width: '100%' }}>
+                    {qs?.content}
+                    {index > 4 && deleteButton} {/* Only show delete button if index > 4 */}
+                  </span>
+                }
+                name={`question_${qs?.id}`}
+                rules={[
+                  { required: true, message: 'Please answer this question!' },
+                  () => ({
+                    validator(_, value) {
+                      const maxLength =
+                        qs.type === 'normal' ? 500 : qs.type === 'large' ? 3000 : undefined;
+                      if (value && value.length === maxLength) {
+                        return Promise.reject(
+                          new Error(`You have reached the maximum length of ${maxLength} characters!`)
+                        );
+                      }
+                      return Promise.resolve();
+                    },
+                  }),
+                ]}
+              >
+                <CustomTextArea
+                  placeholder={qs?.place_holder || 'Your answer here'}
+                  value={form.getFieldValue(`question_${qs?.id}`) || ''}
+                  maxLength={qs.type === 'normal' ? 500 : qs.type === 'large' ? 3000 : undefined}
+                />
+              </Form.Item>
+            );
+          })}
+  
+          {/* Show More Questions Button */}
+          {!showMoreQuestions2 && questions2.length > 4 && (
+            <Form.Item>
+              <div className="flex justify-center">
+                <Button onClick={handleShowMoreQuestions2}>Show More Questions</Button>
+              </div>
+            </Form.Item>
+          )}
+  
+          <Form.Item>
+            <div className='flex justify-around'>
+              <CustomButton type="default" onClick={prev}>
+                Back
+              </CustomButton>
+              <CustomButton type="primary" htmlType="submit">
+                Next
+              </CustomButton>
+            </div>
+          </Form.Item>
+        </Form>
+      </div>
+      ),
+    },
+    {
+      title: '',
       content: (
         <div>
           <Form form={form} onFinish={onFinishStep4} layout="vertical" className="px-12 py-4 border border-solid border-blue-500 rounded flex-col w-full mx-auto">
@@ -496,12 +769,25 @@ const NewHome: React.FC = () => {
               </Form.Item>
               
             ))}
-             <Form.Item
+                <Form.Item
                   layout="vertical"
-                  label="Your email"
+                  label="What is your company or project name? "
+                  name="company or project name"
+                  rules={[{ required: true, message: 'Please input your company or project name!' }]}
+                >
+                  <Input
+                    size="large"
+                    placeholder={'company or project name'}
+                    value={inputCompanyName}
+                    onChange={handleChangeCompanyName}
+                  />
+                </Form.Item>
+                <Form.Item
+                  layout="vertical"
+                  label="Please share your email so the smart email can send the results of CV screening to you."
                   name="Your email"
-                  rules={[{ required: true, message: 'Please input your your email!', type: 'email' }]}
-                  tooltip={{ title: 'Register your email to communicate with the smart email!', icon: <InfoCircleOutlined /> }}
+                  rules={[{ required: true, message: 'Please input your email!', type: 'email' }]}
+                  // tooltip={{ title: 'Register your email to communicate with the smart email!', icon: <InfoCircleOutlined /> }}
                 >
                   <Input
                     size="large"
@@ -511,15 +797,15 @@ const NewHome: React.FC = () => {
                   />
                 </Form.Item>
               <Form.Item>
-              <div className='flex justify-around'>
-                <CustomButton type="default" onClick={prev} >
-                  Back
-                </CustomButton>
-                <CustomButton type="primary" htmlType="submit" loading={isLoadingGenerate}>
-                  Generate email
-                </CustomButton>
-              </div>
-            </Form.Item>
+                <div className='flex justify-around'>
+                  <CustomButton type="default" onClick={prev} >
+                    Back
+                  </CustomButton>
+                  <CustomButton type="primary" htmlType="submit" loading={isLoadingGenerate}>
+                    Generate a smart email address for me
+                  </CustomButton>
+                </div>
+              </Form.Item>
           </Form>
         </div>
       ),
@@ -546,13 +832,19 @@ const NewHome: React.FC = () => {
 
   return (
     <div className="flex flex-col h-[calc(100vh-80px)]">
-      <div className="flex-grow flex-col p-6 gap-6 flex m-auto w-full max-w-4xl">
+      <div className="flex-grow flex-col p-6 gap-6 flex m-auto w-full max-w-3xl">
         <AvatarWithText text={t('provideSmart')} />
-        <AvatarWithText text={'Are you ready to experience it?'}>
-          <CustomButton type="primary" onClick={OnClickStartNow}>
-            Start Now
-          </CustomButton>
+        {
+          isStartNow ?
+          <AvatarWithText text={ 'We need to learn your recruitment preferences so the smart email can handle all the CV screening tasks for you.'}></AvatarWithText>
+          : 
+          <AvatarWithText text={ 'Let’s set up your own smart email address to help you recruit great candidates!'}>
+            <CustomButton type="primary" onClick={OnClickStartNow}>
+              Start Now
+            </CustomButton>
         </AvatarWithText>
+        }
+        
         {
           isStartNow && (
             <div className="animate-showSteps">
@@ -582,7 +874,7 @@ const NewHome: React.FC = () => {
       </div>
       <CustomModalSuccess
         isOpen={isModalSuccess}
-        titleSuccess={t('alertCheckMail')}
+        titleSuccess={t('alertCheckMail', { time: expireTime })}
         textButtonConfirm={t('confirm')}
         linkAi={tempMail}
         onCloseModalSuccess={handleCloseModalSuccess}

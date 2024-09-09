@@ -84,6 +84,7 @@ export interface IQuestion {
 
 export interface IBodyCreateLink {
   email?: string,
+  company_project_name?: string,
   background_score?: number,
   expectation_score?: number,
   value_score?: number,

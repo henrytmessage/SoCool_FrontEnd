@@ -36,14 +36,14 @@ const CustomModalSuccess: React.FC<IModalSuccessProps> = ({
       <Result
         className="py-2"
         status={status}
-        title={<span className="opacity-50 text-lg">{titleSuccess}</span>}
+        title={ <span className="text-xl text-black font-semibold">
+          {t('hereLinkAi')}{' '}
+          <div className="my-2 text-xl text-[#1677ff]">
+            ✨ {linkAi} ✨
+          </div>
+        </span>}
         subTitle={
-          <span className="text-xl text-black font-semibold">
-            {t('hereLinkAi')}{' '}
-            <div className="my-2 text-xl text-[#1677ff]">
-              ✨ {linkAi} ✨
-            </div>
-          </span>
+          <span className=" text-base">{titleSuccess}</span>
         }
         extra={[
           <>
