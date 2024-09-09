@@ -13,6 +13,7 @@ import ChatTest from '../components/ChatTest'
 import Home from '../componentsNew/Home'
 import AiRunOnRice from '../componentsNew/AiRunOnRice'
 import NewHome from '../componentsNew/NewHome'
+import LandingPage from '../componentsNew/LandingPage'
 
 const AppRouters = () => {
   return (
@@ -27,6 +28,7 @@ const AppRouters = () => {
       <Route path="/chat" element={<ContentChat />} />
       <Route path="/testChat" element={<ChatTest />} />
       <Route path="/go" element={<Login />} /> */}
+      <Route path="/recruiter" element={<LandingPage />} />
       <Route path="/deactivate" element={<Deactivate />} />
       <Route path="/Terms" element={<Terms />} />
       <Route path="/Policy" element={<PrivatePolicy />} />

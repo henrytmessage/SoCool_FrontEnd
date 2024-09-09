@@ -10,6 +10,7 @@ import {
   IBodyDetailConversation,
   IBodyGenerateAnswerByAi,
   IBodyGenerateQuestion,
+  IBodyGetJob,
   IBodyLinkAnswer,
   IBodyPostLink,
   IBodySendEmailRunOnRice,
@@ -96,3 +97,7 @@ export const postLinkGenerateAnswerByAi = (body: IBodyGenerateAnswerByAi) => {
 export const postCreateLink = (body: IBodyCreateLink) => {
   return axiosInstance.post('/link/create-link', body)
 }
+
+export const getJobDescription = (params: IBodyGetJob) => {
+  return axiosInstance.get('/link/get-job-description', { params });
+};

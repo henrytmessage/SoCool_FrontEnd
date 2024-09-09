@@ -78,7 +78,7 @@ export interface IBodyGenerateAnswerByAi {
 }
 
 export interface IQuestion {
-  question?: string;
+  alias?: string;
   answer?: string;
 }
 
@@ -91,4 +91,8 @@ export interface IBodyCreateLink {
   ability_score?: number,
   personality_score?: number,
   questions: IQuestion[]
+}
+
+export interface IBodyGetJob {
+  code?: string
 }

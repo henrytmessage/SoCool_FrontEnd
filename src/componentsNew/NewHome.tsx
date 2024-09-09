@@ -1,6 +1,6 @@
 import React, { ReactNode, useState } from 'react';
 import { Form, Input, Button, DatePicker, Upload, Steps, Avatar, message, Select, DatePickerProps, Tooltip } from 'antd';
-import { InfoCircleOutlined, UploadOutlined, DeleteOutlined  } from '@ant-design/icons';
+import { InfoCircleOutlined, UploadOutlined, DeleteOutlined, PlusOutlined  } from '@ant-design/icons';
 import { logoSoCool } from '../assets'
 import { useTranslation } from 'react-i18next';
 import { CustomButton, CustomModalSuccess, CustomTextArea } from '../common';
@@ -109,7 +109,7 @@ const NewHome: React.FC = () => {
     setVisibleQuestions1(updatedQuestions);
 
     // Nếu tất cả các câu hỏi thêm đã bị xóa, hiện lại nút "Show More"
-    if (updatedQuestions.length <= 4) {
+    if (updatedQuestions.length <= 3) {
       setShowMoreQuestion1(false);
     }
   };
@@ -250,8 +250,8 @@ const NewHome: React.FC = () => {
 
   const onFinishStep2 = (values: any) => {
     const newAnswersWithIds1 = questions.map((question, index) => ({
-      question: question.alias,
-      answer: String(values[`question_${question?.id}`]),
+      alias: question.alias,
+      answer: values[`question_${question?.id}`],
     }));
 
     setAnswersWithIds((prevState) => {
@@ -261,7 +261,7 @@ const NewHome: React.FC = () => {
       newAnswersWithIds1.forEach((newAnswer) => {
         // Tìm xem câu hỏi đã có trong mảng chưa
         const existingAnswerIndex = updatedAnswers.findIndex(
-          (answer) => answer.question === newAnswer.question
+          (answer) => answer.alias === newAnswer.alias
         );
   
         if (existingAnswerIndex !== -1) {
@@ -352,8 +352,8 @@ const NewHome: React.FC = () => {
 
   const onFinishStep3 = (values: any) => {
     const newAnswersWithIds2 = questions2.map((question, index) => ({
-      question: question.alias,
-      answer: question?.type === 'date' ? dateString : String(values[`question_${question?.id}`]),
+      alias: question.alias,
+      answer: question?.type === 'date' ? dateString : values[`question_${question?.id}`],
     }));
 
     setAnswersWithIds((prevState) => {
@@ -363,7 +363,7 @@ const NewHome: React.FC = () => {
       newAnswersWithIds2.forEach((newAnswer) => {
         // Tìm xem câu hỏi đã có trong mảng chưa
         const existingAnswerIndex = updatedAnswers.findIndex(
-          (answer) => answer.question === newAnswer.question
+          (answer) => answer.alias === newAnswer.alias
         );
   
         if (existingAnswerIndex !== -1) {
@@ -383,7 +383,7 @@ const NewHome: React.FC = () => {
 
   const onFinishStep4 = async (values: any) => {
     const newAnswersWithIds3 = questions3.map((question, index) => ({
-      question: question.alias,
+      alias: question.alias,
       answer: values[`question_${question?.id}`],
     }));
     
@@ -394,7 +394,7 @@ const NewHome: React.FC = () => {
       newAnswersWithIds3.forEach((newAnswer) => {
         // Tìm xem câu hỏi đã có trong mảng chưa
         const existingAnswerIndex = updatedAnswers.findIndex(
-          (answer) => answer.question === newAnswer.question
+          (answer) => answer.alias === newAnswer.alias
         );
   
         if (existingAnswerIndex !== -1) {
@@ -453,72 +453,75 @@ const NewHome: React.FC = () => {
       title: '',
       content: (
         <div >
-        <Form form={form} onFinish={onFinishStep1} layout="vertical" >
-        <table className="w-full border-collapse border border-gray-300 table-fixed">
-          <thead>
-            <tr>
-              <th className="border border-gray-300 p-2 w-1/2 md:w-1/4">Screening Standard</th>
-              <th className="border border-gray-300 p-2 w-1/4 md:w-1/4">Min Score</th>
-              <th className="border border-gray-300 p-2 hidden md:table-cell w-1/4">Recommended Score</th>
-              <th className="border border-gray-300 p-2 w-1/4 md:w-1/4">User's Score</th>
-            </tr>
-          </thead>
-          <tbody>
-            {scoreFields.map((field, index) => (
-              <tr key={index}>
-                <td className="border border-gray-300 p-4 w-1/2 md:w-1/4">
-                  {field.label}
-                  {field.tooltip && 
-                    <Tooltip title={field.tooltip} placement="top">
-                      <InfoCircleOutlined className="ml-1 text-gray-500 cursor-pointer" />
-                    </Tooltip>
-                  }
-                </td>
-                <td className="border border-gray-300 p-2 w-1/4 md:w-1/4">
-                  <Form.Item className="my-4 text-center">
-                    {field.minScore}
-                  </Form.Item>
-                </td>
-                <td className="border border-gray-300 p-2 hidden md:table-cell w-1/4">
-                  <Form.Item className="my-4 text-center">
-                    {field.recommendScore}
-                  </Form.Item>
-                </td>
-                {field.tooltip ?
-                <td className="border border-gray-300 p-2 w-1/4 md:w-1/4">
-                  <Form.Item
-                    className="m-0 text-center"
-                    name={`decidedScore_${index}`}
-                    rules={[{ required: true, message: 'Please select a decided score!' }]}
-                  >
-                    <Select placeholder="Select score"
-                     onChange={(value) => handleScoreChange(value, index)}
-                     >
-                      {renderSelectOptions(field.minScore)}
-                    </Select>
-                  </Form.Item>
-                </td>
-                : 
-                <td className="border border-gray-300 p-2 text-center md:table-cell w-1/4">
-                  {totalScore}
-                </td>
-                }
-              </tr>
-            ))}
-          </tbody>
-        </table>
-          {
-            higher100 && <div className='text-red-500'>{`The total score is ${totalScore} which is higher than 100. Please reduce it to match exactly 100.`}</div>
-          }
-          {
-            below100 && <div className='text-red-500'>{`The total score is ${totalScore} which is below 100. Please increase it to match exactly 100.`}</div>
-          }
-          <Form.Item className="mt-4">
-            <CustomButton type="primary" htmlType="submit">
-              Next
-            </CustomButton>
-          </Form.Item>
-        </Form>
+          <div className='mb-2'> 
+            This is the Screening Matrix. It covers five main aspects for evaluating a CV’s potential
+          </div>
+          <Form form={form} onFinish={onFinishStep1} layout="vertical" >
+            <table className="w-full border-collapse border border-gray-300 table-fixed">
+              <thead>
+                <tr>
+                  <th className="border border-gray-300 p-2 w-1/2 md:w-1/4">Screening Standard</th>
+                  <th className="border border-gray-300 p-2 w-1/4 md:w-1/4">Min Score</th>
+                  <th className="border border-gray-300 p-2 hidden md:table-cell w-1/4">Recommended Score</th>
+                  <th className="border border-gray-300 p-2 w-1/4 md:w-1/4">User's Score</th>
+                </tr>
+              </thead>
+              <tbody>
+                {scoreFields.map((field, index) => (
+                  <tr key={index}>
+                    <td className="border border-gray-300 p-4 w-1/2 md:w-1/4">
+                      {field.label}
+                      {field.tooltip && 
+                        <Tooltip title={field.tooltip} placement="top">
+                          <InfoCircleOutlined className="ml-1 text-gray-500 cursor-pointer" />
+                        </Tooltip>
+                      }
+                    </td>
+                    <td className="border border-gray-300 p-2 w-1/4 md:w-1/4">
+                      <Form.Item className="my-4 text-center">
+                        {field.minScore}
+                      </Form.Item>
+                    </td>
+                    <td className="border border-gray-300 p-2 hidden md:table-cell w-1/4">
+                      <Form.Item className="my-4 text-center">
+                        {field.recommendScore}
+                      </Form.Item>
+                    </td>
+                    {field.tooltip ?
+                    <td className="border border-gray-300 p-2 w-1/4 md:w-1/4">
+                      <Form.Item
+                        className="m-0 text-center"
+                        name={`decidedScore_${index}`}
+                        rules={[{ required: true, message: 'Please select a decided score!' }]}
+                      >
+                        <Select placeholder="Select score"
+                        onChange={(value) => handleScoreChange(value, index)}
+                        >
+                          {renderSelectOptions(field.minScore)}
+                        </Select>
+                      </Form.Item>
+                    </td>
+                    : 
+                    <td className="border border-gray-300 p-2 text-center md:table-cell w-1/4">
+                      {totalScore}
+                    </td>
+                    }
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            {
+              higher100 && <div className='text-red-500'>{`The total score is ${totalScore} which is higher than 100. Please reduce it to match exactly 100.`}</div>
+            }
+            {
+              below100 && <div className='text-red-500'>{`The total score is ${totalScore} which is below 100. Please increase it to match exactly 100.`}</div>
+            }
+            <Form.Item className="mt-4">
+              <CustomButton type="primary" htmlType="submit">
+                Next
+              </CustomButton>
+            </Form.Item>
+          </Form>
       </div>
       ),
     },
@@ -607,9 +610,12 @@ const NewHome: React.FC = () => {
 
             {/* Nút Show More */}
             {!showMoreQuestions1 && questions.length > 3 && (
-              <div className="flex justify-center">
-                <Button onClick={handleShowMoreQuestions1}>Show More Questions</Button>
-              </div>
+              <Form.Item
+                label="If you need more questions, please click the box below"
+                name="showMoreQuestion1"
+              >
+                <Button icon={<PlusOutlined />} onClick={handleShowMoreQuestions1}>Show More Questions</Button>
+              </Form.Item>
             )}
 
             <Form.Item>
@@ -654,16 +660,16 @@ const NewHome: React.FC = () => {
                   label={
                     <span style={{ display: 'flex',  justifyContent: 'space-between', width: '100%' }}>
                       {qs?.content}
-                      {index > 4 && deleteButton} {/* Only show delete button if index > 4 */}
+                      {index > 3 && deleteButton} {/* Only show delete button if index > 4 */}
                     </span>
                   }
                   name={`question_${qs?.id}`}
                   rules={[{ required: true, message: 'Please select a value!' }]}
                 >
-                  <Select
-                    placeholder={qs?.place_holder || 'Select a number'}
-                    options={Array.from({ length: 10 }, (_, i) => ({ value: i + 1, label: i + 1 }))}
-                  />
+                 <Select
+                  placeholder={qs?.place_holder || 'Select a number'}
+                  options={Array.from({ length: 10 }, (_, i) => ({ value: `${i + 1}`, label: `${i + 1}` }))}
+                />
                 </Form.Item>
               );
             }
@@ -676,7 +682,7 @@ const NewHome: React.FC = () => {
                   label={
                     <span style={{ display: 'flex',  justifyContent: 'space-between', width: '100%' }}>
                       {qs?.content}
-                      {index > 4 && deleteButton} {/* Only show delete button if index > 4 */}
+                      {index > 3 && deleteButton} {/* Only show delete button if index > 4 */}
                     </span>
                   }
                   name={`question_${qs?.id}`}
@@ -694,7 +700,7 @@ const NewHome: React.FC = () => {
                 label={
                   <span style={{ display: 'flex',  justifyContent: 'space-between', width: '100%' }}>
                     {qs?.content}
-                    {index > 4 && deleteButton} {/* Only show delete button if index > 4 */}
+                    {index > 3 && deleteButton} {/* Only show delete button if index > 4 */}
                   </span>
                 }
                 name={`question_${qs?.id}`}
@@ -725,10 +731,11 @@ const NewHome: React.FC = () => {
   
           {/* Show More Questions Button */}
           {!showMoreQuestions2 && questions2.length > 4 && (
-            <Form.Item>
-              <div className="flex justify-center">
-                <Button onClick={handleShowMoreQuestions2}>Show More Questions</Button>
-              </div>
+            <Form.Item
+              label="If you need more questions, please click the box below"
+              name="showMoreQuestion2"
+            >
+              <Button icon={<PlusOutlined />} onClick={handleShowMoreQuestions2}>Show More Questions</Button>
             </Form.Item>
           )}
   
