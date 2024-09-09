@@ -328,7 +328,7 @@ const NewHome: React.FC = () => {
         form?.setFieldsValue({
           question_1: response?.data.job_position,
           question_2: response?.data.job_responsibilities,
-          question_3: response?.data.job_requirements,
+          question_3: response?.data.job_requirements.replace(/-\s/g, '\n- '),
         });
 
       } else {

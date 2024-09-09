@@ -28,7 +28,7 @@ const AppRouters = () => {
       <Route path="/chat" element={<ContentChat />} />
       <Route path="/testChat" element={<ChatTest />} />
       <Route path="/go" element={<Login />} /> */}
-      <Route path="/recruiter" element={<LandingPage />} />
+      <Route path="/job" element={<LandingPage />} />
       <Route path="/deactivate" element={<Deactivate />} />
       <Route path="/Terms" element={<Terms />} />
       <Route path="/Policy" element={<PrivatePolicy />} />
