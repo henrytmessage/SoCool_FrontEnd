@@ -9,6 +9,7 @@ interface IModalSuccessProps {
   textButtonConfirm?: string
   status?: 'success' | 'error' | 'info' | 'warning'
   onCloseModalSuccess: () => void
+  textChildren?: string
 }
 
 const CustomModalSuccess: React.FC<IModalSuccessProps> = ({
@@ -17,7 +18,8 @@ const CustomModalSuccess: React.FC<IModalSuccessProps> = ({
   titleSuccess,
   textButtonConfirm,
   status = 'success',
-  onCloseModalSuccess
+  onCloseModalSuccess,
+  textChildren
 }) => {
   const { t } = useTranslation()
 
@@ -43,7 +45,10 @@ const CustomModalSuccess: React.FC<IModalSuccessProps> = ({
           </div>
         </span>}
         subTitle={
-          <span className=" text-base">{titleSuccess}</span>
+          <>
+            <div className=" text-base">{titleSuccess}</div>
+            <div className=" text-base">{textChildren}</div>
+          </>
         }
         extra={[
           <>

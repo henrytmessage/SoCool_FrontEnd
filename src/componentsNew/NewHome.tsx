@@ -825,8 +825,9 @@ const NewHome: React.FC = () => {
                   <CustomButton type="default" onClick={prev} >
                     Back
                   </CustomButton>
-                  <CustomButton type="primary" htmlType="submit" loading={isLoadingGenerate}>
-                    Generate a smart email address for me
+                  <CustomButton type="primary" htmlType="submit" loading={isLoadingGenerate} >
+                    <div className="block md:hidden">Generate ...</div>
+                    <div className="hidden md:block">Generate a smart email address for me</div>
                   </CustomButton>
                 </div>
               </Form.Item>
@@ -918,6 +919,7 @@ const NewHome: React.FC = () => {
       <CustomModalSuccess
         isOpen={isModalSuccess}
         titleSuccess={t('alertCheckMail', { time: expireTime })}
+        textChildren={t('useEmail')}
         textButtonConfirm={t('confirm')}
         linkAi={tempMail}
         onCloseModalSuccess={handleCloseModalSuccess}
