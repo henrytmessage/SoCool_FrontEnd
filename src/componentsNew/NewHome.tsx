@@ -8,6 +8,7 @@ import { IBodyCreateLink, IBodyGenerateAnswerByAi, IBodyGenerateQuestion, IQuest
 import { postCreateLinkService, postLinkGenerateAnswerByAiService, postLinkGenerateQuestionService, postLinkUploadFileService } from '../service';
 import CustomDropDown from '../common/CustomDropDown';
 import dayjs from 'dayjs';
+import CustomModalWarning from '../common/CustomModalWarning';
 interface ScoreField {
   label?: string;
   minScore: number;
@@ -87,6 +88,7 @@ const NewHome: React.FC = () => {
   const [totalScore, setTotalScore] = useState(0)
   const [inputCompanyName, setInputCompanyName] = useState('')
   const [expireTime, setExpireTime] = useState('')
+  const [isModalWarning, setIsModalWarning] = useState(false)
 
   const [loading, setLoading] = useState(false)
   const [isLoadingGenerate, setIsLoadingGenerate] = useState(false)
@@ -187,13 +189,23 @@ const NewHome: React.FC = () => {
       setBelow100(false);
       setBackgroundScore(values.decidedScore_0)
       setExpectationScore(values.decidedScore_1)
+      
       setValueScore(values.decidedScore_2)
       setAbilityScore(values.decidedScore_3)
       setPersonalityScore(values.decidedScore_4)
       handleGenerateQuestion(values.decidedScore_0, values.decidedScore_1, values.decidedScore_2, values.decidedScore_3, values.decidedScore_4 )
-      next();
+      if(values.decidedScore_2 == 0 || values.decidedScore_3 == 0 || values.decidedScore_4 == 0) {
+        setIsModalWarning(true)
+      } else {
+        next();
+      }
     }
   };
+
+  const handleCloseModalWarning = () => {
+    setIsModalWarning(false); 
+    next(); 
+  }
 
   const handleGenerateQuestion = async (background_score: number, expectation_score: number, value_score: number, ability_score: number, personality_score: number ) => {
     const body: IBodyGenerateQuestion = {
@@ -885,6 +897,12 @@ const NewHome: React.FC = () => {
         textButtonConfirm={t('confirm')}
         linkAi={tempMail}
         onCloseModalSuccess={handleCloseModalSuccess}
+      />
+      <CustomModalWarning
+        isOpen={isModalWarning}
+        titleWarning={t('anyStandard')}
+        textButtonConfirm={t('confirm')}
+        onCloseModalWarning={handleCloseModalWarning}
       />
     </div>
   );  
