@@ -20,6 +20,7 @@ interface ScoreField {
 interface AvatarWithTextProps {
   text: string
   children?: ReactNode  
+  textChild?: string
 }
 
 const { Step } = Steps;
@@ -203,6 +204,10 @@ const NewHome: React.FC = () => {
   };
 
   const handleCloseModalWarning = () => {
+    setIsModalWarning(false); 
+  }
+
+  const handleConfirmModalWarning = () => {
     setIsModalWarning(false); 
     next(); 
   }
@@ -849,10 +854,29 @@ const NewHome: React.FC = () => {
       </div>
   )
 
+  const AvatarFirsText = () => {
+    return (
+      <div className="flex justify-start w-full">
+        <div>
+          <Avatar src={<img src={logoSoCool} alt="avatar" />} />
+        </div>
+        <div className="flex flex-col md:flex-row gap-4 ml-4 md:items-center">
+          <div
+            className={`bg-gray-200 rounded-3xl p-4 text-gray-800 max-w-screen-xl font-medium text-lg`}
+          >
+            <span className="inline md:block">{t('provideSmart')}</span>{' '}
+            <span className="inline md:block">{t('screeningCV')}</span>
+          </div>
+        </div>
+      </div>
+    );
+  };
+  
+  
   return (
     <div className="flex flex-col h-[calc(100vh-80px)]">
       <div className="flex-grow flex-col p-6 gap-6 flex m-auto w-full max-w-3xl">
-        <AvatarWithText text={t('provideSmart')} />
+        <AvatarFirsText />
         {
           isStartNow ?
           <AvatarWithText text={ 'We need to learn your recruitment preferences so the smart email can handle all the CV screening tasks for you.'}></AvatarWithText>
@@ -900,9 +924,11 @@ const NewHome: React.FC = () => {
       />
       <CustomModalWarning
         isOpen={isModalWarning}
+        onCloseModalWarning={handleCloseModalWarning}
         titleWarning={t('anyStandard')}
         textButtonConfirm={t('confirm')}
-        onCloseModalWarning={handleCloseModalWarning}
+        content={t('youSure')}
+        onConfirmModalWarning={handleConfirmModalWarning}  
       />
     </div>
   );  

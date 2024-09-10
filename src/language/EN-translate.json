@@ -97,6 +97,8 @@
   "update16/8": "🌟 Thank you for being with us over the past month! 🚀 We are thrilled to announce that on August 16th, our upcoming update will introduce groundbreaking features, elevating your user experience to new heights. ❤️",
   "placeholderArea": "The city of Los Angeles",
   "generateEmail": "Generate a smart email address for me",
-  "provideSmart": "We provide smart, fully automated emails designed to boost your CV screening quality by 10x ⚡",
-  "anyStandard": "Any standard that has a score of 0 in the Matrix will not be used to screen candidates' CVs.  Are you sure about your selection?"
+  "provideSmart": "We provide smart, fully automated emails designed to boost your ",
+  "screeningCV": "CV screening quality by 10x ⚡",
+  "anyStandard": "Any standard that has a score of 0 in the Matrix will not be used to screen candidates' CVs. ⚠️",
+  "youSure": "Are you sure about your selection?"
 }
