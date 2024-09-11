@@ -444,7 +444,7 @@ const NewHome: React.FC = () => {
       setIsLoadingGenerate(true)
       const data = await postCreateLinkService(body)
       if (data.status_code === 200) {
-        setExpireTime(dayjs(data.data.alias.links[0].exp).format('DD/MM/YYYY'))
+        setExpireTime(dayjs(data.data?.exp).format('DD/MM/YYYY'))
         setTempMail(data.data.alias.alias)
         setIsModalSuccess(true)
       }
