@@ -1,5 +1,5 @@
 import React, { ReactNode, useState } from 'react';
-import { Form, Input, Button, DatePicker, Upload, Steps, Avatar, message, Select, DatePickerProps, Tooltip } from 'antd';
+import { Form, Input, Button, DatePicker, Upload, Steps, Avatar, message, Select, DatePickerProps, Tooltip, InputNumber } from 'antd';
 import { InfoCircleOutlined, UploadOutlined, DeleteOutlined, PlusOutlined  } from '@ant-design/icons';
 import { logoSoCool } from '../assets'
 import { useTranslation } from 'react-i18next';
@@ -100,6 +100,22 @@ const NewHome: React.FC = () => {
 
   const [visibleQuestions2, setVisibleQuestions2] = useState(questions2.slice(0, 4));
   const [showMoreQuestions2, setShowMoreQuestion2] = useState(false)
+
+  const [fromValue, setFromValue] = useState<number | null>(null);
+  const [toValue, setToValue] = useState<number | null>(null);
+  const [period, setPeriod] = useState('Monthly'); 
+
+  const handleFromChange = (value: number | null) => {
+    setFromValue(value);
+  };
+
+  const handleToChange = (value: number | null) => {
+    setToValue(value);
+  };
+
+  const handlePeriodChange = (value: string) => {
+    setPeriod(value);
+  };
 
   const handleShowMoreQuestions1 = () => {
     setShowMoreQuestion1(true);
@@ -368,9 +384,14 @@ const NewHome: React.FC = () => {
   }
 
   const onFinishStep3 = (values: any) => {
+    
     const newAnswersWithIds2 = questions2.map((question, index) => ({
       alias: question.alias,
-      answer: question?.type === 'date' ? dateString : values[`question_${question?.id}`],
+      answer: question?.type === 'date' 
+      ? dateString 
+      : question?.type === 'range' 
+        ? `${fromValue} - ${toValue} - ${period}` 
+        : values[`question_${question?.id}`]
     }));
 
     setAnswersWithIds((prevState) => {
@@ -458,12 +479,6 @@ const NewHome: React.FC = () => {
   const handleCloseModalSuccess = () => {
     window.location.reload()
   }
-  // const handleTextAreaChange = (index: number, e: React.ChangeEvent<HTMLTextAreaElement>) => {
-  //   const newValue = e.target.value;
-  //   form.setFieldsValue({ [`question_${index}`]: newValue });
-  //   console.log(newValue);
-    
-  // };
 
   const steps = [
     {
@@ -668,6 +683,81 @@ const NewHome: React.FC = () => {
                 style={{ border: 'none', marginLeft: '8px' }} // Optional margin for spacing
               />
             );
+
+            if (qs.type === 'range') {
+              return (
+                <Form.Item
+                  key={index}
+                  label={
+                    <span style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+                      {qs?.content}
+                      {index > 3 && deleteButton} {/* Only show delete button if index > 3 */}
+                    </span>
+                  }
+                  name={`question_${qs?.id}`}
+                  rules={[{ required: true, message: 'Please enter a value!' }]}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                  <span style={{ marginRight: '10px' }}>From</span>
+                  <InputNumber
+                    style={{ width: '100%', marginRight: '10px' }}
+                    min={0}
+                    max={10000000}
+                    value={fromValue}
+                    onChange={handleFromChange} 
+                    placeholder="From"
+                    addonAfter="USD"
+                    onKeyPress={(event) => {
+                      // Allow numbers and a single decimal point
+                      const key = event.key;
+                      const currentValue = event.currentTarget.value;
+
+                      if (!/[0-9]/.test(key) && key !== '.') {
+                        event.preventDefault();
+                      }
+
+                      if (key === '.' && currentValue.includes('.')) {
+                        event.preventDefault();
+                      }
+                    }}
+                  />
+                  <span style={{ marginRight: '10px' }}>to</span>
+                  <InputNumber
+                    style={{ width: '100%', marginRight: '10px' }}
+                    min={0}
+                    max={10000000}
+                    value={toValue}
+                    onChange={handleToChange}
+                    placeholder="To"
+                    addonAfter="USD"
+                    onKeyPress={(event) => {
+                      const key = event.key;
+                      const currentValue = event.currentTarget.value;
+
+                      if (!/[0-9]/.test(key) && key !== '.') {
+                        event.preventDefault();
+                      }
+
+                      // Prevent entering more than one decimal point
+                      if (key === '.' && currentValue.includes('.')) {
+                        event.preventDefault();
+                      }
+                    }}
+                  />
+                  <Select
+                    style={{ width: '150px' }}
+                    placeholder="Select period"
+                    value={period} 
+                    onChange={handlePeriodChange}
+                    options={[
+                      { value: 'Monthly', label: 'Monthly' },
+                      { value: 'Annually', label: 'Annually' },
+                    ]}
+                  />
+                  </div>
+                </Form.Item>
+              );
+            }
   
             // If the question type is 'number', render a Select input
             if (qs.type === 'number') {
