@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Card, Row, Col, Button, Typography, Divider, Alert } from 'antd';
-import { MailOutlined, ClockCircleOutlined } from '@ant-design/icons';
+import { Card, Typography, Divider, Alert } from 'antd';
 import { getJobDescriptionService } from '../service';
 
 const { Title, Paragraph } = Typography;
@@ -17,8 +16,10 @@ const LandingPage = () => {
 
   const [expireDate, setExpireDate] = useState('')
   const [companyName, setCompanyName] = useState('')
-  const [jdContent, setJdContent] = useState('')
   const [mailAlias, setMailAlias] = useState('')
+  const [jobPosition, getJobPosition] = useState('')
+  const [jobResponsibilities, getJobResponsibilities] = useState('')
+  const [jobRequirements, setJobRequirements] = useState('')
 
   useEffect(() => {
     const getJobDes = async () => {
@@ -29,7 +30,9 @@ const LandingPage = () => {
         const response = await getJobDescriptionService(body);
         console.log("response", response);
         setMailAlias(response?.data?.alias)
-        setJdContent(response?.data?.jd_content)
+        getJobPosition(response?.data?.job_position)
+        getJobResponsibilities(response?.data?.job_responsibilities)
+        setJobRequirements(response?.data?.job_requirements)
         setCompanyName(response?.data?.company_project_name)
         setExpireDate(response?.data?.expire_time)
       } catch (error) {
@@ -44,53 +47,30 @@ const LandingPage = () => {
     <div className="container mx-auto p-4">
       <Card>
         <Title level={2}>{companyName}</Title>
-        {/* <Row gutter={[16, 16]}>
-          <Col span={16}>
-            <div className="info-box flex gap-2">
-              <MailOutlined style={{ color: '#1677ff', fontSize: '18px' }} />
-              <span className="info-text">{mailAlias}</span>
-            </div>
-          </Col>
-        </Row> */}
-        {/* <Row gutter={[16, 16]} style={{ marginTop: '20px' }}>
-          <Col span={16}>
-            <div className="info-box flex gap-2">
-              <ClockCircleOutlined style={{ color: '#1677ff', fontSize: '18px' }} />
-              <span className="info-text">Expire Time: {expireDate}</span>
-            </div>
-          </Col>
-        </Row> */}
         <Divider />
-        <Title level={4}>Job Description</Title>
-        <Paragraph style={{ whiteSpace: 'pre-wrap' }}>{jdContent}</Paragraph>
+        <div>Job Description</div>
+        <Title level={4}>{jobPosition}</Title>
+        <div style={{ whiteSpace: 'pre-wrap' }}>Job Responsibilities:</div>
+        <Paragraph style={{ whiteSpace: 'pre-wrap' }}>- {jobResponsibilities}</Paragraph>
+        <div style={{ whiteSpace: 'pre-wrap' }}>Job Requirements:</div>
+        <Paragraph style={{ whiteSpace: 'pre-wrap' }}>{jobRequirements}</Paragraph>
         <div className='flex gap-4 flex-col'>
         <Alert
           description={
             <>
-              Please submit your CV to the corresponding 
-              <span className="font-semibold mx-2">{mailAlias}</span> 
-              address to complete your application.
+              Please submit your CV to 
+              <span className="font-semibold mx-1">{mailAlias}</span> 
             </>
           }
           type="info"
           showIcon
         />
-          <Alert
-            // message="Note"
-            description="Please submit your CV to the provided email address. Results will be provided within 3 days after submission. Please only apply once to avoid being marked as spam."
-            type="info"
-            showIcon
-          />
-          <Alert
-            description="Please submit your application only once for each job to avoid being marked as spam."
-            type="warning"
-            showIcon
-          />
-          <Alert
-            description={`This link will expire after ${expireDate}`}
-            type="warning"
-            showIcon
-          />
+        <ul>
+          <li>
+           - After receiving your CV, we will notify you of the results within a maximum of 3 days. Please only apply once to avoid being marked as spam.
+          </li>
+          <li>{`- This link will expire after ${expireDate}`}</li>
+        </ul>
         </div>
       </Card>
     </div>
