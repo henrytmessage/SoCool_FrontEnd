@@ -783,9 +783,9 @@ const NewHome: React.FC = () => {
                   name={`question_${qs?.id}`}
                   rules={[{ required: true, message: 'Please select a value!' }]}
                 >
-                 <Select
+                <Select
                   placeholder={qs?.place_holder || 'Select a number'}
-                  options={Array.from({ length: 10 }, (_, i) => ({ value: `${i + 1}`, label: `${i + 1}` }))}
+                  options={Array.from({ length: 9 }, (_, i) => ({ value: `${i + 2}`, label: `${i + 2}` }))}
                 />
                 </Form.Item>
               );
