@@ -641,14 +641,14 @@ const NewHome: React.FC = () => {
             ))}
 
             {/* Nút Show More */}
-            {!showMoreQuestions1 && questions.length > 3 && (
+            {/* {!showMoreQuestions1 && questions.length > 3 && (
               <Form.Item
                 label="If you need more questions, please click the box below"
                 name="showMoreQuestion1"
               >
                 <Button icon={<PlusOutlined />} onClick={handleShowMoreQuestions1}>Show More Questions</Button>
               </Form.Item>
-            )}
+            )} */}
 
             <Form.Item>
               <div className="flex justify-around">
@@ -846,15 +846,15 @@ const NewHome: React.FC = () => {
             );
           })}
   
-          {/* Show More Questions Button */}
-          {!showMoreQuestions2 && questions2.length > 4 && (
+          {/* Nút Show More */}
+          {/* {!showMoreQuestions2 && questions2.length > 4 && (
             <Form.Item
               label="If you need more questions, please click the box below"
               name="showMoreQuestion2"
             >
               <Button icon={<PlusOutlined />} onClick={handleShowMoreQuestions2}>Show More Questions</Button>
             </Form.Item>
-          )}
+          )} */}
   
           <Form.Item>
             <div className='flex justify-around'>
