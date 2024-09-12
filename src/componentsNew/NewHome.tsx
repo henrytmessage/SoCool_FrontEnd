@@ -695,65 +695,75 @@ const NewHome: React.FC = () => {
                     </span>
                   }
                   name={`question_${qs?.id}`}
-                  rules={[{ required: true, message: 'Please enter a value!' }]}
+                  rules={[
+                    { required: true, message: 'Please enter a value!' },
+                    {
+                      validator: (_, value) => {
+                        if (fromValue !== undefined && toValue !== undefined && toValue && fromValue && toValue < fromValue) {
+                          return Promise.reject(new Error('The "To" value cannot be smaller than the "From" value!'));
+                        }
+                        return Promise.resolve();
+                      },
+                    },
+                  ]}
                 >
-                  <div style={{ display: 'flex', alignItems: 'center' }}>
-                  <span style={{ marginRight: '10px' }}>From</span>
-                  <InputNumber
-                    style={{ width: '100%', marginRight: '10px' }}
-                    min={0}
-                    max={10000000}
-                    value={fromValue}
-                    onChange={handleFromChange} 
-                    placeholder="From"
-                    addonAfter="USD"
-                    onKeyPress={(event) => {
-                      // Allow numbers and a single decimal point
-                      const key = event.key;
-                      const currentValue = event.currentTarget.value;
+                  <div  className='flex flex-col gap-2 md:flex-row "'>
+                    <span style={{ marginRight: '10px' }}>From</span>
+                    <InputNumber
+                      style={{ width: '100%', marginRight: '10px' }}
+                      min={0}
+                      max={10000000}
+                      value={fromValue}
+                      onChange={handleFromChange} 
+                      placeholder="Select value"
+                      addonAfter="USD"
+                      onKeyPress={(event) => {
+                        // Allow numbers and a single decimal point
+                        const key = event.key;
+                        const currentValue = event.currentTarget.value;
 
-                      if (!/[0-9]/.test(key) && key !== '.') {
-                        event.preventDefault();
-                      }
+                        if (!/[0-9]/.test(key) && key !== '.') {
+                          event.preventDefault();
+                        }
 
-                      if (key === '.' && currentValue.includes('.')) {
-                        event.preventDefault();
-                      }
-                    }}
-                  />
-                  <span style={{ marginRight: '10px' }}>to</span>
-                  <InputNumber
-                    style={{ width: '100%', marginRight: '10px' }}
-                    min={0}
-                    max={10000000}
-                    value={toValue}
-                    onChange={handleToChange}
-                    placeholder="To"
-                    addonAfter="USD"
-                    onKeyPress={(event) => {
-                      const key = event.key;
-                      const currentValue = event.currentTarget.value;
+                        if (key === '.' && currentValue.includes('.')) {
+                          event.preventDefault();
+                        }
+                      }}
+                    />
+                    <span style={{ marginRight: '10px' }}>to</span>
+                    <InputNumber
+                      style={{ width: '100%', marginRight: '10px' }}
+                      min={0}
+                      max={10000000}
+                      value={toValue}
+                      onChange={handleToChange}
+                      placeholder="Select value"
+                      addonAfter="USD"
+                      onKeyPress={(event) => {
+                        const key = event.key;
+                        const currentValue = event.currentTarget.value;
 
-                      if (!/[0-9]/.test(key) && key !== '.') {
-                        event.preventDefault();
-                      }
+                        if (!/[0-9]/.test(key) && key !== '.') {
+                          event.preventDefault();
+                        }
 
-                      // Prevent entering more than one decimal point
-                      if (key === '.' && currentValue.includes('.')) {
-                        event.preventDefault();
-                      }
-                    }}
-                  />
-                  <Select
-                    style={{ width: '150px' }}
-                    placeholder="Select period"
-                    value={period} 
-                    onChange={handlePeriodChange}
-                    options={[
-                      { value: 'Monthly', label: 'Monthly' },
-                      { value: 'Annually', label: 'Annually' },
-                    ]}
-                  />
+                        // Prevent entering more than one decimal point
+                        if (key === '.' && currentValue.includes('.')) {
+                          event.preventDefault();
+                        }
+                      }}
+                    />
+                    <Select
+                      style={{ width: '150px' }}
+                      placeholder="Select period"
+                      value={period} 
+                      onChange={handlePeriodChange}
+                      options={[
+                        { value: 'Monthly', label: 'Monthly' },
+                        { value: 'Annually', label: 'Annually' },
+                      ]}
+                    />
                   </div>
                 </Form.Item>
               );
