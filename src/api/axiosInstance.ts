@@ -1,6 +1,12 @@
-import axios, { AxiosInstance, AxiosResponse, AxiosError } from 'axios';
+import axios, { AxiosInstance, AxiosResponse, AxiosError, InternalAxiosRequestConfig } from 'axios';
+import { refreshToken } from './core';
 
 // let currentLanguage = localStorage.getItem('language');
+const MAX_RETRY_COUNT = 5;
+
+interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
+  _retryCount?: number;  // Optional retry count property
+}
 
 const axiosInstance: AxiosInstance = axios.create({
   baseURL: process.env.REACT_APP_API_URL, // Replace with your API base URL
@@ -25,7 +31,7 @@ const axiosInstance: AxiosInstance = axios.create({
 
 // Request interceptor for adding authorization token
 axiosInstance.interceptors.request.use(
-  (config: any) => {
+  (config: CustomAxiosRequestConfig) => {
     // Perform actions before request is sent
     const accessToken = sessionStorage.getItem('access_token');
     const token = accessToken && JSON.parse(accessToken).token;
@@ -34,7 +40,7 @@ axiosInstance.interceptors.request.use(
       config.headers = {
         ...config.headers,
         Authorization: `Bearer ${token}`,
-      };
+      } as any;
     }
     return config;
   },
@@ -50,11 +56,50 @@ axiosInstance.interceptors.response.use(
     // Handle success responses globally
     return response;
   },
-  (error: AxiosError) => {
+  async (error: AxiosError) => {
     // Handle error responses globally
-    if (error.response?.status === 401) {
+    const originalRequest = error.config as CustomAxiosRequestConfig;
+    if (error.response?.status === 401 
+      && originalRequest._retryCount 
+      && originalRequest._retryCount < MAX_RETRY_COUNT) {
+        originalRequest._retryCount += 1;
+
       // Redirect to login page or handle unauthorized error
       console.log('Unauthorized request');
+      if (!originalRequest._retryCount) {
+        originalRequest._retryCount = 0;
+      }
+      try{
+        const refreshTk = sessionStorage.getItem('refresh_token');
+
+        const token = refreshTk && JSON.parse(refreshTk).token;
+
+        if (token){
+          const response = await refreshToken({
+            refresh_token: token
+          })
+
+          const accessToken = response.data.access_token
+          if (accessToken){
+            sessionStorage.setItem('access_token', accessToken)
+
+            if (error?.config) {
+              const newHeaders = axios.AxiosHeaders.from({
+                ...error.config.headers,
+                Authorization: `Bearer ${token}`,
+              });
+            
+              error.config.headers = newHeaders;
+
+              return axiosInstance(error.config)
+            }
+          }
+        }
+
+      }catch(error){
+        console.error('Error when refresh token',error)
+        return Promise.reject(error);
+      }
     }
     return Promise.reject(error);
   }

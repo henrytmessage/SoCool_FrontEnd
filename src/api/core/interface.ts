@@ -96,3 +96,7 @@ export interface IBodyCreateLink {
 export interface IBodyGetJob {
   code?: string
 }
+
+export interface IRefreshToken {
+  refresh_token:string
+}

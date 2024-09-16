@@ -15,6 +15,7 @@ import {
   IBodyPostLink,
   IBodySendEmailRunOnRice,
   IBodySendMessage,
+  IRefreshToken,
 } from './interface'
 
 // vi du
@@ -101,3 +102,8 @@ export const postCreateLink = (body: IBodyCreateLink) => {
 export const getJobDescription = (params: IBodyGetJob) => {
   return axiosInstance.get('/link/get-job-description', { params });
 };
+
+export const refreshToken = (params: IRefreshToken) => {
+  return axiosInstance.get('/auth/refresh-token', { params });
+};
+
