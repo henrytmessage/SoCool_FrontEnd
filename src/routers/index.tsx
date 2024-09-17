@@ -14,6 +14,7 @@ import Home from '../componentsNew/Home'
 import AiRunOnRice from '../componentsNew/AiRunOnRice'
 import NewHome from '../componentsNew/NewHome'
 import LandingPage from '../componentsNew/LandingPage'
+import AuthPage from '../componentsNew/AuthModal'
 
 const AppRouters = () => {
   return (
@@ -33,6 +34,7 @@ const AppRouters = () => {
       <Route path="/Terms" element={<Terms />} />
       <Route path="/Policy" element={<PrivatePolicy />} />
       <Route path="*" element={<NotFound />} />
+      <Route path="/login" element={<AuthPage />} />
     </Routes>
   )
 }

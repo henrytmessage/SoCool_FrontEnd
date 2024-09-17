@@ -1,7 +1,5 @@
 import axios, { AxiosInstance, AxiosResponse, AxiosError, InternalAxiosRequestConfig } from 'axios';
 import { refreshToken } from './core';
-
-// let currentLanguage = localStorage.getItem('language');
 const MAX_RETRY_COUNT = 5;
 
 interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
@@ -9,7 +7,7 @@ interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
 }
 
 const axiosInstance: AxiosInstance = axios.create({
-  baseURL: process.env.REACT_APP_API_URL, // Replace with your API base URL
+  baseURL: 'http://localhost:5003', // Replace with your API base URL
   timeout: 20000, // Example timeout configuration
   headers: {
     'Content-Type': 'application/json',
@@ -17,23 +15,11 @@ const axiosInstance: AxiosInstance = axios.create({
   },
 });
 
-// Function to update axiosInstance headers
-// const updateHeaders = () => {
-//   const newLanguage = localStorage.getItem('language');
-//   if (newLanguage !== currentLanguage) {
-//     currentLanguage = newLanguage;
-//     axiosInstance.defaults.headers['accept-language'] = newLanguage;
-//   }
-// };
-
-// Initial call to set headers
-// updateHeaders();
-
 // Request interceptor for adding authorization token
 axiosInstance.interceptors.request.use(
   (config: CustomAxiosRequestConfig) => {
     // Perform actions before request is sent
-    const accessToken = sessionStorage.getItem('access_token');
+    const accessToken = localStorage.getItem('access_token');
     const token = accessToken && JSON.parse(accessToken).token;
     if (token) {
       // Ensure config.headers is initialized before assigning Authorization header
@@ -70,7 +56,7 @@ axiosInstance.interceptors.response.use(
         originalRequest._retryCount = 0;
       }
       try{
-        const refreshTk = sessionStorage.getItem('refresh_token');
+        const refreshTk = localStorage.getItem('refresh_token');
 
         const token = refreshTk && JSON.parse(refreshTk).token;
 
@@ -81,7 +67,7 @@ axiosInstance.interceptors.response.use(
 
           const accessToken = response.data.access_token
           if (accessToken){
-            sessionStorage.setItem('access_token', accessToken)
+            localStorage.setItem('access_token', accessToken)
 
             if (error?.config) {
               const newHeaders = axios.AxiosHeaders.from({
@@ -95,6 +81,9 @@ axiosInstance.interceptors.response.use(
             }
           }
         }
+        else {
+          window.location.href = '/login';
+        }
 
       }catch(error){
         console.error('Error when refresh token',error)
@@ -104,9 +93,5 @@ axiosInstance.interceptors.response.use(
     return Promise.reject(error);
   }
 );
-
-// Listen to changes in localStorage 'language' key
-// setInterval(updateHeaders, 1000); 
-// Check every second for changes in 'language'
 
 export default axiosInstance;

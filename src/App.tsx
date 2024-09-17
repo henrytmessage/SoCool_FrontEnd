@@ -4,10 +4,11 @@ import './App.css';
 import AppRouters from './routers';
 import Header from './components/Header';
 import './i18n'
-
+import { GoogleOAuthProvider } from '@react-oauth/google';
 function App() {
 
   return (
+    <GoogleOAuthProvider clientId='your-google-client-id'>
     <div className="App">
       <div className=''>
         <div className='flex flex-col bg-grey-900'>
@@ -20,6 +21,7 @@ function App() {
         </div>
       </div>
     </div>
+    </GoogleOAuthProvider>
   );
 }
 

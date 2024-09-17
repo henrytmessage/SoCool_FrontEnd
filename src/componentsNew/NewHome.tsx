@@ -1,5 +1,5 @@
-import React, { ReactNode, useState } from 'react';
-import { Form, Input, Button, DatePicker, Upload, Steps, Avatar, message, Select, DatePickerProps, Tooltip, InputNumber } from 'antd';
+import React, { ReactNode, useEffect, useState } from 'react';
+import { Form, Input, Button, DatePicker, Upload, Steps, Avatar, message, Select, DatePickerProps, Tooltip, InputNumber, Spin } from 'antd';
 import { InfoCircleOutlined, UploadOutlined, DeleteOutlined, PlusOutlined  } from '@ant-design/icons';
 import { logoSoCool } from '../assets'
 import { useTranslation } from 'react-i18next';
@@ -9,6 +9,7 @@ import { postCreateLinkService, postLinkGenerateAnswerByAiService, postLinkGener
 import CustomDropDown from '../common/CustomDropDown';
 import dayjs from 'dayjs';
 import CustomModalWarning from '../common/CustomModalWarning';
+import { useNavigate } from 'react-router-dom';
 interface ScoreField {
   label?: string;
   minScore: number;
@@ -90,6 +91,7 @@ const NewHome: React.FC = () => {
   const [inputCompanyName, setInputCompanyName] = useState('')
   const [expireTime, setExpireTime] = useState('')
   const [isModalWarning, setIsModalWarning] = useState(false)
+  const navigate = useNavigate();
 
   const [loading, setLoading] = useState(false)
   const [isLoadingGenerate, setIsLoadingGenerate] = useState(false)
@@ -104,6 +106,7 @@ const NewHome: React.FC = () => {
   const [fromValue, setFromValue] = useState<number | null>(null);
   const [toValue, setToValue] = useState<number | null>(null);
   const [period, setPeriod] = useState('Monthly'); 
+  const [loadingInit, setLoadingInit] = useState(true);
 
   const handleFromChange = (value: number | null) => {
     setFromValue(value);
@@ -479,6 +482,19 @@ const NewHome: React.FC = () => {
   const handleCloseModalSuccess = () => {
     window.location.reload()
   }
+
+  useEffect(() => {
+    const checkAccessToken = async () => {
+      const accessToken = localStorage.getItem('accessToken');
+      if (!accessToken) {
+        navigate('/login');
+      } else {
+        setLoading(false);
+      }
+    };
+
+    checkAccessToken();
+  }, [navigate]);
 
   const steps = [
     {
@@ -972,12 +988,20 @@ const NewHome: React.FC = () => {
       </div>
     );
   };
-  
+
+  if (loadingInit) {
+    return (
+      <div className="flex justify-center items-center h-[calc(100vh-80px)]">
+        <Spin size="large" />
+      </div>
+    );
+  }
   
   return (
     <div className="flex flex-col h-[calc(100vh-80px)]">
       <div className="flex-grow flex-col p-6 gap-6 flex m-auto w-full max-w-3xl">
         <AvatarFirsText />
+       
         {
           isStartNow ?
           <AvatarWithText text={ 'We need to learn your recruitment preferences so the smart email can handle all the CV screening tasks for you.'}></AvatarWithText>

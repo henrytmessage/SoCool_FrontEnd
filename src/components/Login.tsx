@@ -35,7 +35,6 @@ const Login: React.FC = () => {
       setLoading(true)
       const bodyAuthOTP: IBodyAuthOTP = {
         email: values.email,
-        code: code
       }
       try {
         const data = await postAuthOTP(bodyAuthOTP)

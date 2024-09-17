@@ -9,7 +9,7 @@ export interface IBodyPostLink {
 
 export interface IBodyAuthOTP {
   email: string
-  code: string
+  type?: string
 }
 
 export interface IBodyAuthRegister {
