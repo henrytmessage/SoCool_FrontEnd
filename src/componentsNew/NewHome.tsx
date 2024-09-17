@@ -24,6 +24,11 @@ interface AvatarWithTextProps {
   textChild?: string
 }
 
+interface FormValuesInit {
+  project: string;
+  company: string;
+}
+
 const { Step } = Steps;
 const { Option } = Select;
 
@@ -107,6 +112,7 @@ const NewHome: React.FC = () => {
   const [toValue, setToValue] = useState<number | null>(null);
   const [period, setPeriod] = useState('Monthly'); 
   const [loadingInit, setLoadingInit] = useState(true);
+  const [isRequireProject, setIsRequireProject] = useState(false)
 
   const handleFromChange = (value: number | null) => {
     setFromValue(value);
@@ -483,13 +489,59 @@ const NewHome: React.FC = () => {
     window.location.reload()
   }
 
+  const onFinishInit = (values: FormValuesInit) => {
+    console.log('Form Values:', values);
+  };
+
+  const formRequireInit = () => {
+   return (
+      <Form
+        form={form}
+        name="project_company_form"
+        onFinish={onFinishInit}
+        layout= "vertical"
+        // labelCol={{ span: 8 }}
+        // wrapperCol={{ span: 16 }}
+        // style={{ maxWidth: 600, margin: '0 auto' }}
+      >
+        <Form.Item
+          label="Project"
+          name="project"
+          rules={[{ required: true, message: 'Please enter your project name!' }]}
+        >
+          <Input placeholder="Enter your project name" size="large"/>
+        </Form.Item>
+
+        <Form.Item
+          label="Company"
+          name="company"
+          rules={[{ required: true, message: 'Please enter your company name!' }]}
+        >
+          <Input placeholder="Enter your company name" size="large"/>
+        </Form.Item>
+
+        <Form.Item>
+          <Button type="primary" htmlType="submit" size="large">
+            Submit
+          </Button>
+        </Form.Item>
+      </Form>
+    )
+  }
+
   useEffect(() => {
     const checkAccessToken = async () => {
       const accessToken = localStorage.getItem('access_token');
+      const requireProject = localStorage.getItem('require_project_or_company_name');
       if (!accessToken) {
         navigate('/login');
       } else {
         setLoadingInit(false);
+      }
+      if (requireProject === 'true') {
+        setIsRequireProject(true)
+      } else {
+        setIsRequireProject(false)
       }
     };
 
@@ -999,35 +1051,45 @@ const NewHome: React.FC = () => {
   
   return (
     <div className="flex flex-col h-[calc(100vh-80px)]">
-      <div className="flex-grow flex-col p-6 gap-6 flex m-auto w-full max-w-3xl">
-        <AvatarFirsText />
-       
-        {
-          isStartNow ?
-          <AvatarWithText text={ 'We need to learn your recruitment preferences so the smart email can handle all the CV screening tasks for you.'}></AvatarWithText>
-          : 
-          <AvatarWithText text={ 'Let’s set up your own smart email address to help you recruit great candidates!'}>
-            <CustomButton type="primary" onClick={OnClickStartNow}>
-              Start Now
-            </CustomButton>
-        </AvatarWithText>
-        }
-        
-        {
-          isStartNow && (
-            <div className="animate-showSteps">
-              <Steps current={current}>
-                {steps.map((item) => (
-                  <Step key={item.title} title={item.title} />
-                ))}
-              </Steps>
-              <div className="steps-content mt-6">
-                {steps[current].content}
+       <div className="flex-grow flex-col p-6 gap-6 flex m-auto w-full max-w-3xl">
+    <AvatarFirsText />
+
+    {
+      isRequireProject ? (
+        formRequireInit()
+      ) : (
+        <>
+          {/* Avatar and Start Button Section */}
+          {
+            isStartNow ? 
+            <AvatarWithText text="We need to learn your recruitment preferences so the smart email can handle all the CV screening tasks for you." />
+            : 
+            <AvatarWithText text="Let’s set up your own smart email address to help you recruit great candidates!">
+              <CustomButton type="primary" onClick={OnClickStartNow}>
+                Start Now
+              </CustomButton>
+            </AvatarWithText>
+          }
+
+          {/* Steps Section */}
+          {
+            isStartNow && (
+              <div className="animate-showSteps">
+                <Steps current={current}>
+                  {steps.map((item) => (
+                    <Step key={item.title} title={item.title} />
+                  ))}
+                </Steps>
+                <div className="steps-content mt-6">
+                  {steps[current].content}
+                </div>
               </div>
-            </div>
-          )
-        }
-      </div>
+            )
+          }
+        </>
+      )
+    }
+  </div>
       <div className="text-center pb-2">
         By using SoCool, you agree to our{' '}
         <span className="font-bold">
