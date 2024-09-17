@@ -485,16 +485,16 @@ const NewHome: React.FC = () => {
 
   useEffect(() => {
     const checkAccessToken = async () => {
-      const accessToken = localStorage.getItem('accessToken');
+      const accessToken = localStorage.getItem('access_token');
       if (!accessToken) {
         navigate('/login');
       } else {
-        setLoading(false);
+        setLoadingInit(false);
       }
     };
 
     checkAccessToken();
-  }, [navigate]);
+  }, []);
 
   const steps = [
     {

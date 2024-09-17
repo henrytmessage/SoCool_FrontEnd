@@ -3,7 +3,7 @@ import { Tabs, Form, Input, Button, message } from 'antd';
 import { useGoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
 import { IBodyAuthOTP, IBodyAuthRegister } from '../api/core/interface';
-import { postAuthOTP } from '../service';
+import { postAuthOTP, postAuthRegisterService } from '../service';
 import { useNavigate } from 'react-router-dom'; // Use for navigation
 import CustomDropDown from '../common/CustomDropDown';
 
@@ -30,11 +30,25 @@ const AuthPage: React.FC = () => {
   };
 
   const handleRegister = async (values: any) => {
+    const bodyRegister: IBodyAuthRegister = { email: values.email, otp: values.otp };
+    setLoading(true)
     try {
-      const bodyAuthOTP: IBodyAuthRegister = { email: values.email, otp: values.otp };
+      const data = await postAuthRegisterService(bodyRegister);
+      if(data.status_code === 200) {
+        message.success('Register successfully!');
+        localStorage.setItem('access_token', data?.data?.access_token)
+        localStorage.setItem('expired_time', data?.data?.expired_time)
+        localStorage.setItem('refresh_token', data?.data?.refresh_token)
+        localStorage.setItem('require_project_or_company_name', data?.data?.require_project_or_company_name)
+        navigate('/');
+
+      } else {
+        message.error('Register failed!');
+      }
+      setLoading(false)
     } catch (error) {
-      message.error('Register failed!');
-      
+      message.error('Register failed!'); 
+      setLoading(false)
     }
   }
 
