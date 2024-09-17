@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { Tabs, Form, Input, Button, message } from 'antd';
 import { useGoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
-import { IBodyAuthOTP, IBodyAuthRegister } from '../api/core/interface';
-import { postAuthOTP, postAuthRegisterService } from '../service';
+import { IBodyAuthOTP, IBodyAuthRegister, ILoginGoogle } from '../api/core/interface';
+import { postAuthOTP, postAuthRegisterService, postLoginGoogleService } from '../service';
 import { useNavigate } from 'react-router-dom'; // Use for navigation
 import CustomDropDown from '../common/CustomDropDown';
 
@@ -73,8 +73,19 @@ const AuthPage: React.FC = () => {
   const loginWithGoogle = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
       try {
-        message.success('Logged in with Google successfully!');
-        navigate('/dashboard'); // Redirect after Google login
+        console.log("tokenResponse", tokenResponse?.access_token);
+        const bodyLoginGoogle: ILoginGoogle = { access_token: tokenResponse?.access_token }
+        const data = await postLoginGoogleService(bodyLoginGoogle);
+        if(data.status_code === 200) {
+          message.success('Logged in with Google successfully!');
+          localStorage.setItem('access_token', data?.data?.access_token)
+          localStorage.setItem('expired_time', data?.data?.expired_time)
+          localStorage.setItem('refresh_token', data?.data?.refresh_token)
+          localStorage.setItem('require_project_or_company_name', data?.data?.require_project_or_company_name)
+          navigate('/'); 
+        } else {
+          message.error('Google login failed!');
+        }
       } catch (error) {
         message.error('Google login failed!');
       }

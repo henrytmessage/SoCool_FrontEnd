@@ -100,3 +100,7 @@ export interface IBodyGetJob {
 export interface IRefreshToken {
   refresh_token:string
 }
+
+export interface ILoginGoogle {
+  access_token: string
+}

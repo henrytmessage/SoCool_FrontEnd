@@ -8,19 +8,19 @@ import { GoogleOAuthProvider } from '@react-oauth/google';
 function App() {
 
   return (
-    <GoogleOAuthProvider clientId='your-google-client-id'>
-    <div className="App">
-      <div className=''>
-        <div className='flex flex-col bg-grey-900'>
-          <BrowserRouter>
-            <Header/>
-            <div className='mt-28 md:mt-[80px] w-full h-[calc(100vh-80px)]' >
-              <AppRouters/>
-            </div>
-          </BrowserRouter>
+    <GoogleOAuthProvider clientId="877396818815-69mejbiofcr09trrqjph6ttp156o6kpb.apps.googleusercontent.com">
+      <div className="App">
+        <div className=''>
+          <div className='flex flex-col bg-grey-900'>
+            <BrowserRouter>
+              <Header/>
+              <div className='mt-28 md:mt-[80px] w-full h-[calc(100vh-80px)]' >
+                <AppRouters/>
+              </div>
+            </BrowserRouter>
+          </div>
         </div>
       </div>
-    </div>
     </GoogleOAuthProvider>
   );
 }
