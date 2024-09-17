@@ -104,3 +104,8 @@ export interface IRefreshToken {
 export interface ILoginGoogle {
   access_token: string
 }
+
+export interface ILogin {
+  email: string,
+  otp: string
+}

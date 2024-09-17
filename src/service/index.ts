@@ -1,5 +1,5 @@
-import { getApiExample, getConversation, getConversationList, getDetailConversation, getJobDescription, getLink, postAuthOtp, postAuthRegister, postConversation, postConversationCreateSearchPrice, postConversationCreateTitle, postConversationSendMessage, postCreateLink, postLink, postLinkAnswer, postLinkDeactivate, postLinkGenerateAnswerByAi, postLinkGenerateQuestion, postLinkUploadFile, postLoginGoogle, postSendEmailRunOnRice } from "../api/core";
-import { IBodyAuthOTP, IBodyAuthRegister, IBodyConversation, IBodyConversationList, IBodyCreateLink, IBodyCreateSearchPrice, IBodyCreateTitle, IBodyDetailConversation, IBodyGenerateAnswerByAi, IBodyGenerateQuestion, IBodyGetJob, IBodyLinkAnswer, IBodyPostLink, IBodySendEmailRunOnRice, IBodySendMessage, ILoginGoogle } from "../api/core/interface";
+import { getApiExample, getConversation, getConversationList, getDetailConversation, getJobDescription, getLink, postAuthOtp, postAuthRegister, postConversation, postConversationCreateSearchPrice, postConversationCreateTitle, postConversationSendMessage, postCreateLink, postLink, postLinkAnswer, postLinkDeactivate, postLinkGenerateAnswerByAi, postLinkGenerateQuestion, postLinkUploadFile, postLogin, postLoginGoogle, postSendEmailRunOnRice } from "../api/core";
+import { IBodyAuthOTP, IBodyAuthRegister, IBodyConversation, IBodyConversationList, IBodyCreateLink, IBodyCreateSearchPrice, IBodyCreateTitle, IBodyDetailConversation, IBodyGenerateAnswerByAi, IBodyGenerateQuestion, IBodyGetJob, IBodyLinkAnswer, IBodyPostLink, IBodySendEmailRunOnRice, IBodySendMessage, ILogin, ILoginGoogle } from "../api/core/interface";
 
 export const getExample = async (messageChat: string) => {
   try {
@@ -205,6 +205,16 @@ export const getJobDescriptionService = async (body: IBodyGetJob) => {
 export const postLoginGoogleService = async (body: ILoginGoogle) => {
   try {
     const response = await postLoginGoogle(body)
+    return response?.data;
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    throw error;
+  }
+}
+
+export const postLoginService = async (body: ILogin) => {
+  try {
+    const response = await postLogin(body)
     return response?.data;
   } catch (error) {
     console.error('Error fetching data:', error);

@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 import { Tabs, Form, Input, Button, message } from 'antd';
 import { useGoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
-import { IBodyAuthOTP, IBodyAuthRegister, ILoginGoogle } from '../api/core/interface';
-import { postAuthOTP, postAuthRegisterService, postLoginGoogleService } from '../service';
+import { IBodyAuthOTP, IBodyAuthRegister, ILogin, ILoginGoogle } from '../api/core/interface';
+import { postAuthOTP, postAuthRegisterService, postLoginGoogleService, postLoginService } from '../service';
 import { useNavigate } from 'react-router-dom'; // Use for navigation
 import CustomDropDown from '../common/CustomDropDown';
+import { postLogin } from '../api/core';
 
 type FieldType = {
   email?: string;
@@ -21,9 +22,19 @@ const AuthPage: React.FC = () => {
 
   const handleLogin = async (values: any) => {
     try {
-      const response = await axios.post('/api/login', { email: values.email, otp: values.otp });
-      message.success('Logged in successfully!');
-      navigate('/dashboard'); // Redirect to dashboard or another page on success
+      const bodyLogin: ILogin = { email: values.email, otp: values.otp };
+      setLoading(true)
+      const data = await postLoginService(bodyLogin)
+      if (data.status_code === 200){
+        message.success('Login successfully!');
+        localStorage.setItem('access_token', data?.data?.access_token)
+        localStorage.setItem('expired_time', data?.data?.expired_time)
+        localStorage.setItem('refresh_token', data?.data?.refresh_token)
+        localStorage.setItem('require_project_or_company_name', data?.data?.require_project_or_company_name)
+        navigate('/')
+      }else{
+        message.error(data.error.message)
+      }
     } catch (error) {
       message.error('Login failed!');
     }

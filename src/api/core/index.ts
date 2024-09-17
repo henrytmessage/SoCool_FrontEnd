@@ -15,6 +15,7 @@ import {
   IBodyPostLink,
   IBodySendEmailRunOnRice,
   IBodySendMessage,
+  ILogin,
   ILoginGoogle,
   IRefreshToken,
 } from './interface'
@@ -110,4 +111,8 @@ export const refreshToken = (params: IRefreshToken) => {
 
 export const postLoginGoogle = (body: ILoginGoogle) => {
   return axiosInstance.post('/auth/login-google', body)
+}
+
+export const postLogin = (body: ILogin) => {
+  return axiosInstance.post('/auth/login', body)
 }
