@@ -1,4 +1,4 @@
-import { getApiExample, getConversation, getConversationList, getDetailConversation, getJobDescription, getLink, postAuthOtp, postAuthRegister, postConversation, postConversationCreateSearchPrice, postConversationCreateTitle, postConversationSendMessage, postCreateLink, postLink, postLinkAnswer, postLinkDeactivate, postLinkGenerateAnswerByAi, postLinkGenerateQuestion, postLinkUploadFile, postLogin, postLoginGoogle, postSaveCompanyOrProjectName, postSendEmailRunOnRice } from "../api/core";
+import { getAliasInfos, getApiExample, getConversation, getConversationList, getDetailConversation, getJobDescription, getLink, postAuthOtp, postAuthRegister, postConversation, postConversationCreateSearchPrice, postConversationCreateTitle, postConversationSendMessage, postCreateLink, postLink, postLinkAnswer, postLinkDeactivate, postLinkGenerateAnswerByAi, postLinkGenerateQuestion, postLinkUploadFile, postLogin, postLoginGoogle, postSaveCompanyOrProjectName, postSendEmailRunOnRice } from "../api/core";
 import { IBodyAuthOTP, IBodyAuthRegister, IBodyConversation, IBodyConversationList, IBodyCreateLink, IBodyCreateSearchPrice, IBodyCreateTitle, IBodyDetailConversation, IBodyGenerateAnswerByAi, IBodyGenerateQuestion, IBodyGetJob, IBodyLinkAnswer, IBodyPostLink, IBodySendEmailRunOnRice, IBodySendMessage, ICompanyProject, ILogin, ILoginGoogle } from "../api/core/interface";
 
 export const getExample = async (messageChat: string) => {
@@ -225,6 +225,16 @@ export const postLoginService = async (body: ILogin) => {
 export const postSaveCompanyOrProjectNameService = async (body: ICompanyProject) => {
   try{
     const response = await postSaveCompanyOrProjectName(body)
+    return response?.data
+  }catch(error){
+    console.error('Error fetching data:', error);
+    throw error;
+  }
+}
+
+export const getAliasInfosService = async () => {
+  try{
+    const response = await getAliasInfos()
     return response?.data
   }catch(error){
     console.error('Error fetching data:', error);

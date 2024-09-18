@@ -113,3 +113,15 @@ export interface ILogin {
 export interface ICompanyProject{
   company_or_project_name: string
 }
+
+export interface IAliasInfo{
+  alias: string,
+  job_title:string,
+  landing_page:string,
+  published_date:string,
+  end_date:string,
+  no_summitted_cv:number,
+  no_not_decide_cv:number,
+  no_accepted_cv:number,
+  no_rejected_cv:number
+}

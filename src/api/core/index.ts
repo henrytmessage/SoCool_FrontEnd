@@ -121,3 +121,7 @@ export const postLogin = (body: ILogin) => {
 export const postSaveCompanyOrProjectName = (body: ICompanyProject) => {
   return axiosInstance.post('/user/save-company-project-name',body)
 }
+
+export const getAliasInfos = () =>{
+  return axiosInstance.get('/alias/get-all-alias')
+}

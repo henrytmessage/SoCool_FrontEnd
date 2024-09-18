@@ -190,7 +190,7 @@ const AuthPage: React.FC = () => {
     },
     {
       key: 'signup',
-      label: 'Sign Up',
+      label: 'Sign up',
       children: (
         <>
           <Form form={form} onFinish={handleRegister}>
@@ -211,7 +211,7 @@ const AuthPage: React.FC = () => {
               </div>
               
             </Form.Item>
-            {otpSignInSent && (
+            {otpSignUpSent && (
               <Form.Item
                 name="otp"
                 rules={[{ required: true, message: 'Please enter OTP!' }]}

@@ -172,6 +172,10 @@ const NewHome: React.FC = () => {
     setIsStartNow(true)
   }
 
+  const OnClickNavigateLogin = () => {
+    navigate('/login')
+  }
+
   const next = () => {
     setCurrent(current + 1);
   };
@@ -542,7 +546,8 @@ const NewHome: React.FC = () => {
       const accessToken = localStorage.getItem('access_token');
       const requireProject = localStorage.getItem('require_project_or_company_name');
       if (!accessToken) {
-        navigate('/login');
+        // navigate('/login');
+        setLoadingInit(true);
       } else {
         setLoadingInit(false);
       }
@@ -1049,10 +1054,15 @@ const NewHome: React.FC = () => {
     );
   };
 
-  if (loadingInit) {
+  const wrapLogin = () => {
     return (
-      <div className="flex justify-center items-center h-[calc(100vh-80px)]">
-        <Spin size="large" />
+      <div className="flex gap-10 justify-center items-center">
+        <CustomButton type="primary" onClick={OnClickNavigateLogin}>
+                Sign in
+              </CustomButton>
+        <CustomButton type="primary" onClick={OnClickNavigateLogin}>
+                Sign up
+              </CustomButton>
       </div>
     );
   }
@@ -1061,8 +1071,8 @@ const NewHome: React.FC = () => {
     <div className="flex flex-col h-[calc(100vh-80px)]">
        <div className="flex-grow flex-col p-6 gap-6 flex m-auto w-full max-w-3xl">
     <AvatarFirsText />
-
-    {
+    {loadingInit ? wrapLogin() :
+    
       isRequireProject ? (
         formRequireInit()
       ) : (
@@ -1096,7 +1106,8 @@ const NewHome: React.FC = () => {
           }
         </>
       )
-    }
+    
+  }
   </div>
       <div className="text-center pb-2">
         By using SoCool, you agree to our{' '}

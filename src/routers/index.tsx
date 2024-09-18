@@ -15,6 +15,7 @@ import AiRunOnRice from '../componentsNew/AiRunOnRice'
 import NewHome from '../componentsNew/NewHome'
 import LandingPage from '../componentsNew/LandingPage'
 import AuthPage from '../componentsNew/AuthModal'
+import DashBoardPage from '../componentsNew/DashBoard'
 
 const AppRouters = () => {
   return (
@@ -35,6 +36,7 @@ const AppRouters = () => {
       <Route path="/Policy" element={<PrivatePolicy />} />
       <Route path="*" element={<NotFound />} />
       <Route path="/login" element={<AuthPage />} />
+      <Route path="/dashboard" element={<DashBoardPage/>} />
     </Routes>
   )
 }
