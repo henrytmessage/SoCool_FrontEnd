@@ -109,3 +109,7 @@ export interface ILogin {
   email: string,
   otp: string
 }
+
+export interface ICompanyProject{
+  company_or_project_name: string
+}

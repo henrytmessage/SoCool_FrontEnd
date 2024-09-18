@@ -15,6 +15,7 @@ import {
   IBodyPostLink,
   IBodySendEmailRunOnRice,
   IBodySendMessage,
+  ICompanyProject,
   ILogin,
   ILoginGoogle,
   IRefreshToken,
@@ -115,4 +116,8 @@ export const postLoginGoogle = (body: ILoginGoogle) => {
 
 export const postLogin = (body: ILogin) => {
   return axiosInstance.post('/auth/login', body)
+}
+
+export const postSaveCompanyOrProjectName = (body: ICompanyProject) => {
+  return axiosInstance.post('/user/save-company-project-name',body)
 }

@@ -7,6 +7,7 @@ import { postAuthOTP, postAuthRegisterService, postLoginGoogleService, postLogin
 import { useNavigate } from 'react-router-dom'; // Use for navigation
 import CustomDropDown from '../common/CustomDropDown';
 import { postLogin } from '../api/core';
+import { logoGoogle } from '../assets'
 
 type FieldType = {
   email?: string;
@@ -15,7 +16,8 @@ type FieldType = {
 
 const AuthPage: React.FC = () => {
   const [form] = Form.useForm();
-  const [otpSent, setOtpSent] = useState(false);
+  const [otpSignInSent, setOtpSignInSent] = useState(false);
+  const [otpSignUpSent, setOtpSignUpSent] = useState(false);
   const navigate = useNavigate(); 
   const [activeTab, setActiveTab] = useState('SIGN_IN');
   const [loading, setLoading] = useState(false)
@@ -63,7 +65,7 @@ const AuthPage: React.FC = () => {
     }
   }
 
-  const handleSendOtp = async (email: string) => {
+  const handleSendOtp = async (email: string, type:string) => {
     const bodyAuthOTP: IBodyAuthOTP = { email: email, type: activeTab };
     setLoading(true)
     try {
@@ -73,7 +75,12 @@ const AuthPage: React.FC = () => {
       } else {
         message.error('Failed to send OTP!');
       }
-      setOtpSent(true);
+      if (type == 'SIGN_IN'){
+        setOtpSignInSent(true);
+      }else{
+        setOtpSignUpSent(true);
+      }
+      
       setLoading(false)
     } catch (error) {
       message.error('Failed to send OTP!');
@@ -109,7 +116,7 @@ const AuthPage: React.FC = () => {
   const tabsItems = [
     {
       key: 'login',
-      label: 'Login',
+      label: 'Sign in',
       children: (
         <>
           <Form form={form} onFinish={handleLogin}>
@@ -117,17 +124,38 @@ const AuthPage: React.FC = () => {
               name="email"
               rules={[{ required: true, type: 'email', message: 'Please enter a valid email!' }]}
             >
-              <Input placeholder="Email" disabled={otpSent} size="large" />
+              <div className='flex gap-4'>
+              <Input placeholder="Email" disabled={otpSignInSent} size="large" />
+              <Button
+                  type="primary"
+                  size="large"
+                  loading={loading}
+                  onClick={() => handleSendOtp(form.getFieldValue('email'), 'SIGN_IN')}
+                >
+                  Send OTP
+                </Button>
+              </div>
+              
             </Form.Item>
-            {otpSent && (
+            {otpSignInSent && (
               <Form.Item
                 name="otp"
                 rules={[{ required: true, message: 'Please enter OTP!' }]}
               >
+                <div className='flex gap-4'>
                 <Input.OTP formatter={str => str.toUpperCase()} size="large" />
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  size="large"
+                  loading={loading}
+                >
+                  {activeTab === 'SIGN_IN' ? 'Sign in' : 'Sign up'}
+                </Button>
+                </div>
               </Form.Item>
             )}
-            <Form.Item>
+            {/* <Form.Item>
               {!otpSent ? (
                 <Button
                   type="primary"
@@ -147,9 +175,14 @@ const AuthPage: React.FC = () => {
                   {activeTab === 'SIGN_IN' ? 'Login' : 'Sign up'}
                 </Button>
               )}
-            </Form.Item>
+            </Form.Item> */}
           </Form>
           <Button size='large' block onClick={() => loginWithGoogle()}>
+            <img
+              src={logoGoogle}
+              alt='Google logo'
+              style={{ width: '20px', height:'20px'}}
+              />
             Sign in with Google
           </Button>
         </>
@@ -165,40 +198,46 @@ const AuthPage: React.FC = () => {
               name="email"
               rules={[{ required: true, type: 'email', message: 'Please enter a valid email!' }]}
             >
+              <div className='flex gap-4'>
               <Input placeholder="Email" size="large" />
+              <Button
+                  type="primary"
+                  size="large"
+                  loading={loading}
+                  onClick={() => handleSendOtp(form.getFieldValue('email'), 'SIGN_UP')}
+                >
+                  Send OTP
+                </Button>
+              </div>
+              
             </Form.Item>
-            {otpSent && (
+            {otpSignInSent && (
               <Form.Item
                 name="otp"
                 rules={[{ required: true, message: 'Please enter OTP!' }]}
               >
+                <div className='flex gap-4'>
                 <Input.OTP formatter={str => str.toUpperCase()} size="large" />
-              </Form.Item>
-            )}
-            <Form.Item>
-              {!otpSent ? (
-                <Button
-                  type="primary"
-                  size="large"
-                  loading={loading}
-                  onClick={() => handleSendOtp(form.getFieldValue('email'))}
-                >
-                  Send OTP
-                </Button>
-              ) : (
                 <Button
                   type="primary"
                   htmlType="submit"
                   size="large"
                   loading={loading}
                 >
-                  {activeTab === 'SIGN_IN' ? 'Login' : 'Sign up'}
+                  {activeTab === 'SIGN_IN' ? 'Sign in' : 'Sign up'}
                 </Button>
-              )}
-            </Form.Item>
+                </div>
+              </Form.Item>
+            )}
+            
           </Form>
 
           <Button size='large' block onClick={() => loginWithGoogle()}>
+          <img
+              src={logoGoogle}
+              alt='Google logo'
+              style={{ width: '20px', height:'20px'}}
+              />
             Sign up with Google
           </Button>
         </>
@@ -209,7 +248,7 @@ const AuthPage: React.FC = () => {
   return (
     <div className="flex flex-col h-[100%] justify-between">
       <div className="flex flex-col w-[80%] max-w-[500px] mt-20 mx-auto">
-        <Tabs defaultActiveKey="login" items={tabsItems} onChange={(key) => setActiveTab(key === 'login' ? 'SIGN_IN' : 'SIGN_UP')}/>
+        <Tabs size = "large" defaultActiveKey="login" items={tabsItems} onChange={(key) => setActiveTab(key === 'login' ? 'SIGN_IN' : 'SIGN_UP')}/>
       </div>
       <div className="text-center">
         By using SoCool, you agree to our{' '}

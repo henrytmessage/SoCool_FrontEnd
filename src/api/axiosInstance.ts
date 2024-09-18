@@ -20,12 +20,11 @@ axiosInstance.interceptors.request.use(
   (config: CustomAxiosRequestConfig) => {
     // Perform actions before request is sent
     const accessToken = localStorage.getItem('access_token');
-    const token = accessToken && JSON.parse(accessToken).token;
-    if (token) {
+    if (accessToken) {
       // Ensure config.headers is initialized before assigning Authorization header
       config.headers = {
         ...config.headers,
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${accessToken}`,
       } as any;
     }
     return config;
