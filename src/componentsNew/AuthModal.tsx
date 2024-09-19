@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Tabs, Form, Input, Button, message } from 'antd';
+import { Tabs, Form, Input, message, Button } from 'antd';
 import { useGoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
 import { IBodyAuthOTP, IBodyAuthRegister, ILogin, ILoginGoogle } from '../api/core/interface';
@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom'; // Use for navigation
 import CustomDropDown from '../common/CustomDropDown';
 import { postLogin } from '../api/core';
 import { logoGoogle } from '../assets'
+import { CustomButton } from '../common';
 
 type FieldType = {
   email?: string;
@@ -56,7 +57,7 @@ const AuthPage: React.FC = () => {
         navigate('/');
 
       } else {
-        message.error('Register failed!');
+        message.error(data.errors?.message);
       }
       setLoading(false)
     } catch (error) {
@@ -72,13 +73,13 @@ const AuthPage: React.FC = () => {
       const data = await postAuthOTP(bodyAuthOTP);
       if(data.status_code === 200) {
         message.success('OTP sent to your email!');
+        if (type == 'SIGN_IN'){
+          setOtpSignInSent(true);
+        }else{
+          setOtpSignUpSent(true);
+        }
       } else {
-        message.error('Failed to send OTP!');
-      }
-      if (type == 'SIGN_IN'){
-        setOtpSignInSent(true);
-      }else{
-        setOtpSignUpSent(true);
+        message.error(data.errors?.message);
       }
       
       setLoading(false)
@@ -102,7 +103,7 @@ const AuthPage: React.FC = () => {
           localStorage.setItem('require_project_or_company_name', data?.data?.require_project_or_company_name)
           navigate('/'); 
         } else {
-          message.error('Google login failed!');
+          message.error(data.errors?.message);
         }
       } catch (error) {
         message.error('Google login failed!');
@@ -126,14 +127,14 @@ const AuthPage: React.FC = () => {
             >
               <div className='flex gap-4'>
               <Input placeholder="Email" disabled={otpSignInSent} size="large" />
-              <Button
+              <CustomButton
                   type="primary"
                   size="large"
                   loading={loading}
                   onClick={() => handleSendOtp(form.getFieldValue('email'), 'SIGN_IN')}
                 >
                   Send OTP
-                </Button>
+                </CustomButton>
               </div>
               
             </Form.Item>
@@ -144,40 +145,20 @@ const AuthPage: React.FC = () => {
               >
                 <div className='flex gap-4'>
                 <Input.OTP formatter={str => str.toUpperCase()} size="large" />
-                <Button
+                <CustomButton
                   type="primary"
                   htmlType="submit"
                   size="large"
                   loading={loading}
                 >
-                  {activeTab === 'SIGN_IN' ? 'Sign in' : 'Sign up'}
-                </Button>
+                  {'Sign in'}
+                </CustomButton>
                 </div>
               </Form.Item>
             )}
-            {/* <Form.Item>
-              {!otpSent ? (
-                <Button
-                  type="primary"
-                  size="large"
-                  loading={loading}
-                  onClick={() => handleSendOtp(form.getFieldValue('email'))}
-                >
-                  Send OTP
-                </Button>
-              ) : (
-                <Button
-                  type="primary"
-                  htmlType="submit"
-                  size="large"
-                  loading={loading}
-                >
-                  {activeTab === 'SIGN_IN' ? 'Login' : 'Sign up'}
-                </Button>
-              )}
-            </Form.Item> */}
+            
           </Form>
-          <Button size='large' block onClick={() => loginWithGoogle()}>
+          <Button className = 'w-full' size='large' onClick={() => loginWithGoogle()}>
             <img
               src={logoGoogle}
               alt='Google logo'
@@ -200,14 +181,14 @@ const AuthPage: React.FC = () => {
             >
               <div className='flex gap-4'>
               <Input placeholder="Email" size="large" />
-              <Button
+              <CustomButton
                   type="primary"
                   size="large"
                   loading={loading}
                   onClick={() => handleSendOtp(form.getFieldValue('email'), 'SIGN_UP')}
                 >
                   Send OTP
-                </Button>
+                </CustomButton>
               </div>
               
             </Form.Item>
@@ -218,21 +199,21 @@ const AuthPage: React.FC = () => {
               >
                 <div className='flex gap-4'>
                 <Input.OTP formatter={str => str.toUpperCase()} size="large" />
-                <Button
+                <CustomButton
                   type="primary"
                   htmlType="submit"
                   size="large"
                   loading={loading}
                 >
-                  {activeTab === 'SIGN_IN' ? 'Sign in' : 'Sign up'}
-                </Button>
+                  {'Sign up'}
+                </CustomButton>
                 </div>
               </Form.Item>
             )}
             
           </Form>
 
-          <Button size='large' block onClick={() => loginWithGoogle()}>
+          <Button className = 'w-full' size='large' onClick={() => loginWithGoogle() }>
           <img
               src={logoGoogle}
               alt='Google logo'

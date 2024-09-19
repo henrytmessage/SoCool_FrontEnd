@@ -19,6 +19,7 @@ import {
   ILogin,
   ILoginGoogle,
   IRefreshToken,
+  IRemoveAlias,
 } from './interface'
 
 // vi du
@@ -124,4 +125,8 @@ export const postSaveCompanyOrProjectName = (body: ICompanyProject) => {
 
 export const getAliasInfos = () =>{
   return axiosInstance.get('/alias/get-all-alias')
+}
+
+export const removeAlias = (body: IRemoveAlias) =>{
+  return axiosInstance.post('/alias/remove-alias', body)
 }

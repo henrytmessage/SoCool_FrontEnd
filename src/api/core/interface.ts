@@ -115,13 +115,18 @@ export interface ICompanyProject{
 }
 
 export interface IAliasInfo{
+  alias_id:number,
   alias: string,
   job_title:string,
   landing_page:string,
   published_date:string,
   end_date:string,
-  no_summitted_cv:number,
-  no_not_decide_cv:number,
-  no_accepted_cv:number,
-  no_rejected_cv:number
+  no_summitted_cv:string,
+  no_not_decide_cv:string,
+  no_accepted_cv:string,
+  no_rejected_cv:string
+}
+
+export interface IRemoveAlias{
+  alias_id: number
 }

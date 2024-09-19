@@ -1,5 +1,5 @@
-import { getAliasInfos, getApiExample, getConversation, getConversationList, getDetailConversation, getJobDescription, getLink, postAuthOtp, postAuthRegister, postConversation, postConversationCreateSearchPrice, postConversationCreateTitle, postConversationSendMessage, postCreateLink, postLink, postLinkAnswer, postLinkDeactivate, postLinkGenerateAnswerByAi, postLinkGenerateQuestion, postLinkUploadFile, postLogin, postLoginGoogle, postSaveCompanyOrProjectName, postSendEmailRunOnRice } from "../api/core";
-import { IBodyAuthOTP, IBodyAuthRegister, IBodyConversation, IBodyConversationList, IBodyCreateLink, IBodyCreateSearchPrice, IBodyCreateTitle, IBodyDetailConversation, IBodyGenerateAnswerByAi, IBodyGenerateQuestion, IBodyGetJob, IBodyLinkAnswer, IBodyPostLink, IBodySendEmailRunOnRice, IBodySendMessage, ICompanyProject, ILogin, ILoginGoogle } from "../api/core/interface";
+import { getAliasInfos, getApiExample, getConversation, getConversationList, getDetailConversation, getJobDescription, getLink, postAuthOtp, postAuthRegister, postConversation, postConversationCreateSearchPrice, postConversationCreateTitle, postConversationSendMessage, postCreateLink, postLink, postLinkAnswer, postLinkDeactivate, postLinkGenerateAnswerByAi, postLinkGenerateQuestion, postLinkUploadFile, postLogin, postLoginGoogle, postSaveCompanyOrProjectName, postSendEmailRunOnRice, removeAlias } from "../api/core";
+import { IBodyAuthOTP, IBodyAuthRegister, IBodyConversation, IBodyConversationList, IBodyCreateLink, IBodyCreateSearchPrice, IBodyCreateTitle, IBodyDetailConversation, IBodyGenerateAnswerByAi, IBodyGenerateQuestion, IBodyGetJob, IBodyLinkAnswer, IBodyPostLink, IBodySendEmailRunOnRice, IBodySendMessage, ICompanyProject, ILogin, ILoginGoogle, IRemoveAlias } from "../api/core/interface";
 
 export const getExample = async (messageChat: string) => {
   try {
@@ -238,6 +238,16 @@ export const getAliasInfosService = async () => {
     return response?.data
   }catch(error){
     console.error('Error fetching data:', error);
+    throw error;
+  }
+}
+
+export const removeAliasService = async (body: IRemoveAlias) => {
+  try{
+    const response = await removeAlias(body)
+    return response?.data
+  }catch(error){
+    console.error('Error remove data:', error);
     throw error;
   }
 }
