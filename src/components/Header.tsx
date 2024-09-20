@@ -1,35 +1,52 @@
-import React, { useEffect, useState } from 'react'
-import { useTranslation } from 'react-i18next'
-import { useLocation } from 'react-router-dom'
-import CustomCountUp from '../common/CustomCountDown'
-import { Avatar } from 'antd'
-import { logoSoCool } from '../assets'
-import { getLinkDemo } from '../service'
-
-const getRandomNumber = (): number => {
-  return Math.floor(Math.random() * (100 - 10 + 1)) + 10
-}
+import React from 'react';
+import { useTranslation } from 'react-i18next';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { Avatar, Button, Dropdown, MenuProps } from 'antd';
+import { logoSoCool } from '../assets';
+import { DownOutlined } from '@ant-design/icons';
+import { postLogoutService } from '../service';
 
 const Header = () => {
-  const { t } = useTranslation()
-  const location = useLocation()
-
-  const [randomNumber, setRandomNumber] = useState<number>(getRandomNumber())
-
-  useEffect(() => {
-    if (location.pathname === '/') {
-      // Update random number every minute
-      const updateInterval = setInterval(() => {
-        setRandomNumber(getRandomNumber())
-      }, 60000)
-
-      return () => clearInterval(updateInterval)
+  const { t } = useTranslation();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const currentEmail = localStorage.getItem('current_emails_count');
+  const maxEmail = localStorage.getItem('max_emails_count');
+  const expiredDate = localStorage.getItem('expired_date_email');
+  
+  const handleLogout = async () => {
+    try {
+      await postLogoutService(); 
+      localStorage.clear(); 
+      navigate('/login'); 
+    } catch (error) {
+      console.error('Error during logout:', error);
     }
-  }, [location.pathname])
+  };
+
+  // Define menu items
+  const menuItems: MenuProps['items'] = [
+    {
+      key: '1',
+      label: 'Go to Dashboard',
+      onClick: () => navigate('/dashboard'),
+    },
+    {
+      key: '2',
+      label: 'Go to Account Setting',
+      onClick: () => navigate('/accountSetting'),
+    },
+    {
+      key: '3',
+      label: 'Sign out',
+      onClick: handleLogout,
+    },
+  ];
 
   return (
-    <div className="fixed w-full bg-[#F4F4F4] z-50 px-6 shadow-md">
-      <div className="flex items-center justify-center gap-4">
+    <div className="fixed w-full bg-[#F4F4F4] z-50 px-6 shadow-md flex items-center justify-between">
+      {/* Logo and Title */}
+      <div className="flex items-center justify-center flex-grow">
         <a href="/">
           <Avatar src={<img src={logoSoCool} alt="avatar" />} className="sm:size-14 size-10" />
         </a>
@@ -39,14 +56,30 @@ const Header = () => {
           </h3>
         </a>
       </div>
-      {/* {location.pathname === '/' && (
-        <div className="text-center md:flex justify-center">
-          <div className="mr-2">{t('haveSpawnedLink', { number: randomNumber })}</div>
-        </div>
-      )} */}
-      {/* {location.pathname === '/chat' && <CustomCountUp />} */}
-    </div>
-  )
-}
+      
+      {/* Dropdown Menu in the top right corner */}
+      {
+        expiredDate && (
+          <div className="relative">
+            <Dropdown menu={{ items: menuItems }} placement="bottomRight" arrow>
+              <Button className='py-6 px-2'>
+                <>
+                <DownOutlined className="ml-2" />
 
-export default Header
+                </>
+                <>
+                <div className="flex items-center cursor-pointer">
+                  <span>{`${currentEmail}/${maxEmail} emails`}</span>
+                </div>
+                <div>Exp: {expiredDate}</div>
+                </>
+              </Button>
+            </Dropdown>
+          </div>
+        )
+      } 
+    </div>
+  );
+};
+
+export default Header;

@@ -1,5 +1,5 @@
-import { getAliasInfos, getApiExample, getConversation, getConversationList, getDetailConversation, getJobDescription, getLink, postAuthOtp, postAuthRegister, postConversation, postConversationCreateSearchPrice, postConversationCreateTitle, postConversationSendMessage, postCreateLink, postLink, postLinkAnswer, postLinkDeactivate, postLinkGenerateAnswerByAi, postLinkGenerateQuestion, postLinkUploadFile, postLogin, postLoginGoogle, postSaveCompanyOrProjectName, postSendEmailRunOnRice, removeAlias } from "../api/core";
-import { IBodyAuthOTP, IBodyAuthRegister, IBodyConversation, IBodyConversationList, IBodyCreateLink, IBodyCreateSearchPrice, IBodyCreateTitle, IBodyDetailConversation, IBodyGenerateAnswerByAi, IBodyGenerateQuestion, IBodyGetJob, IBodyLinkAnswer, IBodyPostLink, IBodySendEmailRunOnRice, IBodySendMessage, ICompanyProject, ILogin, ILoginGoogle, IRemoveAlias } from "../api/core/interface";
+import { getAccountSetting, getAliasInfos, getApiExample, getConversation, getConversationList, getDetailConversation, getJobDescription, getLink, postAuthOtp, postAuthRegister, postConversation, postConversationCreateSearchPrice, postConversationCreateTitle, postConversationSendMessage, postCreateLink, postLink, postLinkAnswer, postLinkDeactivate, postLinkGenerateAnswerByAi, postLinkGenerateQuestion, postLinkUploadFile, postLogin, postLoginGoogle, postLogout, postSaveCompanyOrProjectName, postSendEmailRunOnRice, postUpdateAccountSetting, removeAlias } from "../api/core";
+import { IBodyAuthOTP, IBodyAuthRegister, IBodyConversation, IBodyConversationList, IBodyCreateLink, IBodyCreateSearchPrice, IBodyCreateTitle, IBodyDetailConversation, IBodyGenerateAnswerByAi, IBodyGenerateQuestion, IBodyGetJob, IBodyLinkAnswer, IBodyPostLink, IBodySendEmailRunOnRice, IBodySendMessage, ICompanyProject, ILogin, ILoginGoogle, IRemoveAlias, IUpdateAccountSetting } from "../api/core/interface";
 
 export const getExample = async (messageChat: string) => {
   try {
@@ -248,6 +248,36 @@ export const removeAliasService = async (body: IRemoveAlias) => {
     return response?.data
   }catch(error){
     console.error('Error remove data:', error);
+    throw error;
+  }
+}
+
+export const getAccountSettingService = async () => {
+  try{
+    const response = await getAccountSetting()
+    return response?.data
+  }catch(error){
+    console.error('Error fetching data:', error);
+    throw error;
+  }
+}
+
+export const postUpdateAccountSettingService = async (body: IUpdateAccountSetting) => {
+  try{
+    const response = await postUpdateAccountSetting(body)
+    return response?.data
+  }catch(error){
+    console.error('Error fetching data:', error);
+    throw error;
+  }
+}
+
+export const postLogoutService = async () => {
+  try{
+    const response = await postLogout()
+    return response?.data
+  }catch(error){
+    console.error('Error fetching data:', error);
     throw error;
   }
 }

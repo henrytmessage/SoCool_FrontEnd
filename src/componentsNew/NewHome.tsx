@@ -113,6 +113,10 @@ const NewHome: React.FC = () => {
   const [period, setPeriod] = useState('Monthly'); 
   const [loadingInit, setLoadingInit] = useState(true);
   const [isRequireProject, setIsRequireProject] = useState(false)
+  const [jobCloseDate, setJobCloseDate] = useState('')
+
+  const currentEmail = parseInt(localStorage.getItem('current_emails_count') ?? '0', 10);
+  const maxEmail = parseInt(localStorage.getItem('max_emails_count') ?? '0', 10);  
 
   const handleFromChange = (value: number | null) => {
     setFromValue(value);
@@ -393,8 +397,18 @@ const NewHome: React.FC = () => {
   }
 
   const handleChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputEmail(e.target.value)
+    const value = e.target.value;
+    const regex = /^[a-zA-Z0-9]*$/; // Chỉ cho phép chữ cái và số
+
+    // Kiểm tra nếu giá trị nhập vào phù hợp với regex và độ dài hợp lệ (8-30 ký tự)
+    if (regex.test(value) && value.length <= 30) {
+      setInputEmail(value);
+    }
   }
+
+  const onChangeJobClose: DatePickerProps['onChange'] = (date, dateString) => {
+    setJobCloseDate(dateString.toString())
+  };
 
   const onFinishStep3 = (values: any) => {
     
@@ -464,13 +478,14 @@ const NewHome: React.FC = () => {
   const handleCreateLink = async (updatedAnswers: IQuestion[]) => {
     
     const body: IBodyCreateLink = {
-      email: inputEmail,
+      custom_alias: inputEmail,
       company_project_name: inputCompanyName,
       background_score: backgroundScore,
       expectation_score: expectationScore,
       value_score: valueScore,
       ability_score: abilityScore,
       personality_score: personalityScore,
+      job_close_date: jobCloseDate,
       questions: updatedAnswers
     }
 
@@ -481,6 +496,9 @@ const NewHome: React.FC = () => {
         setExpireTime(dayjs(data.data?.exp).format('DD/MM/YYYY'))
         setTempMail(data.data.alias.alias)
         setIsModalSuccess(true)
+        if (currentEmail < maxEmail) {
+          localStorage.setItem('current_emails_count', (currentEmail + 1).toString());
+        }
       }
       setIsLoadingGenerate(false)
     } catch (error) {
@@ -989,15 +1007,35 @@ const NewHome: React.FC = () => {
                 </Form.Item>
                 <Form.Item
                   layout="vertical"
-                  label="Please share your email so the smart email can send the results of CV screening to you."
+                  label="Please choose When does this job posting close?"
+                  name="choose job posting close"
+                  rules={[{ required: true, message: 'Please input this job posting close!'}]}
+                >
+                  <DatePicker onChange={onChangeJobClose} />
+                </Form.Item>
+
+                <Form.Item
+                  layout="vertical"
+                  label="Please create your own smart email address"
                   name="Your email"
-                  rules={[{ required: true, message: 'Please input your email!', type: 'email' }]}
-                  // tooltip={{ title: 'Register your email to communicate with the smart email!', icon: <InfoCircleOutlined /> }}
+                  rules={[
+                    { required: true, message: 'Please input your email!' },
+                    // Tự thêm validate về độ dài
+                    {
+                      validator: (_, value) => {
+                        if (value && (value.length < 8 || value.length > 30)) {
+                          return Promise.reject('Email must be between 8 and 30 characters');
+                        }
+                        return Promise.resolve();
+                      }
+                    }
+                  ]}
                 >
                   <Input
                     size="large"
-                    placeholder={t('emailHere')}
+                    placeholder="Enter your email here"
                     value={inputEmail}
+                    suffix="@socool.ai"
                     onChange={handleChangeEmail}
                   />
                 </Form.Item>

@@ -16,6 +16,7 @@ import NewHome from '../componentsNew/NewHome'
 import LandingPage from '../componentsNew/LandingPage'
 import AuthPage from '../componentsNew/AuthModal'
 import DashBoardPage from '../componentsNew/DashBoard'
+import AccountSettings from '../componentsNew/AccountSetting'
 
 const AppRouters = () => {
   return (
@@ -37,6 +38,7 @@ const AppRouters = () => {
       <Route path="*" element={<NotFound />} />
       <Route path="/login" element={<AuthPage />} />
       <Route path="/dashboard" element={<DashBoardPage/>} />
+      <Route path="/accountSetting" element={<AccountSettings/>} />
     </Routes>
   )
 }
