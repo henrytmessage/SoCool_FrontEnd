@@ -503,7 +503,7 @@ const NewHome: React.FC = () => {
       
       if(response?.status_code === 200){
         setIsRequireProject(false)
-        localStorage.setItem('require_project_or_company_name',values.project_company)
+        localStorage.setItem('require_project_or_company_name','false')
       }
     }catch(error){
       console.error(error);
