@@ -1,3 +1,5 @@
+import dayjs from "dayjs"
+
 export const checkLocationInVietnam = (lat: number, lng: number) => {
   if (lat >= 8.3 && lat <= 23.4 && lng >= 102.1 && lng <= 109.5) {
     return true
@@ -17,4 +19,29 @@ export const formatVND = (str: string) => {
 
 export const removeSpaces = (str: string) => {
   return str.replace(/\s/g, '')
+}
+
+export const toCustomDate = (date:string) => {
+  if (isNotEmpty(date)){
+    console.log(date)
+    const formattedDate = dayjs(date, 'M/D/YYYY, h:mm:ss A').format('DD MMM YYYY, h:mm:ss A');
+    return formattedDate;
+  }else{
+    return ''
+  }
+}
+
+export const formatDate = (date:string) => {
+  if (isNotEmpty(date)){
+    const formattedDate = dayjs(date).format('DD MMM YYYY');
+    return formattedDate;
+  }
+  return ''
+}
+
+export const isNotEmpty = (text:string): boolean => {
+  if (text == undefined || text == null || text == ''){
+    return false
+  }
+  return true
 }

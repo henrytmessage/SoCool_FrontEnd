@@ -90,6 +90,8 @@ export interface IBodyCreateLink {
   value_score?: number,
   ability_score?: number,
   personality_score?: number,
+  custom_alias?: string,
+  job_close_date?: string,
   questions: IQuestion[]
 }
 
@@ -112,4 +114,28 @@ export interface ILogin {
 
 export interface ICompanyProject{
   company_or_project_name: string
+}
+
+export interface IAliasInfo{
+  alias_id:number,
+  alias: string,
+  job_title:string,
+  landing_page:string,
+  published_date:string,
+  end_date:string,
+  no_summitted_cv:string,
+  no_not_decide_cv:string,
+  no_accepted_cv:string,
+  no_rejected_cv:string
+}
+
+export interface IRemoveAlias{
+  alias_id: number
+}
+
+export interface IUpdateAccountSetting {
+  project_or_company_name: string,
+  received_email: string,
+  registered_email: string,
+  otp: string
 }
