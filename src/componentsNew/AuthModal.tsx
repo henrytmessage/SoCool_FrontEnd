@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Tabs, Form, Input, message, Button } from 'antd';
+import { Tabs, Form, Input, message, Button, GetProps } from 'antd';
 import { useGoogleLogin } from '@react-oauth/google';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -19,6 +19,8 @@ import { logoGoogle } from '../assets';
 import { CustomButton } from '../common';
 import { formatDate } from '../function';
 
+type OTPProps = GetProps<typeof Input.OTP>;
+
 const AuthPage: React.FC = () => {
   const [loginForm] = Form.useForm();
   const [registerForm] = Form.useForm();
@@ -27,10 +29,21 @@ const AuthPage: React.FC = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('SIGN_IN');
   const [loading, setLoading] = useState(false);
+  const [otp, setOtp] = useState('')
+
+
+  // Change OTP
+  const onChange: OTPProps['onChange'] = (text) => {
+    setOtp(text)
+  };
+  
+  const sharedProps: OTPProps = {
+    onChange,
+  };
 
   const handleLogin = async (values: any) => {
     try {
-      const bodyLogin: ILogin = { email: values.email, otp: values.otp };
+      const bodyLogin: ILogin = { email: values.email, otp: otp };
       setLoading(true);
       const data = await postLoginService(bodyLogin);
       if (data.status_code === 200) {
@@ -58,7 +71,7 @@ const AuthPage: React.FC = () => {
   };
 
   const handleRegister = async (values: any) => {
-    const bodyRegister: IBodyAuthRegister = { email: values.email, otp: values.otp };
+    const bodyRegister: IBodyAuthRegister = { email: values.email, otp: otp };
     setLoading(true);
     try {
       const data = await postAuthRegisterService(bodyRegister);
@@ -71,6 +84,9 @@ const AuthPage: React.FC = () => {
           'require_project_or_company_name',
           data?.data?.require_project_or_company_name
         );
+        localStorage.setItem('current_emails_count', data?.data?.current_emails_count);
+        localStorage.setItem('max_emails_count', data?.data?.max_emails_count);
+        localStorage.setItem('expired_date_email', formatDate(data?.data?.exp));
         navigate('/');
       } else {
         message.error(data.errors?.message);
@@ -163,7 +179,7 @@ const AuthPage: React.FC = () => {
                 rules={[{ required: true, message: 'Please enter OTP!' }]}
               >
                 <div className='flex gap-4'>
-                  <Input.OTP formatter={(str) => str.toUpperCase()} size="large" />
+                  <Input.OTP formatter={(str) => str.toUpperCase()} size="large"  value={otp} {...sharedProps} />
                   <CustomButton
                     type="primary"
                     htmlType="submit"
@@ -214,7 +230,7 @@ const AuthPage: React.FC = () => {
                 rules={[{ required: true, message: 'Please enter OTP!' }]}
               >
                 <div className='flex gap-4'>
-                  <Input.OTP formatter={(str) => str.toUpperCase()} size="large" />
+                  <Input.OTP formatter={(str) => str.toUpperCase()} size="large" value={otp}  {...sharedProps}/>
                   <CustomButton
                     type="primary"
                     htmlType="submit"

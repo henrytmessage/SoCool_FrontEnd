@@ -992,19 +992,7 @@ const NewHome: React.FC = () => {
               </Form.Item>
               
             ))}
-                <Form.Item
-                  layout="vertical"
-                  label="What is your company or project name? "
-                  name="company or project name"
-                  rules={[{ required: true, message: 'Please input your company or project name!' }]}
-                >
-                  <Input
-                    size="large"
-                    placeholder={'company or project name'}
-                    value={inputCompanyName}
-                    onChange={handleChangeCompanyName}
-                  />
-                </Form.Item>
+                
                 <Form.Item
                   layout="vertical"
                   label="Please choose When does this job posting close?"
@@ -1039,6 +1027,19 @@ const NewHome: React.FC = () => {
                     onChange={handleChangeEmail}
                   />
                 </Form.Item>
+                {/* <Form.Item
+                  layout="vertical"
+                  label="What is your company or project name? "
+                  name="company or project name"
+                  rules={[{ required: true, message: 'Please input your company or project name!' }]}
+                >
+                  <Input
+                    size="large"
+                    placeholder={'company or project name'}
+                    value={inputCompanyName}
+                    onChange={handleChangeCompanyName}
+                  />
+                </Form.Item> */}
               <Form.Item>
                 <div className='flex justify-around'>
                   <CustomButton type="default" onClick={prev} >
