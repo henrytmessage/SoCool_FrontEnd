@@ -11,6 +11,7 @@ const SiteAdminPage = () => {
   const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState(10)
   const [data, setData] = useState<IUserInfo[]>([])
+  const [index , setIndex] = useState(-1)
 
   const handleChangePlan = async (newPackage:string) =>{
     try{
@@ -19,8 +20,8 @@ const SiteAdminPage = () => {
       })
 
       if (response?.status_code == 200){
-        const data = response?.data 
-        if (data?.affected == 1){
+        const dataPlan = response?.data 
+        if (dataPlan?.affected == 1){
           message.success('Change plan sucessfully!')
         }else{
           message.error('Change plan fail!')
