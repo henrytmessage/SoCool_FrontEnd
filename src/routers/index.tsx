@@ -17,6 +17,8 @@ import LandingPage from '../componentsNew/LandingPage'
 import AuthPage from '../componentsNew/AuthModal'
 import DashBoardPage from '../componentsNew/DashBoard'
 import AccountSettings from '../componentsNew/AccountSetting'
+import LoginPage from '../componentsNew/SignIn'
+import SignUpPage from '../componentsNew/SignUp'
 
 const AppRouters = () => {
   return (
@@ -36,9 +38,12 @@ const AppRouters = () => {
       <Route path="/Terms" element={<Terms />} />
       <Route path="/Policy" element={<PrivatePolicy />} />
       <Route path="*" element={<NotFound />} />
-      <Route path="/login" element={<AuthPage />} />
+      {/* <Route path="/login" element={<AuthPage />} /> */}
       <Route path="/dashboard" element={<DashBoardPage/>} />
       <Route path="/accountSetting" element={<AccountSettings/>} />
+      <Route path="/login" element={<LoginPage/>} />
+      <Route path="/signUp" element={<SignUpPage/>} />
+      
     </Routes>
   )
 }
