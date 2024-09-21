@@ -1,4 +1,4 @@
-import { Button, Form, message } from "antd"
+import { Button, Form, message, Typography } from "antd"
 import { useEffect, useState } from "react";
 import { getAliasInfosService, removeAliasService } from "../service";
 import { IAliasInfo, IRemoveAlias } from "../api/core/interface";
@@ -6,7 +6,7 @@ import { formatDate, toCustomDate } from "../function";
 import { DeleteOutlined } from '@ant-design/icons';
 import PopupModal from "./PopupModal";
 
-
+const { Title, Text } = Typography;
 const DashBoardPage = () => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(true)
@@ -148,10 +148,9 @@ const DashBoardPage = () => {
               no_accepted_cv: alias.no_accepted_cv,
               no_rejected_cv: alias.no_rejected_cv
             }
-
-
-            aliasInfos.push(aliasInfo)
-            
+            if (aliasInfo && alias.alias_id){
+              aliasInfos.push(aliasInfo)
+            }
             
           }
           setAliasInfos(aliasInfos)
@@ -169,7 +168,7 @@ const DashBoardPage = () => {
 
   return (<div>
     <div className="ml-10 mt-10">
-    <strong>SMART EMAIL DASHBOARD</strong>
+    <Title level={2}>Smart Email Dashboard</Title>
     </div>
     
     {

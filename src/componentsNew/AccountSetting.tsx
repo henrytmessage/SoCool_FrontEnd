@@ -112,12 +112,12 @@ const AccountSettings: React.FC = () => {
   }, [])
 
   return (
-    <div className="p-6">
-      <Card className="shadow-lg">
+    <div className="p-6 ml-8">
+      {/* <Card className=""> */}
         <Title level={2}>Account Settings</Title>
 
         <div className='flex gap-10 items-center'>
-          <div className="mb-4 flex items-center justify-center gap-5">
+          <div className="mb-2 mt-10 flex items-center justify-center gap-5">
             <Text strong>Plan Name: </Text>
             <span>{plan}</span>
             <Button type="primary" onClick={showPlanModal} className="ml-4">
@@ -125,9 +125,9 @@ const AccountSettings: React.FC = () => {
             </Button>
           </div>
         </div>
-        <Divider style={{  borderColor: '#9999' }} />
+        <Divider style={{  borderColor: '#eeeee4' }} />
 
-        <div className="mb-4 flex items-center gap-5">
+        <div className="mb-2 flex items-center gap-5">
           <Text strong>Company Name or Project Name:</Text>
           {isEditingCompany ? (
             <div>
@@ -137,7 +137,7 @@ const AccountSettings: React.FC = () => {
               />
             </div>
           ) : (
-            <div >{companyName}</div>
+            <div style={{ color: '#c0c0c0' }}  >{companyName}</div>
           )}
           <Button 
             icon={<EditOutlined />} 
@@ -145,9 +145,9 @@ const AccountSettings: React.FC = () => {
              
           />
         </div>
-        <Divider style={{  borderColor: '#9999' }} />
+        <Divider style={{  borderColor: '#eeeee4' }} />
 
-        <div className="mb-4 flex items-center gap-5">
+        <div className="mb-2 flex items-center gap-5">
           <Text strong>Registered Emails to receive CV screening results from the smart emails:</Text>
           {isEditingEmail ? (
             <div>
@@ -158,7 +158,7 @@ const AccountSettings: React.FC = () => {
               />
           </div>
           ) : (
-            <div >{receivedEmail}</div>
+            <div style={{ color: '#c0c0c0' }}  >{receivedEmail}</div>
           )}
           <Button 
             icon={<EditOutlined />} 
@@ -166,13 +166,13 @@ const AccountSettings: React.FC = () => {
              
           />
         </div>
-        <Divider style={{  borderColor: '#9999' }} />
+        <Divider style={{  borderColor: '#eeeee4' }} />
 
-        <div className='mb-4 flex items-center gap-5'>
+        <div className='mb-2 flex items-center gap-5'>
           <Text strong>Initial Signed-Up Emails: </Text>
-          <span>{registeredEmail}</span>
+          <span style={{ color: '#c0c0c0' }} >{registeredEmail}</span>
         </div>
-        <Divider style={{  borderColor: '#9999' }} />
+        <Divider style={{  borderColor: '#eeeee4' }} />
 
         <div className='flex gap-10'>
           <Button type="primary" danger onClick={handleDeleteAccount}>
@@ -185,7 +185,7 @@ const AccountSettings: React.FC = () => {
             </Button>
           )}
         </div>
-      </Card>
+      {/* </Card> */}
       <Modal
         title="Enter OTP"
         visible={openModalOtp}

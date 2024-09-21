@@ -117,8 +117,8 @@ const SignUpPage: React.FC = () => {
 
   return (
     <div className="flex flex-col items-center justify-center px-4 mt-14">
-      <div className="flex flex-col w-full max-w-md bg-white p-6 shadow-md rounded-lg">
-        <Title level={3} className="text-center">Sign up with SoCool</Title>
+      <div className="flex flex-col w-full max-w-md bg-white p-6 rounded-lg">
+        <Title level={2} className="text-center">Sign up with SoCool</Title>
         <Form
           form={registerForm}
           onFinish={handleRegister}

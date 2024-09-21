@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Avatar, Button, Dropdown, MenuProps } from 'antd';
 import { logoSoCool } from '../assets';
-import { DownOutlined } from '@ant-design/icons';
+import { CaretDownOutlined, DownOutlined } from '@ant-design/icons';
 import { postLogoutService } from '../service';
 
 const Header = () => {
@@ -83,16 +83,16 @@ const Header = () => {
       
       {/* Dropdown Menu in the top right corner */}
       {
-        (
-          <div className="relative">
+        currentEmail && (
+          <div className="absolute right-6">
             <Dropdown menu={{ items: admin == 'true' ? menuItemsHasAdmin : menuItems }} placement="bottomRight" arrow>
-              <Button className='py-6 px-2'>
+              <Button className='py-6 px-4'>
                 <>
-                <DownOutlined className="ml-2" />
+                <CaretDownOutlined className="ml-4" />
 
                 </>
                 <>
-                <div className="flex items-center cursor-pointer">
+                <div className="flex items-center cursor-pointer ml-2">
                   <span>{`${currentEmail}/${maxEmail} emails`}</span>
                 </div>
                 <div>Exp: {expiredDate}</div>
