@@ -58,7 +58,7 @@ const SiteAdminPage = () => {
     }
   ];
 
-  const dropdown = (plan: string) => {
+  const dropdown = () => {
     return (
       <Dropdown menu={{ items: menuItems }} placement="bottomRight" arrow>
         <Button className="py-6 px-2">
@@ -66,7 +66,7 @@ const SiteAdminPage = () => {
             <DownOutlined className="ml-2" />
           </>
           <>
-            <div>{plan}</div>
+            <div>Change plan</div>
           </>
         </Button>
       </Dropdown>
@@ -114,7 +114,7 @@ const SiteAdminPage = () => {
                       {user.package}
                     </td>
                     <td className="border border-gray-300 p-4">
-                      {dropdown(user.package)}
+                      {dropdown()}
                     </td>
                   </tr>
                 ))
