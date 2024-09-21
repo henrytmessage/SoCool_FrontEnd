@@ -180,6 +180,11 @@ const NewHome: React.FC = () => {
     navigate('/login')
   }
 
+  const OnClickNavigateSignUp = () => {
+    navigate('/signUp')
+  }
+
+
   const next = () => {
     setCurrent(current + 1);
   };
@@ -1099,7 +1104,7 @@ const NewHome: React.FC = () => {
         <CustomButton type="primary" onClick={OnClickNavigateLogin}>
                 Sign in
               </CustomButton>
-        <CustomButton type="primary" onClick={OnClickNavigateLogin}>
+        <CustomButton type="primary" onClick={OnClickNavigateSignUp}>
                 Sign up
               </CustomButton>
       </div>
