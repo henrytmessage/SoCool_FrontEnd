@@ -43,7 +43,7 @@ const CustomButton: React.FC<CustomButtonProps> = ({ onClick, children, classNam
       size={buttonSize}
       htmlType={htmlType}
       loading={loading}
-      className={`px-4 py-2 rounded bg-[#03A3B3] hover:bg-black  duration-300 ${classNameCustom}`}
+      className={`px-4 py-2 rounded bg-[#03A3B3] hover:bg-black w-full  duration-300 ${classNameCustom}`}
     >
       {children}
     </ButtonAnt>
