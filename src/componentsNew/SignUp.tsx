@@ -96,6 +96,9 @@ const SignUpPage: React.FC = () => {
           localStorage.setItem('expired_time', data.data.expired_time);
           localStorage.setItem('refresh_token', data.data.refresh_token);
           localStorage.setItem('require_project_or_company_name', data.data.require_project_or_company_name);
+          localStorage.setItem('current_emails_count', data.data.current_emails_count);
+          localStorage.setItem('max_emails_count', data.data.max_emails_count);
+          localStorage.setItem('expired_date_email', formatDate(data.data.exp));
           navigate('/');
         } else {
           message.error(data.errors?.message);
