@@ -44,7 +44,7 @@ const AccountSettings: React.FC = () => {
 
   const handleSendOtp = async () => {
     const bodyAuthOTP = {
-      email: receivedEmail,
+      email: registeredEmail,
       type: 'CHANGE_NOTIFY_EMAIL'
     }
     try {
