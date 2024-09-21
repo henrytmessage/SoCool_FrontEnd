@@ -7,6 +7,7 @@ import { postAuthOTP, postLoginGoogleService, postLoginService } from '../servic
 import { logoGoogle } from '../assets';
 import { formatDate } from '../function';
 import { OTPProps } from 'antd/es/input/OTP';
+import { CustomButton } from '../common';
 
 const { Title, Text } = Typography;
 
@@ -97,14 +98,14 @@ const LoginPage: React.FC = () => {
   });
 
   return (
-    <div className="flex flex-col h-screen items-center justify-center px-4">
+    <div className="flex flex-col items-center justify-center px-4 mt-14">
       <div className="flex flex-col w-full max-w-md bg-white p-6 shadow-md rounded-lg">
         <Title level={3} className="text-center">Login with SoCool</Title>
         <Form
           form={loginForm}
           onFinish={handleLoginOrSendOtp}
           layout="vertical"
-          className="mt-4"
+          className="mt-4 "
         >
           <Form.Item
             name="email"
@@ -120,7 +121,7 @@ const LoginPage: React.FC = () => {
             <Form.Item
               name="otp"
               rules={[{ required: true, message: 'Please enter OTP!' }]}
-              className="mt-4"
+              className="mt-4 flex justify-center"
             >
               <Input.OTP
                 size="large"
@@ -129,16 +130,14 @@ const LoginPage: React.FC = () => {
               />
             </Form.Item>
           )}
-          <Button
+          <CustomButton
             type="primary"
             htmlType="submit"
             size="large"
-            block
             loading={loading}
-            className="mt-4"
           >
             {otpSent ? 'Login with email' : 'Send OTP'}
-          </Button>
+          </CustomButton>
         </Form>
         <div className="text-center my-4">OR</div>
         <Button

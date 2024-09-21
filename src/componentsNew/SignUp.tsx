@@ -7,6 +7,7 @@ import { postAuthOTP, postAuthRegisterService, postLoginGoogleService } from '..
 import { logoGoogle } from '../assets';
 import { formatDate } from '../function';
 import { OTPProps } from 'antd/es/input/OTP';
+import { CustomButton } from '../common';
 
 const { Title, Text } = Typography;
 
@@ -110,7 +111,7 @@ const SignUpPage: React.FC = () => {
   });
 
   return (
-    <div className="flex flex-col h-screen items-center justify-center px-4">
+    <div className="flex flex-col items-center justify-center px-4 mt-14">
       <div className="flex flex-col w-full max-w-md bg-white p-6 shadow-md rounded-lg">
         <Title level={3} className="text-center">Sign up with SoCool</Title>
         <Form
@@ -133,7 +134,7 @@ const SignUpPage: React.FC = () => {
             <Form.Item
               name="otp"
               rules={[{ required: true, message: 'Please enter OTP!' }]}
-              className="mt-4"
+              className="mt-4 flex justify-center"
             >
               <Input.OTP
                 size="large"
@@ -142,15 +143,14 @@ const SignUpPage: React.FC = () => {
               />
             </Form.Item>
           )}
-          <Button
+          <CustomButton
             type="primary"
             size="large"
-            block
             onClick={handleButtonClick} // Gọi hàm xử lý nút
             loading={loading}
           >
             {otpSent ? 'Sign up with email' : 'Send OTP'} {/* Thay đổi text của nút */}
-          </Button>
+          </CustomButton>
         </Form>
         <div className="text-center my-4">OR</div>
         <Button
