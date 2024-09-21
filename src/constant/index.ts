@@ -34,3 +34,8 @@ export const KEY_SELECT_PAYMENT = {
   DIGITAL_WALLETS: 'DIGITAL WALLETS',
   OTHERS: 'OTHERS'
 }
+
+export const ROLE = {
+  ADMIN : 'ADMIN',
+  USER : 'USER'
+}

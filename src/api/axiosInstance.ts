@@ -1,6 +1,6 @@
 import axios, { AxiosInstance, AxiosResponse, AxiosError, InternalAxiosRequestConfig } from 'axios';
 import { refreshToken } from './core';
-const MAX_RETRY_COUNT = 5;
+const MAX_RETRY_COUNT = 3;
 
 interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
   _retryCount?: number;  // Optional retry count property
@@ -37,60 +37,70 @@ axiosInstance.interceptors.request.use(
 
 // Response interceptor for handling responses
 axiosInstance.interceptors.response.use(
-  (response: AxiosResponse<any>) => {
+  async (response: AxiosResponse<any>) => {
     // Handle success responses globally
+    if(response?.data?.status_code == 401){
+      console.log('Unauthorized request');
+        const originalRequest = response.config as CustomAxiosRequestConfig;
+        if(!originalRequest._retryCount){
+          originalRequest._retryCount = 1
+        }
+        if (originalRequest._retryCount 
+          && originalRequest._retryCount < MAX_RETRY_COUNT) {
+            originalRequest._retryCount += 1;
+
+          // Redirect to login page or handle unauthorized error
+          if (!originalRequest._retryCount) {
+            originalRequest._retryCount = 0;
+          }
+          try{
+            const refreshTk = localStorage.getItem('refresh_token');
+
+            const token = refreshTk;
+
+            if (token){
+              const response = await refreshToken({
+                refresh_token: token
+              })
+
+              const accessToken = response.data.data.access_token
+
+              if (accessToken){
+                
+                localStorage.setItem('access_token', accessToken)
+                
+                if (response.config) {
+                  const newHeaders = axios.AxiosHeaders.from({
+                    ...response.config.headers,
+                    Authorization: `Bearer ${token}`,
+                  });
+                
+                  response.config.headers = newHeaders;
+
+                  
+                  return axiosInstance(response.config)
+                }
+              }
+            }
+            else {
+              
+              window.location.href = '/login';
+            }
+
+          }catch(error){
+            console.error('Error when refresh token',error)
+            return Promise.reject(error);
+          }
+        }
+    }
     return response;
   },
   async (error: AxiosError) => {
     // Handle error responses globally
-    const originalRequest = error.config as CustomAxiosRequestConfig;
-    if (error.response?.status === 401 
-      && originalRequest._retryCount 
-      && originalRequest._retryCount < MAX_RETRY_COUNT) {
-        originalRequest._retryCount += 1;
-
-      // Redirect to login page or handle unauthorized error
-      console.log('Unauthorized request');
-      if (!originalRequest._retryCount) {
-        originalRequest._retryCount = 0;
-      }
-      try{
-        const refreshTk = localStorage.getItem('refresh_token');
-
-        const token = refreshTk && JSON.parse(refreshTk).token;
-
-        if (token){
-          const response = await refreshToken({
-            refresh_token: token
-          })
-
-          const accessToken = response.data.access_token
-          if (accessToken){
-            localStorage.setItem('access_token', accessToken)
-
-            if (error?.config) {
-              const newHeaders = axios.AxiosHeaders.from({
-                ...error.config.headers,
-                Authorization: `Bearer ${token}`,
-              });
-            
-              error.config.headers = newHeaders;
-
-              return axiosInstance(error.config)
-            }
-          }
-        }
-        else {
-          window.location.href = '/login';
-        }
-
-      }catch(error){
-        console.error('Error when refresh token',error)
-        return Promise.reject(error);
-      }
-    }
+    
     return Promise.reject(error);
   }
 );
+
 
 export default axiosInstance;

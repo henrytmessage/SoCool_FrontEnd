@@ -16,6 +16,7 @@ import {
   IBodySendEmailRunOnRice,
   IBodySendMessage,
   ICompanyProject,
+  IGetAllUser,
   ILogin,
   ILoginGoogle,
   IRefreshToken,
@@ -108,8 +109,8 @@ export const getJobDescription = (params: IBodyGetJob) => {
   return axiosInstance.get('/link/get-job-description', { params });
 };
 
-export const refreshToken = (params: IRefreshToken) => {
-  return axiosInstance.get('/auth/refresh-token', { params });
+export const refreshToken = (body: IRefreshToken) => {
+  return axiosInstance.post('/auth/refresh-token', body);
 };
 
 export const postLoginGoogle = (body: ILoginGoogle) => {
@@ -142,4 +143,12 @@ export const postUpdateAccountSetting = (body: IUpdateAccountSetting) =>{
 
 export const postLogout = () =>{
   return axiosInstance.post('/auth/logout')
+}
+
+export const getCurrentRole = () =>{
+  return axiosInstance.post('/role/get-current-role')
+}
+
+export const getAllUser = (body: IGetAllUser) =>{
+  return axiosInstance.post('/user/get-all-user', body)
 }

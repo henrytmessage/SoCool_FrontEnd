@@ -1,5 +1,5 @@
-import { getAccountSetting, getAliasInfos, getApiExample, getConversation, getConversationList, getDetailConversation, getJobDescription, getLink, postAuthOtp, postAuthRegister, postConversation, postConversationCreateSearchPrice, postConversationCreateTitle, postConversationSendMessage, postCreateLink, postLink, postLinkAnswer, postLinkDeactivate, postLinkGenerateAnswerByAi, postLinkGenerateQuestion, postLinkUploadFile, postLogin, postLoginGoogle, postLogout, postSaveCompanyOrProjectName, postSendEmailRunOnRice, postUpdateAccountSetting, removeAlias } from "../api/core";
-import { IBodyAuthOTP, IBodyAuthRegister, IBodyConversation, IBodyConversationList, IBodyCreateLink, IBodyCreateSearchPrice, IBodyCreateTitle, IBodyDetailConversation, IBodyGenerateAnswerByAi, IBodyGenerateQuestion, IBodyGetJob, IBodyLinkAnswer, IBodyPostLink, IBodySendEmailRunOnRice, IBodySendMessage, ICompanyProject, ILogin, ILoginGoogle, IRemoveAlias, IUpdateAccountSetting } from "../api/core/interface";
+import { getAccountSetting, getAliasInfos, getAllUser, getApiExample, getConversation, getConversationList, getCurrentRole, getDetailConversation, getJobDescription, getLink, postAuthOtp, postAuthRegister, postConversation, postConversationCreateSearchPrice, postConversationCreateTitle, postConversationSendMessage, postCreateLink, postLink, postLinkAnswer, postLinkDeactivate, postLinkGenerateAnswerByAi, postLinkGenerateQuestion, postLinkUploadFile, postLogin, postLoginGoogle, postLogout, postSaveCompanyOrProjectName, postSendEmailRunOnRice, postUpdateAccountSetting, removeAlias } from "../api/core";
+import { IBodyAuthOTP, IBodyAuthRegister, IBodyConversation, IBodyConversationList, IBodyCreateLink, IBodyCreateSearchPrice, IBodyCreateTitle, IBodyDetailConversation, IBodyGenerateAnswerByAi, IBodyGenerateQuestion, IBodyGetJob, IBodyLinkAnswer, IBodyPostLink, IBodySendEmailRunOnRice, IBodySendMessage, ICompanyProject, IGetAllUser, ILogin, ILoginGoogle, IRemoveAlias, IUpdateAccountSetting } from "../api/core/interface";
 
 export const getExample = async (messageChat: string) => {
   try {
@@ -275,6 +275,26 @@ export const postUpdateAccountSettingService = async (body: IUpdateAccountSettin
 export const postLogoutService = async () => {
   try{
     const response = await postLogout()
+    return response?.data
+  }catch(error){
+    console.error('Error fetching data:', error);
+    throw error;
+  }
+}
+
+export const getCurrentRoleService = async () => {
+  try{
+    const response = await getCurrentRole()
+    return response?.data
+  }catch(error){
+    console.error('Error fetching data:', error);
+    throw error;
+  }
+}
+
+export const getAllUserService = async (body: IGetAllUser) => {
+  try{
+    const response = await getAllUser(body)
     return response?.data
   }catch(error){
     console.error('Error fetching data:', error);

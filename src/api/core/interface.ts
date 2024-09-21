@@ -139,3 +139,18 @@ export interface IUpdateAccountSetting {
   registered_email: string,
   otp: string
 }
+
+export interface IGetAllUser{
+  page: number,
+  page_size: number
+}
+
+export interface IUserInfo{
+  email:string,
+  phone:string,
+  full_name:string,
+  project_or_company_name:string,
+  notification_email:string,
+  package:string,
+  expiration_date:string
+}

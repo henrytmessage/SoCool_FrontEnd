@@ -17,6 +17,7 @@ import LandingPage from '../componentsNew/LandingPage'
 import AuthPage from '../componentsNew/AuthModal'
 import DashBoardPage from '../componentsNew/DashBoard'
 import AccountSettings from '../componentsNew/AccountSetting'
+import SiteAdminPage from '../componentsNew/SiteAdmin'
 
 const AppRouters = () => {
   return (
@@ -39,6 +40,7 @@ const AppRouters = () => {
       <Route path="/login" element={<AuthPage />} />
       <Route path="/dashboard" element={<DashBoardPage/>} />
       <Route path="/accountSetting" element={<AccountSettings/>} />
+      <Route path="/site-admin" element={<SiteAdminPage/>} />
     </Routes>
   )
 }
