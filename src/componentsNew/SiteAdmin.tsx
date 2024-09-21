@@ -22,9 +22,8 @@ const SiteAdminPage = () => {
     try{
       const response = await updatePlanService({
         newPackage: newPackage,
-        user_id: data[index].id
+        user_id: data[index-1].id
       })
-
       if (response?.status_code == 200){
         const dataPlan = response?.data 
         if (dataPlan?.affected == 1){
@@ -97,17 +96,21 @@ const SiteAdminPage = () => {
     },
   ];
 
-  const menuItemsWithHandlers: MenuProps['items'] = menuItems
-  .filter((item): item is MenuItemType => item !== null) 
-  .map((item, index) => {
-    if ('label' in item) {
-      return {
-        ...item,
-        onClick: () => handleChangePlan(item.label as string, index), 
-      };
-    }
-    return item;
-  });
+  const menuItemsWithHandlers: MenuProps['items'] = ((count: number) => {
+    return menuItems
+      .filter((item): item is MenuItemType => item !== null) 
+      .map((item, index) => {
+        if ('label' in item) {
+          return {
+            ...item,
+            onClick: () => handleChangePlan(item.label as string, count), 
+          };
+        }
+        return item;
+      });
+  })(1); 
+  
+  
   
 
   const dropdown = (index:number) => {
