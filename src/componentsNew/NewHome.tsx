@@ -569,8 +569,8 @@ const NewHome: React.FC = () => {
       const accessToken = localStorage.getItem('access_token');
       const requireProject = localStorage.getItem('require_project_or_company_name');
       if (!accessToken) {
-        // navigate('/login');
-        setLoadingInit(true);
+        navigate('/login');
+        // setLoadingInit(true);
       } else {
         setLoadingInit(false);
       }

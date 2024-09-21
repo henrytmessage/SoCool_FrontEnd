@@ -22,6 +22,8 @@ const Header = () => {
       navigate('/login'); 
     } catch (error) {
       console.error('Error during logout:', error);
+      localStorage.clear(); 
+      navigate('/login'); 
     }
   };
 
