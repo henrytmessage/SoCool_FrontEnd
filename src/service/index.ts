@@ -1,5 +1,5 @@
-import { getAccountSetting, getAliasInfos, getAllUser, getApiExample, getConversation, getConversationList, getCurrentRole, getDetailConversation, getJobDescription, getLink, postAuthOtp, postAuthRegister, postConversation, postConversationCreateSearchPrice, postConversationCreateTitle, postConversationSendMessage, postCreateLink, postLink, postLinkAnswer, postLinkDeactivate, postLinkGenerateAnswerByAi, postLinkGenerateQuestion, postLinkUploadFile, postLogin, postLoginGoogle, postLogout, postSaveCompanyOrProjectName, postSendEmailRunOnRice, postUpdateAccountSetting, removeAlias, updatePlan } from "../api/core";
-import { IBodyAuthOTP, IBodyAuthRegister, IBodyConversation, IBodyConversationList, IBodyCreateLink, IBodyCreateSearchPrice, IBodyCreateTitle, IBodyDetailConversation, IBodyGenerateAnswerByAi, IBodyGenerateQuestion, IBodyGetJob, IBodyLinkAnswer, IBodyPostLink, IBodySendEmailRunOnRice, IBodySendMessage, ICompanyProject, IGetAllUser, ILogin, ILoginGoogle, IRemoveAlias, IUpdateAccountSetting, IUpdatePlan } from "../api/core/interface";
+import { findUserByEmail, getAccountSetting, getAliasInfos, getAllUser, getApiExample, getConversation, getConversationList, getCurrentRole, getDetailConversation, getJobDescription, getLink, postAuthOtp, postAuthRegister, postConversation, postConversationCreateSearchPrice, postConversationCreateTitle, postConversationSendMessage, postCreateLink, postLink, postLinkAnswer, postLinkDeactivate, postLinkGenerateAnswerByAi, postLinkGenerateQuestion, postLinkUploadFile, postLogin, postLoginGoogle, postLogout, postSaveCompanyOrProjectName, postSendEmailRunOnRice, postUpdateAccountSetting, removeAlias, updatePlan } from "../api/core";
+import { IBodyAuthOTP, IBodyAuthRegister, IBodyConversation, IBodyConversationList, IBodyCreateLink, IBodyCreateSearchPrice, IBodyCreateTitle, IBodyDetailConversation, IBodyGenerateAnswerByAi, IBodyGenerateQuestion, IBodyGetJob, IBodyLinkAnswer, IBodyPostLink, IBodySendEmailRunOnRice, IBodySendMessage, ICompanyProject, IGetAllUser, ILogin, ILoginGoogle, IRemoveAlias, ISearchUser, IUpdateAccountSetting, IUpdatePlan } from "../api/core/interface";
 
 export const getExample = async (messageChat: string) => {
   try {
@@ -305,6 +305,16 @@ export const getAllUserService = async (body: IGetAllUser) => {
 export const updatePlanService = async (body: IUpdatePlan) => {
   try{
     const response = await updatePlan(body)
+    return response?.data
+  }catch(error){
+    console.error('Error fetching data:', error);
+    throw error;
+  }
+}
+
+export const findUserByEmailService = async (body: ISearchUser) => {
+  try{
+    const response = await findUserByEmail(body)
     return response?.data
   }catch(error){
     console.error('Error fetching data:', error);

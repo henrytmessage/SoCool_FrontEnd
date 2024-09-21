@@ -1,9 +1,13 @@
-import { Button, Dropdown, Form, MenuProps, message } from "antd";
+import { Button, Dropdown, Form, Input, MenuProps, message, Typography } from "antd";
 import { useEffect, useState } from "react";
-import { getAllUserService, getCurrentRoleService, updatePlanService } from "../service";
+import { findUserByEmailService, getAllUserService, getCurrentRoleService, updatePlanService } from "../service";
 import { ROLE } from "../constant";
 import { IUserInfo } from "../api/core/interface";
-import { DownOutlined } from "@ant-design/icons";
+import { CaretDownOutlined, DownOutlined } from "@ant-design/icons";
+import { MenuItemType } from "antd/es/menu/interface";
+import { CustomButton } from "../common";
+
+const { Title, Text } = Typography;
 
 const SiteAdminPage = () => {
   const [form] = Form.useForm();
@@ -11,12 +15,14 @@ const SiteAdminPage = () => {
   const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState(10)
   const [data, setData] = useState<IUserInfo[]>([])
-  const [index , setIndex] = useState(-1)
+  const [email, setEmail] = useState('');  
 
-  const handleChangePlan = async (newPackage:string) =>{
+
+  const handleChangePlan = async (newPackage:string, index:number) =>{
     try{
       const response = await updatePlanService({
-        newPackage: newPackage
+        newPackage: newPackage,
+        user_id: data[index].id
       })
 
       if (response?.status_code == 200){
@@ -36,35 +42,80 @@ const SiteAdminPage = () => {
     }
   }
 
+  const handleChange = (event:any) => {
+    setEmail(event.target.value);  
+  };
+
+  const handleSearch = async () => {
+    try{
+      const response = await findUserByEmailService({
+        search: email
+      })
+
+      if (response?.status_code == 200){
+        const dataSearch = response?.data 
+
+        const list:IUserInfo[] = []
+        for (const item of dataSearch){
+          const user:IUserInfo = {
+            id:item.id,
+            email: item.email,
+            phone: item.phone,
+            full_name: item.full_name,
+            package: item.package,
+            project_or_company_name: item.project_or_company_name,
+            expiration_date: item.expiration_date,
+            notification_email: item.notificationEmail
+          }
+          list.push(user)
+        }
+
+        setData(list)
+        
+      }
+    }catch(error){
+      console.error(error);
+    }
+  }
+
   const menuItems: MenuProps['items'] = [
     {
       key: '1',
       label: 'FREE',
-      onClick: () => handleChangePlan('FREE'),
     },
     {
       key: '2',
       label: 'S9',
-      onClick: () => handleChangePlan('S9'),
     },
     {
       key: '3',
       label: 'S19',
-      onClick: () => handleChangePlan('S19'),
     },
     {
       key: '4',
       label: 'S29',
-      onClick: () => handleChangePlan('S29'),
-    }
+    },
   ];
 
-  const dropdown = () => {
+  const menuItemsWithHandlers: MenuProps['items'] = menuItems
+  .filter((item): item is MenuItemType => item !== null) 
+  .map((item, index) => {
+    if ('label' in item) {
+      return {
+        ...item,
+        onClick: () => handleChangePlan(item.label as string, index), 
+      };
+    }
+    return item;
+  });
+  
+
+  const dropdown = (index:number) => {
     return (
-      <Dropdown menu={{ items: menuItems }} placement="bottomRight" arrow>
+      <Dropdown menu={{ items: menuItemsWithHandlers }} placement="bottomRight" arrow>
         <Button className="py-6 px-2">
           <>
-            <DownOutlined className="ml-2" />
+            <CaretDownOutlined className="ml-2" />
           </>
           <>
             <div>Change plan</div>
@@ -115,7 +166,7 @@ const SiteAdminPage = () => {
                       {user.package}
                     </td>
                     <td className="border border-gray-300 p-4">
-                      {dropdown()}
+                      {dropdown(index)}
                     </td>
                   </tr>
                 ))
@@ -140,6 +191,7 @@ const SiteAdminPage = () => {
         const list:IUserInfo[] = []
         for (const item of data){
           const user:IUserInfo = {
+            id:item.id,
             email: item.email,
             phone: item.phone,
             full_name: item.full_name,
@@ -180,7 +232,19 @@ const SiteAdminPage = () => {
 
   return (<div>
     <div className="ml-10 mt-10">
-    <strong>Admin</strong>
+    <Title level={ 2 }>Admin</Title>
+
+    <div>
+    <Input
+        placeholder='Enter an email'
+        className='md:w-[400px]'
+        onChange={handleChange}
+      />
+      <CustomButton classNameCustom="ml-10 mt-5" key='button' onClick={handleSearch}>
+              Search
+      </CustomButton>
+    </div>
+    
     </div>
     
     {

@@ -21,6 +21,7 @@ import {
   ILoginGoogle,
   IRefreshToken,
   IRemoveAlias,
+  ISearchUser,
   IUpdateAccountSetting,
   IUpdatePlan,
 } from './interface'
@@ -156,4 +157,8 @@ export const getAllUser = (body: IGetAllUser) =>{
 
 export const updatePlan = (body: IUpdatePlan) =>{
   return axiosInstance.post('/user/update-package', body)
+}
+
+export const findUserByEmail = (body: ISearchUser) =>{
+  return axiosInstance.post('/user/find-users-by-email', body)
 }

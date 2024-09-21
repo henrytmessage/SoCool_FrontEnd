@@ -146,6 +146,7 @@ export interface IGetAllUser{
 }
 
 export interface IUserInfo{
+  id:number,
   email:string,
   phone:string,
   full_name:string,
@@ -156,5 +157,10 @@ export interface IUserInfo{
 }
 
 export interface IUpdatePlan{
-  newPackage: string
+  newPackage: string,
+  user_id:number
+}
+
+export interface ISearchUser{
+  search: string
 }
