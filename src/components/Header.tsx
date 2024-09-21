@@ -13,6 +13,7 @@ const Header = () => {
   const currentEmail = localStorage.getItem('current_emails_count');
   const maxEmail = localStorage.getItem('max_emails_count');
   const expiredDate = localStorage.getItem('expired_date_email');
+  const admin = localStorage.getItem('is_admin');
   
   const handleLogout = async () => {
     try {
@@ -40,7 +41,30 @@ const Header = () => {
       key: '3',
       label: 'Sign out',
       onClick: handleLogout,
+    }
+  ];
+
+  const menuItemsHasAdmin: MenuProps['items'] = [
+    {
+      key: '1',
+      label: 'Go to Dashboard',
+      onClick: () => navigate('/dashboard'),
     },
+    {
+      key: '2',
+      label: 'Go to Account Setting',
+      onClick: () => navigate('/accountSetting'),
+    },
+    {
+      key: '3',
+      label: 'Sign out',
+      onClick: handleLogout,
+    },
+    {
+      key: '4',
+      label: 'Admin',
+      onClick: () => navigate('/site-admin'),
+    }
   ];
 
   return (
@@ -61,7 +85,7 @@ const Header = () => {
       {
         expiredDate && (
           <div className="relative">
-            <Dropdown menu={{ items: menuItems }} placement="bottomRight" arrow>
+            <Dropdown menu={{ items: admin ? menuItemsHasAdmin : menuItems }} placement="bottomRight" arrow>
               <Button className='py-6 px-2'>
                 <>
                 <DownOutlined className="ml-2" />

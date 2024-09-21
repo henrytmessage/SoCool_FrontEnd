@@ -62,6 +62,7 @@ const SignUpPage: React.FC = () => {
         localStorage.setItem('current_emails_count', data.data.current_emails_count);
         localStorage.setItem('max_emails_count', data.data.max_emails_count);
         localStorage.setItem('expired_date_email', formatDate(data.data.exp));
+        localStorage.setItem('is_admin',data?.data?.is_admin)
         navigate('/');
       } else {
         message.error(data.errors?.message);
@@ -99,6 +100,7 @@ const SignUpPage: React.FC = () => {
           localStorage.setItem('current_emails_count', data.data.current_emails_count);
           localStorage.setItem('max_emails_count', data.data.max_emails_count);
           localStorage.setItem('expired_date_email', formatDate(data.data.exp));
+          localStorage.setItem('is_admin',data?.data?.is_admin)
           navigate('/');
         } else {
           message.error(data.errors?.message);

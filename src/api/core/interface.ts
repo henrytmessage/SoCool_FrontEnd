@@ -154,3 +154,7 @@ export interface IUserInfo{
   package:string,
   expiration_date:string
 }
+
+export interface IUpdatePlan{
+  newPackage: string
+}

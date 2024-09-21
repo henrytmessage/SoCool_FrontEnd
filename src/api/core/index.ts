@@ -22,6 +22,7 @@ import {
   IRefreshToken,
   IRemoveAlias,
   IUpdateAccountSetting,
+  IUpdatePlan,
 } from './interface'
 
 // vi du
@@ -151,4 +152,8 @@ export const getCurrentRole = () =>{
 
 export const getAllUser = (body: IGetAllUser) =>{
   return axiosInstance.post('/user/get-all-user', body)
+}
+
+export const updatePlan = (body: IUpdatePlan) =>{
+  return axiosInstance.post('/user/update-package', body)
 }

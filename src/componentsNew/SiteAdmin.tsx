@@ -1,8 +1,9 @@
-import { Form } from "antd";
+import { Button, Dropdown, Form, MenuProps, message } from "antd";
 import { useEffect, useState } from "react";
-import { getAllUserService, getCurrentRoleService } from "../service";
+import { getAllUserService, getCurrentRoleService, updatePlanService } from "../service";
 import { ROLE } from "../constant";
 import { IUserInfo } from "../api/core/interface";
+import { DownOutlined } from "@ant-design/icons";
 
 const SiteAdminPage = () => {
   const [form] = Form.useForm();
@@ -10,6 +11,68 @@ const SiteAdminPage = () => {
   const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState(10)
   const [data, setData] = useState<IUserInfo[]>([])
+
+  const handleChangePlan = async (newPackage:string) =>{
+    try{
+      const response = await updatePlanService({
+        newPackage: newPackage
+      })
+
+      if (response?.status_code == 200){
+        const data = response?.data 
+        if (data?.affected == 1){
+          message.success('Change plan sucessfully!')
+        }else{
+          message.error('Change plan fail!')
+        }
+      }else{
+        message.error('Change plan fail!')
+      }
+
+    }catch(error){
+      console.error(error);
+      message.error('Change plan fail!')
+    }
+  }
+
+  const menuItems: MenuProps['items'] = [
+    {
+      key: '1',
+      label: 'FREE',
+      onClick: () => handleChangePlan('FREE'),
+    },
+    {
+      key: '2',
+      label: 'S9',
+      onClick: () => handleChangePlan('S9'),
+    },
+    {
+      key: '3',
+      label: 'S19',
+      onClick: () => handleChangePlan('S19'),
+    },
+    {
+      key: '4',
+      label: 'S29',
+      onClick: () => handleChangePlan('S29'),
+    }
+  ];
+
+  const dropdown = (plan: string) => {
+    return (
+      <Dropdown menu={{ items: menuItems }} placement="bottomRight" arrow>
+        <Button className="py-6 px-2">
+          <>
+            <DownOutlined className="ml-2" />
+          </>
+          <>
+            <div>{plan}</div>
+          </>
+        </Button>
+      </Dropdown>
+    );
+  };
+  
   
   const siteAdmin = {
     
@@ -25,6 +88,7 @@ const SiteAdminPage = () => {
                 <th className="border border-gray-300 p-2  ">Project or company</th>
                 <th className="border border-gray-300 p-2  ">Receiced email</th>
                 <th className="border border-gray-300 p-2  ">Current plan</th>
+                <th className="border border-gray-300 p-2  ">Change plan</th>
               </tr>
             </thead>
             <tbody>
@@ -48,6 +112,9 @@ const SiteAdminPage = () => {
                     </td>
                     <td className="border border-gray-300 p-4">
                       {user.package}
+                    </td>
+                    <td className="border border-gray-300 p-4">
+                      {dropdown(user.package)}
                     </td>
                   </tr>
                 ))
