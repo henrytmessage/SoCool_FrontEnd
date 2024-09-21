@@ -83,7 +83,7 @@ const Header = () => {
       
       {/* Dropdown Menu in the top right corner */}
       {
-        expiredDate && (
+        (
           <div className="relative">
             <Dropdown menu={{ items: admin == 'true' ? menuItemsHasAdmin : menuItems }} placement="bottomRight" arrow>
               <Button className='py-6 px-2'>
