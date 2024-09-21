@@ -153,6 +153,7 @@ const SignUpPage: React.FC = () => {
             size="large"
             onClick={handleButtonClick} // Gọi hàm xử lý nút
             loading={loading}
+            classNameCustom="w-full"
           >
             {otpSent ? 'Sign up with email' : 'Send OTP'} {/* Thay đổi text của nút */}
           </CustomButton>

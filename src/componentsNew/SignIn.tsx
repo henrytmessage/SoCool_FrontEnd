@@ -140,6 +140,7 @@ const LoginPage: React.FC = () => {
             htmlType="submit"
             size="large"
             loading={loading}
+            classNameCustom="w-full"
           >
             {otpSent ? 'Login with email' : 'Send OTP'}
           </CustomButton>

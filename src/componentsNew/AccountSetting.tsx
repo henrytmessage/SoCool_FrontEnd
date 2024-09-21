@@ -62,8 +62,8 @@ const AccountSettings: React.FC = () => {
 
   const handleModalOk =  async () => {
     const bodyUpdateAccount: IUpdateAccountSetting = {
-      project_or_company_name: companyName,
-      received_email: receivedEmail,
+      project_or_company_name: companyName ? companyName : '',
+      received_email: receivedEmail ? receivedEmail : '',
       registered_email: registeredEmail,
       otp: otp
     }
@@ -152,13 +152,13 @@ const AccountSettings: React.FC = () => {
           {isEditingEmail ? (
             <div>
               <Input 
-                value={registeredEmail} 
-                onChange={(e) => setRegisteredEmail(e.target.value)} 
+                value={receivedEmail} 
+                onChange={(e) => setReceivedEmail(e.target.value)} 
                  
               />
           </div>
           ) : (
-            <div >{registeredEmail}</div>
+            <div >{receivedEmail}</div>
           )}
           <Button 
             icon={<EditOutlined />} 
@@ -170,7 +170,7 @@ const AccountSettings: React.FC = () => {
 
         <div className='mb-4 flex items-center gap-5'>
           <Text strong>Initial Signed-Up Emails: </Text>
-          <span>{receivedEmail}</span>
+          <span>{registeredEmail}</span>
         </div>
         <Divider style={{  borderColor: '#9999' }} />
 
