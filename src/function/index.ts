@@ -32,11 +32,17 @@ export const toCustomDate = (date:string) => {
 }
 
 export const formatDate = (date:string) => {
-  if (isNotEmpty(date)){
-    const formattedDate = dayjs(date).format('DD MMM YYYY');
-    return formattedDate;
+  try{
+    if (isNotEmpty(date)){
+      const formattedDate = dayjs(date).format('DD MMM YYYY');
+      return formattedDate;
+    }
+    return ''
+  }catch(error){
+    console.log(error)
+    return ''
   }
-  return ''
+  
 }
 
 export const isNotEmpty = (text:string): boolean => {
