@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Card, Divider, GetProps, Input, message, Modal, Typography } from 'antd';
 import { EditOutlined } from '@ant-design/icons';
-import { getAccountSettingService, postAuthOTP, postUpdateAccountSettingService } from '../service';
+import { deleteUserService, getAccountSettingService, postAuthOTP, postUpdateAccountSettingService } from '../service';
 import { IUpdateAccountSetting } from '../api/core/interface';
 import ModalPlan from './ModalPlan';
+import PopupModal from './PopupModal';
+import { useNavigate } from 'react-router-dom';
 
 const { Title, Text } = Typography;
 type OTPProps = GetProps<typeof Input.OTP>;
@@ -18,6 +20,9 @@ const AccountSettings: React.FC = () => {
   const [openModalOtp, setOpenModalOtp] = useState(false)
   const [otp, setOtp] = useState('')
   const [isPlanModalVisible, setIsPlanModalVisible] = useState<boolean>(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [loadingPopup, setLoadingPopup] = useState(false)
+  const navigate = useNavigate();
 
   const showPlanModal = () => {
     setIsPlanModalVisible(true);
@@ -28,8 +33,7 @@ const AccountSettings: React.FC = () => {
   };
 
   const handleDeleteAccount = () => {
-    // Logic to delete account
-    console.log('Delete account clicked');
+    handleRemove()
   };
 
   const toggleEditCompany = () => {
@@ -93,6 +97,33 @@ const AccountSettings: React.FC = () => {
   const sharedProps: OTPProps = {
     onChange,
   };
+
+  const hideModal = () => {
+    setIsModalVisible(false);
+  };
+
+  const handleRemove = () => {
+    setIsModalVisible(true)
+  }
+
+  const deleteUser = async () => {
+    setLoadingPopup(true)
+    const response = await deleteUserService()
+    try{
+      if (response.status_code == 200 ){
+        localStorage.clear(); 
+        navigate('/login'); 
+        message.success('Your account have been deleted!')
+      }else{
+        message.error(response.errors.message)
+      }
+    }catch(error){
+      message.error(response.error)
+    }finally{
+      setLoadingPopup(true)
+      hideModal()
+    }
+  }
 
   useEffect(() => {
     const getInfoAccount = async () => {
@@ -199,6 +230,8 @@ const AccountSettings: React.FC = () => {
         />
       </Modal>
       <ModalPlan visible={isPlanModalVisible} onClose={hidePlanModal} />
+
+      <PopupModal isVisible = {isModalVisible} hideModal={hideModal} confirm = { deleteUser } loading = {loadingPopup} />
     </div>
   );
 };

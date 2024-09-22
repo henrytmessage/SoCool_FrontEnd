@@ -22,12 +22,23 @@ const SiteAdminPage = () => {
     try{
       const response = await updatePlanService({
         newPackage: newPackage,
-        user_id: data[index-1].id
+        user_id: data[index].id
       })
       if (response?.status_code == 200){
         const dataPlan = response?.data 
+        
         if (dataPlan?.affected == 1){
+          let newData:IUserInfo[]= []
+          for(const item of data){
+            if (item.id == data[index].id){
+              item.package = newPackage
+            }
+            newData.push(item)
+          }
+          setData(newData)
+
           message.success('Change plan sucessfully!')
+
         }else{
           message.error('Change plan fail!')
         }
@@ -96,26 +107,28 @@ const SiteAdminPage = () => {
     },
   ];
 
-  const menuItemsWithHandlers: MenuProps['items'] = ((count: number) => {
-    return menuItems
-      .filter((item): item is MenuItemType => item !== null) 
-      .map((item, index) => {
-        if ('label' in item) {
-          return {
-            ...item,
-            onClick: () => handleChangePlan(item.label as string, count), 
-          };
-        }
-        return item;
-      });
-  })(1); 
-  
-  
-  
+  const getMenu = (count:number) => {
+    const menuItemsWithHandlers: MenuProps['items'] = (() => {
+      return menuItems
+        .filter((item): item is MenuItemType => item !== null) 
+        .map((item) => {
+          if ('label' in item) {
+            return {
+              ...item,
+              onClick: () => handleChangePlan(item.label as string, count), 
+            };
+          }
+          return item;
+        });
+    })();
+
+    return menuItemsWithHandlers
+
+  }
 
   const dropdown = (index:number) => {
     return (
-      <Dropdown menu={{ items: menuItemsWithHandlers }} placement="bottomRight" arrow>
+      <Dropdown menu={{ items: getMenu(index) }} placement="bottomRight" arrow>
         <Button className="py-6 px-2">
           <>
             <CaretDownOutlined className="ml-2" />
