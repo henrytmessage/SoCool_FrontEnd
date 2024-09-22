@@ -174,7 +174,7 @@ const DashBoardPage = () => {
     {
       !loading ? dashboard.content : <div/>
     }
-    <PopupModal isVisible = {isModalVisible} hideModal={hideModal} confirm = { removeAlias } loading = {loadingPopup} />
+    <PopupModal isVisible = {isModalVisible} hideModal={hideModal} confirm = { removeAlias } loading = {loadingPopup} title="Are you sure to delete this smart email?"/>
 
   </div>);
 

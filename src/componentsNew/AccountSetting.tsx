@@ -231,7 +231,7 @@ const AccountSettings: React.FC = () => {
       </Modal>
       <ModalPlan visible={isPlanModalVisible} onClose={hidePlanModal} />
 
-      <PopupModal isVisible = {isModalVisible} hideModal={hideModal} confirm = { deleteUser } loading = {loadingPopup} />
+      <PopupModal isVisible = {isModalVisible} hideModal={hideModal} confirm = { deleteUser } loading = {loadingPopup} title='Are you sure to delete your account?'/>
     </div>
   );
 };

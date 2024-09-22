@@ -6,14 +6,15 @@ interface ModalProps {
   loading: boolean,
   hideModal: () => void;
   confirm: () => void;
+  title:string
 }
 
-const PopupModal: React.FC<ModalProps > = ({ isVisible,loading, hideModal, confirm }) => {
+const PopupModal: React.FC<ModalProps > = ({ isVisible,loading, hideModal, confirm, title }) => {
 
   return (
     <>
       <Modal
-        title="Are you sure to delete this smart email?"
+        title = {title}
         visible = { isVisible }
         onOk={confirm}
         
