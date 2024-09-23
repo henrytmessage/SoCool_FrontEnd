@@ -29,7 +29,7 @@ const SendOTP: React.FC = () => {
 
   const handleResendOtp = async () => {
     try {
-      const bodyAuthOTP: IBodyAuthOTP = { email: email, type: 'SIGN_UP' };
+      const bodyAuthOTP: IBodyAuthOTP = { email: email, type: type };
       setLoading(true);
       const data = await postAuthOTP(bodyAuthOTP);
       if (data.status_code === 200) {
@@ -68,6 +68,7 @@ const SendOTP: React.FC = () => {
         localStorage.setItem('max_emails_count', data.data.max_emails_count);
         localStorage.setItem('expired_date_email', formatDate(data.data.exp));
         localStorage.setItem('is_admin',data?.data?.is_admin)
+        localStorage.setItem('email',data?.data?.email)
         navigate('/');
       } else {
         message.error(data.errors?.message);
@@ -95,6 +96,7 @@ const SendOTP: React.FC = () => {
         localStorage.setItem('max_emails_count', data?.data?.max_emails_count);
         localStorage.setItem('expired_date_email', formatDate(data?.data?.exp));
         localStorage.setItem('is_admin',data?.data?.is_admin)
+        localStorage.setItem('email',data?.data?.email)
         navigate('/');
       } else {
         message.error(data.error.message);
@@ -124,9 +126,7 @@ const SendOTP: React.FC = () => {
       <div className="flex flex-col w-full max-w-md bg-white p-6 rounded-lg">
       <Title level={2} className="text-center">Check your email for a code</Title>
       <Text>
-        {isLogin
-          ? "We've sent a 6-digit code to your email. The code expires shortly, so please enter it soon."
-          : "Please check your email for a verification code to complete your signup."}
+      We've sent a 6-digit code to <Text strong>{email}</Text>. The code expires shortly, so please enter it soon.
       </Text>
       <Form
           form={sendOTPForm}

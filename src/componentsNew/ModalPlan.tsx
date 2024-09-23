@@ -32,9 +32,7 @@ const ModalPlan: React.FC<PlanModalProps> = ({ visible, onClose, email }) => {
       visible={visible}
       onCancel={onClose}
       footer={[
-        <Button key="cancel" onClick={onClose}>
-          Cancel
-        </Button>,
+        
         <Button key="submit" type="primary" onClick={onClose}>
           Ok
         </Button>,
@@ -60,7 +58,7 @@ const ModalPlan: React.FC<PlanModalProps> = ({ visible, onClose, email }) => {
         />
         <div>
           To upgrade your plan, please use the initial signed-up email <Text strong>{email} </Text>
-          to send a request to <Text strong>hello@socool.ai</Text> with the subject <Text strong>"Request to upgrade plan of SoCool email"</Text>.
+          to send a request to <Text strong>contact@socool.ai</Text> with the subject <Text strong>"Request to upgrade plan of SoCool email"</Text>.
           In the email, specify your desired plan. We will contact you soon to provide the pricing details that match your needs.
         </div>
       </Typography>

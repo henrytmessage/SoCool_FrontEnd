@@ -757,7 +757,7 @@ const NewHome: React.FC = () => {
 
             <Form.Item>
               <div className="flex justify-around">
-                <CustomButton type="default" onClick={prev}>
+                <CustomButton onClick={prev}>
                   Back
                 </CustomButton>
                 <CustomButton type="primary" htmlType="submit">
@@ -963,7 +963,7 @@ const NewHome: React.FC = () => {
   
           <Form.Item>
             <div className='flex justify-around'>
-              <CustomButton type="default" onClick={prev}>
+              <CustomButton onClick={prev}>
                 Back
               </CustomButton>
               <CustomButton type="primary" htmlType="submit">
@@ -1048,7 +1048,7 @@ const NewHome: React.FC = () => {
                 </Form.Item> */}
               <Form.Item>
                 <div className='flex justify-around'>
-                  <CustomButton type="default" onClick={prev} >
+                  <CustomButton  onClick={prev} >
                     Back
                   </CustomButton>
                   <CustomButton type="primary" htmlType="submit" loading={isLoadingGenerate} >

@@ -42,7 +42,11 @@ axiosInstance.interceptors.response.use(
     // look like refresh token is incorrect
     if (response?.data?.status_code == 406){
       console.log('refresh token is incorrect');
-      window.location.href = '/login';
+      const refresh_token = localStorage.get('refresh_token') 
+      if(refresh_token){
+        window.location.href = '/login';
+      }
+     
     }
     // Unauthorized request
     else if(response?.data?.status_code == 401){

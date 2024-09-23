@@ -156,7 +156,7 @@ const AccountSettings: React.FC = () => {
           <Text strong>Account: </Text>
           <span  >{registeredEmail}</span>
         </div>
-        <Divider style={{  borderColor: '#eeeee4' }} />
+        <Divider className='mt-10' style={{  borderColor: '#eeeee4' }} />
 
         <div className='flex gap-5 items-center'>
             <Text strong>Plan Name: </Text>
@@ -169,7 +169,7 @@ const AccountSettings: React.FC = () => {
 
         <div className='mb-2 flex items-center gap-5'>
           <Text strong>Expired Date: </Text>
-          <span style={{ color: '#c0c0c0' }} >{localStorage.getItem('expired_date_email')}</span>
+          <span  >{localStorage.getItem('expired_date_email')}</span>
         </div>
         <Divider style={{  borderColor: '#eeeee4' }} />
 
@@ -202,14 +202,15 @@ const AccountSettings: React.FC = () => {
       <Modal
         title="Edit Account"
         visible={isSendOtp}
+        onCancel={handleModalEditCancel}
         footer={[
-          <CustomButton
-            key="back"
-            onClick={handleModalEditCancel}
-            classNameCustom="outline outline-0 bg-gray-200 text-gray-800 hover:bg-gray-300"
-          >
-            Back
-          </CustomButton>,
+          // <CustomButton
+          //   key="back"
+          //   onClick={handleModalEditCancel}
+          //   classNameCustom="outline outline-0 bg-gray-200 text-gray-800 hover:bg-gray-300"
+          // >
+          //   Back
+          // </CustomButton>,
           <CustomButton key="submit" onClick={handleSendOtp} classNameCustom="ml-6" loading={isLoadingEdit}>
             Submit
           </CustomButton>
@@ -237,7 +238,7 @@ const AccountSettings: React.FC = () => {
         title="Enter OTP"
         visible={openModalOtp}
         // onOk={handleModalOk}
-        // onCancel={handleModalCancel}
+        onCancel={handleModalCancel}
         footer={[
           <CustomButton
             key="back"
@@ -251,7 +252,11 @@ const AccountSettings: React.FC = () => {
           </CustomButton>
         ]}
       >
-         <div className='mb-2'><Text strong>We've sent a 6-digit code to your email. The code expires shortly, so please enter it soon.</Text></div>
+         <div className='mb-4'><Text strong><div>We need to verify your email to approve the request for updating the information.</div></Text>
+         <div className='mt-2'><Text>We've sent a 6-digit code to <Text strong>{registeredEmail}</Text>. The code expires shortly, so please enter it soon.</Text></div>
+         </div>
+         
+         
         <Input.OTP
           value={otp}
           formatter={str => str.toUpperCase()}
