@@ -60,6 +60,7 @@ const Header = () => {
     {
       key: '1',
       label: <Text strong>Expired date: {expiredDate}</Text>,
+      disabled: true
     },
     {
       key: '2',
