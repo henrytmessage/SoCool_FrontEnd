@@ -36,17 +36,17 @@ const Header = () => {
   const menuItems: MenuProps['items'] = [
     {
       key: '1',
+      label: `Expired date: ${expiredDate}`,
+    },
+    {
+      key: '2',
       label: 'Dashboard',
       onClick: () => navigate('/dashboard'),
     },
     {
-      key: '2',
+      key: '3',
       label: 'Account Setting',
       onClick: () => navigate('/accountSetting'),
-    },
-    {
-      key: '3',
-      label: expiredDate,
     },
     {
       key: '4',
@@ -58,17 +58,17 @@ const Header = () => {
   const menuItemsHasAdmin: MenuProps['items'] = [
     {
       key: '1',
+      label: `Expired date: ${expiredDate}`,
+    },
+    {
+      key: '2',
       label: 'Dashboard',
       onClick: () => navigate('/dashboard'),
     },
     {
-      key: '2',
+      key: '3',
       label: 'Account Setting',
       onClick: () => navigate('/accountSetting'),
-    },
-    {
-      key: '3',
-      label: expiredDate,
     },
     {
       key: '4',
