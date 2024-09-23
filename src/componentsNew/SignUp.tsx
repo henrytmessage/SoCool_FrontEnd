@@ -53,7 +53,11 @@ const SignUpPage: React.FC = () => {
           localStorage.setItem('expired_date_email', formatDate(data.data.exp));
           localStorage.setItem('is_admin',data?.data?.is_admin)
           localStorage.setItem('email',data?.data?.email)
-          navigate('/companyOrProduct');
+          if (data?.data?.require_project_or_company_name == 'true'){
+            navigate('/companyOrProduct');
+          }else{
+            navigate('/')
+          }
 
         } else {
           message.error(data.errors?.message);
