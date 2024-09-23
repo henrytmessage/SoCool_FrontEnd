@@ -149,7 +149,7 @@ const DashBoardPage = () => {
               no_accepted_cv: alias.no_accepted_cv,
               no_rejected_cv: alias.no_rejected_cv
             }
-            if (aliasInfo && alias.alias_id){
+            if (aliasInfo && alias.aliasId){
               aliasInfos.push(aliasInfo)
             }else{
               aliasInfos.push({
