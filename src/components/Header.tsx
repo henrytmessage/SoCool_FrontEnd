@@ -18,6 +18,7 @@ const Header = () => {
   const expiredDate = localStorage.getItem('expired_date_email');
   const admin = localStorage.getItem('is_admin');
   const email = localStorage.getItem('email');
+  const isCompanyOrProductPage = location.pathname.includes('companyOrProduct');
   
   const handleLogout = async () => {
     try {
@@ -35,42 +36,50 @@ const Header = () => {
   const menuItems: MenuProps['items'] = [
     {
       key: '1',
-      label: 'Go to Dashboard',
+      label: 'Dashboard',
       onClick: () => navigate('/dashboard'),
     },
     {
       key: '2',
-      label: 'Go to Account Setting',
+      label: 'Account Setting',
       onClick: () => navigate('/accountSetting'),
     },
     {
       key: '3',
+      label: expiredDate,
+    },
+    {
+      key: '4',
       label: 'Sign out',
       onClick: handleLogout,
-    }
+    },
   ];
 
   const menuItemsHasAdmin: MenuProps['items'] = [
     {
       key: '1',
-      label: 'Go to Dashboard',
+      label: 'Dashboard',
       onClick: () => navigate('/dashboard'),
     },
     {
       key: '2',
-      label: 'Go to Account Setting',
+      label: 'Account Setting',
       onClick: () => navigate('/accountSetting'),
     },
     {
       key: '3',
-      label: 'Sign out',
-      onClick: handleLogout,
+      label: expiredDate,
     },
     {
       key: '4',
       label: 'Admin',
       onClick: () => navigate('/site-admin'),
-    }
+    },
+    {
+      key: '5',
+      label: 'Sign out',
+      onClick: handleLogout,
+    },
   ];
 
   return (
@@ -89,21 +98,18 @@ const Header = () => {
       
       {/* Dropdown Menu in the top right corner */}
       {
-        currentEmail && (
+        currentEmail && !isCompanyOrProductPage && (
           <div className="absolute right-6">
             <Dropdown menu={{ items: admin == 'true' ? menuItemsHasAdmin : menuItems }} placement="bottomRight" arrow>
               <Button className='py-6 px-2'>
-                <>
+                <div className='text-left'>
                 {/* <CaretDownOutlined className="ml-4" /> */}
-                <img src={avatar} alt="Dropdown icon" style={{ width: '50px', height: '50px' }} />
-
-                </>
-                <>
+                {/* <img src={avatar} alt="Dropdown icon" style={{ width: '50px', height: '50px' }} /> */}
                 <Text strong>{email}</Text>
                 <div className="flex items-left cursor-pointer">
                   <span>{`${currentEmail}/${maxEmail} smart emails`}</span>
                 </div>
-                </>
+                </div>
               </Button>
             </Dropdown>
           </div>

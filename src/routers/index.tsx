@@ -21,6 +21,7 @@ import SiteAdminPage from '../componentsNew/SiteAdmin'
 import LoginPage from '../componentsNew/SignIn'
 import SignUpPage from '../componentsNew/SignUp'
 import SendOTP from '../componentsNew/OTP'
+import CompanyOrProject from '../componentsNew/CompanyOrProject'
 
 const AppRouters = () => {
   return (
@@ -47,6 +48,7 @@ const AppRouters = () => {
       <Route path="/login" element={<LoginPage/>} />
       <Route path="/signUp" element={<SignUpPage/>} />
       <Route path="/otp" element={<SendOTP />} />
+      <Route path="/companyOrProduct" element={<CompanyOrProject />} />
     </Routes>
   )
 }

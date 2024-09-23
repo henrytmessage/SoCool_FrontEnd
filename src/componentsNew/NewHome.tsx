@@ -536,34 +536,34 @@ const NewHome: React.FC = () => {
     }
   };
 
-  const formRequireInit = () => {
-   return (
-      <Form
-        form={form}
-        name="project_company_form"
-        onFinish={onFinishInit}
-        layout= "vertical"
-        // labelCol={{ span: 8 }}
-        // wrapperCol={{ span: 16 }}
-        // style={{ maxWidth: 600, margin: '0 auto' }}
-      >
+  // const formRequireInit = () => {
+  //  return (
+  //     <Form
+  //       form={form}
+  //       name="project_company_form"
+  //       onFinish={onFinishInit}
+  //       layout= "vertical"
+  //       // labelCol={{ span: 8 }}
+  //       // wrapperCol={{ span: 16 }}
+  //       // style={{ maxWidth: 600, margin: '0 auto' }}
+  //     >
 
-        <Form.Item
-          label="Project or company"
-          name="project_company"
-          rules={[{ required: true, message: 'Please enter your company or project name!' }]}
-        >
-          <Input placeholder="Enter your company or project name" size="large"/>
-        </Form.Item>
+  //       <Form.Item
+  //         label="Project or company"
+  //         name="project_company"
+  //         rules={[{ required: true, message: 'Please enter your company or project name!' }]}
+  //       >
+  //         <Input placeholder="Enter your company or project name" size="large"/>
+  //       </Form.Item>
 
-        <Form.Item>
-          <Button type="primary" htmlType="submit" size="large">
-            Submit
-          </Button>
-        </Form.Item>
-      </Form>
-    )
-  }
+  //       <Form.Item>
+  //         <Button type="primary" htmlType="submit" size="large">
+  //           Submit
+  //         </Button>
+  //       </Form.Item>
+  //     </Form>
+  //   )
+  // }
 
   useEffect(() => {
     const checkAccessToken = async () => {
@@ -1118,9 +1118,9 @@ const NewHome: React.FC = () => {
     <AvatarFirsText />
     {loadingInit ? wrapLogin() :
     
-      isRequireProject ? (
-        formRequireInit()
-      ) : (
+      // isRequireProject ? (
+      //   formRequireInit()
+      // ) : (
         <>
           {/* Avatar and Start Button Section */}
           {
@@ -1150,7 +1150,7 @@ const NewHome: React.FC = () => {
             )
           }
         </>
-      )
+      // )
     
   }
   </div>

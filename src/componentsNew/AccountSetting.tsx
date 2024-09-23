@@ -156,6 +156,10 @@ const AccountSettings: React.FC = () => {
           <Text strong>Account: </Text>
           <span  >{registeredEmail}</span>
         </div>
+        <div className='mb-2 flex items-center gap-5'>
+          <Text strong>Expired Date: </Text>
+          <span  >{localStorage.getItem('expired_date_email')}</span>
+        </div>
         <Divider className='mt-10' style={{  borderColor: '#eeeee4' }} />
 
         <div className='flex gap-5 items-center'>
@@ -166,13 +170,6 @@ const AccountSettings: React.FC = () => {
             </Button>
         </div>
         <Divider style={{  borderColor: '#eeeee4' }} />
-
-        <div className='mb-2 flex items-center gap-5'>
-          <Text strong>Expired Date: </Text>
-          <span  >{localStorage.getItem('expired_date_email')}</span>
-        </div>
-        <Divider style={{  borderColor: '#eeeee4' }} />
-
         <div className="mb-2 flex items-center gap-5">
           <Text strong>Company Name or Project Name:</Text>
             <div style={{ color: '#c0c0c0' }}  >{companyName}</div>
