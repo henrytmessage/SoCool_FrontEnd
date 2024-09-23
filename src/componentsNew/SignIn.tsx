@@ -2,11 +2,10 @@ import React, { useState } from 'react';
 import { Form, Input, message, Button, Typography } from 'antd';
 import { useGoogleLogin } from '@react-oauth/google';
 import { useNavigate } from 'react-router-dom';
-import { IBodyAuthOTP, ILogin, ILoginGoogle } from '../api/core/interface';
-import { postAuthOTP, postLoginGoogleService, postLoginService } from '../service';
+import { IBodyAuthOTP, ILoginGoogle } from '../api/core/interface';
+import { postAuthOTP, postLoginGoogleService } from '../service';
 import { logoGoogle } from '../assets';
 import { formatDate } from '../function';
-import { OTPProps } from 'antd/es/input/OTP';
 import { CustomButton } from '../common';
 
 const { Title, Text } = Typography;
@@ -15,63 +14,24 @@ const LoginPage: React.FC = () => {
   const [loginForm] = Form.useForm();
   const [otpSent, setOtpSent] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [otp, setOtp] = useState('');
   const navigate = useNavigate();
 
-  // Change OTP
-  const onChange: OTPProps['onChange'] = (text) => {
-    setOtp(text);
-  };
-
-  const sharedProps: OTPProps = {
-    onChange,
-  };
-
-  // Combined button functionality for sending OTP and logging in
-  const handleLoginOrSendOtp = async (values: any) => {
-    if (!otpSent) {
-      // Send OTP
-      try {
-        const bodyAuthOTP: IBodyAuthOTP = { email: values.email, type: 'SIGN_IN' };
-        setLoading(true);
-        const data = await postAuthOTP(bodyAuthOTP);
-        if (data.status_code === 200) {
-          message.success('OTP sent to your email!');
-          setOtpSent(true);
-        } else {
-          message.error(data.errors?.message);
-        }
-      } catch (error) {
-        message.error('Failed to send OTP!');
-      } finally {
-        setLoading(false);
+  const handleSendOtp = async (values: any) => {
+    try {
+      const bodyAuthOTP: IBodyAuthOTP = { email: values.email, type: 'SIGN_IN' };
+      setLoading(true);
+      const data = await postAuthOTP(bodyAuthOTP);
+      if (data.status_code === 200) {
+        message.success('OTP sent to your email!');
+        setOtpSent(true);
+        navigate(`/otp?email=${values?.email}&type=SIGN_IN`);
+      } else {
+        message.error(data.errors?.message);
       }
-    } else {
-      // Login
-      try {
-        const bodyLogin: ILogin = { email: values.email, otp };
-        setLoading(true);
-        const data = await postLoginService(bodyLogin);
-        if (data.status_code === 200) {
-          message.success('Login successfully!');
-          localStorage.setItem('access_token', data?.data?.access_token);
-          localStorage.setItem('expired_time', data?.data?.expired_time);
-          localStorage.setItem('refresh_token', data?.data?.refresh_token);
-          localStorage.setItem('require_project_or_company_name', data?.data?.require_project_or_company_name);
-          localStorage.setItem('current_emails_count', data?.data?.current_emails_count);
-          localStorage.setItem('max_emails_count', data?.data?.max_emails_count);
-          localStorage.setItem('expired_date_email', formatDate(data?.data?.exp));
-          localStorage.setItem('is_admin',data?.data?.is_admin)
-          localStorage.setItem('email',data?.data?.email)
-          navigate('/');
-        } else {
-          message.error(data.error.message);
-        }
-      } catch (error) {
-        message.error('Login failed!');
-      } finally {
-        setLoading(false);
-      }
+    } catch (error) {
+      message.error('Failed to send OTP!');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -110,7 +70,7 @@ const LoginPage: React.FC = () => {
         <Title level={2} className="text-center">Sign in with SoCool</Title>
         <Form
           form={loginForm}
-          onFinish={handleLoginOrSendOtp}
+          onFinish={handleSendOtp}
           layout="vertical"
           className="mt-4 "
         >
@@ -124,19 +84,6 @@ const LoginPage: React.FC = () => {
               disabled={otpSent}
             />
           </Form.Item>
-          {otpSent && (
-            <Form.Item
-              name="otp"
-              rules={[{ required: true, message: 'Please enter OTP!' }]}
-              className="mt-4 flex justify-center"
-            >
-              <Input.OTP
-                size="large"
-                value={otp}
-                {...sharedProps}
-              />
-            </Form.Item>
-          )}
           <CustomButton
             type="primary"
             htmlType="submit"
@@ -144,7 +91,7 @@ const LoginPage: React.FC = () => {
             loading={loading}
             classNameCustom="w-full"
           >
-            {otpSent ? 'Login with email' : 'Send OTP'}
+            Login with email
           </CustomButton>
         </Form>
         <div className="text-center my-4">OR</div>
