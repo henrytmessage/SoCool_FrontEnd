@@ -55,12 +55,11 @@ const DashBoardPage = () => {
   const dashboard = {
     
       content: (
-      <div>
+      <div className="px-8">
         <Form form={form} layout="vertical">
-          <table className="w-full border-collapse border border-gray-300 ml-10 mr-10 mt-5">
+          <table className="w-full border-collapse border border-gray-300  mt-5">
             <thead>
               <tr>
-                <th className=" p-2 w-[50px]"></th>
                 <th className="border border-gray-300 p-2  ">Smart Email</th>
                 <th className="border border-gray-300 p-2 ">Job Title</th>
                 <th className="border border-gray-300 p-2  ">Landing Page</th>
@@ -70,46 +69,48 @@ const DashBoardPage = () => {
                 <th className="border border-gray-300 p-2  ">No.Not-Decide CV</th>
                 <th className="border border-gray-300 p-2 ">No.Accepted CV</th>
                 <th className="border border-gray-300 p-2  ">No.Rejected CV</th>
+                <th className=" p-2 w-[50px]"></th>
               </tr>
             </thead>
             <tbody>
               {
                 aliasInfos.map((info, index) => (
                   <tr key={index}>
-                    <td className=" text-center align-middle w-[50px]">
-                    <Button
-                    type="text"
-                    icon={<DeleteOutlined />}
-                    onClick={() => handleRemove(index)}
-                    />
-                    </td>
-                    
-                    <td className="border border-gray-300 p-4  text-center align-middle">
+                    <td className="border border-gray-300 p-4 text-center align-middle ">
                     {info.alias}
                     </td>
-                    <td className="border border-gray-300 p-4 ">
+                    <td className="border border-gray-300 p-4 text-center align-middle ">
                     {info.job_title}
                     </td>
-                    <td className="border border-gray-300 p-4  text-center align-middle">
+                    <td className="border border-gray-300 p-4 text-center align-middle">
                     {info.landing_page}
                     </td>
-                    <td className="border border-gray-300 p-4 ">
+                    <td className="border border-gray-300 p-4 text-center align-middle">
                     {info.published_date}
                     </td>
-                    <td className="border border-gray-300 p-4 ">
+                    <td className="border border-gray-300 p-4 text-center align-middle">
                     {info.end_date}
                     </td>
-                    <td className="border border-gray-300 p-4 ">
+                    <td className="border border-gray-300 p-4 text-center align-middle">
                     {info.no_summitted_cv}
                     </td>
-                    <td className="border border-gray-300 p-4 ">
+                    <td className="border border-gray-300 p-4 text-center align-middle">
                     {info.no_not_decide_cv}
                     </td>
-                    <td className="border border-gray-300 p-4 ">
+                    <td className="border border-gray-300 p-4 text-center align-middle">
                     {info.no_accepted_cv}
                     </td>
-                    <td className="border border-gray-300 p-4 ">
+                    <td className="border border-gray-300 p-4 text-center align-middle">
                     {info.no_rejected_cv}
+                    </td>
+                    <td className=" text-center align-middle w-[50px]">
+                    {
+                      info.alias_id > 0 && (<Button
+                        type="text"
+                        icon={<DeleteOutlined />}
+                        onClick={() => handleRemove(index)}
+                        />)
+                    }
                     </td>
                   </tr>
                 ))
@@ -150,6 +151,19 @@ const DashBoardPage = () => {
             }
             if (aliasInfo && alias.alias_id){
               aliasInfos.push(aliasInfo)
+            }else{
+              aliasInfos.push({
+                alias_id: 0,
+                alias: 'N/A',
+                job_title: 'N/A',
+                landing_page: 'N/A',
+                published_date: 'N/A',
+                end_date: 'N/A',
+                no_summitted_cv: '0',
+                no_not_decide_cv: '0',
+                no_accepted_cv: '0',
+                no_rejected_cv: '0'
+              })
             }
             
           }

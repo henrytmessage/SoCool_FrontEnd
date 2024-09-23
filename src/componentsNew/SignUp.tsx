@@ -64,6 +64,7 @@ const SignUpPage: React.FC = () => {
         localStorage.setItem('max_emails_count', data.data.max_emails_count);
         localStorage.setItem('expired_date_email', formatDate(data.data.exp));
         localStorage.setItem('is_admin',data?.data?.is_admin)
+        localStorage.setItem('email',data?.data?.email)
         navigate('/');
       } else {
         message.error(data.errors?.message);
@@ -102,6 +103,7 @@ const SignUpPage: React.FC = () => {
           localStorage.setItem('max_emails_count', data.data.max_emails_count);
           localStorage.setItem('expired_date_email', formatDate(data.data.exp));
           localStorage.setItem('is_admin',data?.data?.is_admin)
+          localStorage.setItem('email',data?.data?.email)
           navigate('/');
         } else {
           message.error(data.errors?.message);
@@ -118,7 +120,7 @@ const SignUpPage: React.FC = () => {
   return (
     <div className="flex flex-col items-center justify-center px-4 mt-14">
       <div className="flex flex-col w-full max-w-md bg-white p-6 rounded-lg">
-        <Title level={2} className="text-center">Sign up with SoCool</Title>
+        <Title level={2} className="text-center">Create new account</Title>
         <Form
           form={registerForm}
           onFinish={handleRegister}
@@ -168,7 +170,7 @@ const SignUpPage: React.FC = () => {
           Continue with Google
         </Button>
         <div className="text-center mt-4">
-          <Text>Already have an account? <a href="/login">Login</a></Text>
+          <Text>Already have an account? <a href="/login">Sign in</a></Text>
         </div>
       </div>
     </div>

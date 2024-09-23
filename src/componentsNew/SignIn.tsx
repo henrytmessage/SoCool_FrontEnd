@@ -62,6 +62,7 @@ const LoginPage: React.FC = () => {
           localStorage.setItem('max_emails_count', data?.data?.max_emails_count);
           localStorage.setItem('expired_date_email', formatDate(data?.data?.exp));
           localStorage.setItem('is_admin',data?.data?.is_admin)
+          localStorage.setItem('email',data?.data?.email)
           navigate('/');
         } else {
           message.error(data.error.message);
@@ -89,6 +90,7 @@ const LoginPage: React.FC = () => {
           localStorage.setItem('max_emails_count', data?.data?.max_emails_count);
           localStorage.setItem('expired_date_email', formatDate(data?.data?.exp));
           localStorage.setItem('is_admin',data?.data?.is_admin)
+          localStorage.setItem('email',data?.data?.email)
           navigate('/');
         } else {
           message.error(data.errors?.message);
@@ -105,7 +107,7 @@ const LoginPage: React.FC = () => {
   return (
     <div className="flex flex-col items-center justify-center px-4 mt-14">
       <div className="flex flex-col w-full max-w-md bg-white p-6 rounded-lg">
-        <Title level={2} className="text-center">Login with SoCool</Title>
+        <Title level={2} className="text-center">Sign in with SoCool</Title>
         <Form
           form={loginForm}
           onFinish={handleLoginOrSendOtp}

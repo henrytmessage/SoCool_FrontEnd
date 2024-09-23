@@ -1,10 +1,13 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Avatar, Button, Dropdown, MenuProps } from 'antd';
+import { Avatar, Button, Dropdown, MenuProps, Typography } from 'antd';
 import { logoSoCool } from '../assets';
 import { CaretDownOutlined, DownOutlined } from '@ant-design/icons';
 import { postLogoutService } from '../service';
+import { avatar } from '../assets';
+
+const { Title, Text } = Typography;
 
 const Header = () => {
   const { t } = useTranslation();
@@ -14,6 +17,7 @@ const Header = () => {
   const maxEmail = localStorage.getItem('max_emails_count');
   const expiredDate = localStorage.getItem('expired_date_email');
   const admin = localStorage.getItem('is_admin');
+  const email = localStorage.getItem('email');
   
   const handleLogout = async () => {
     try {
@@ -88,16 +92,17 @@ const Header = () => {
         currentEmail && (
           <div className="absolute right-6">
             <Dropdown menu={{ items: admin == 'true' ? menuItemsHasAdmin : menuItems }} placement="bottomRight" arrow>
-              <Button className='py-6 px-4'>
+              <Button className='py-6 px-2'>
                 <>
-                <CaretDownOutlined className="ml-4" />
+                {/* <CaretDownOutlined className="ml-4" /> */}
+                <img src={avatar} alt="Dropdown icon" style={{ width: '50px', height: '50px' }} />
 
                 </>
                 <>
-                <div className="flex items-center cursor-pointer ml-2">
-                  <span>{`${currentEmail}/${maxEmail} emails`}</span>
+                <Text strong>{email}</Text>
+                <div className="flex items-left cursor-pointer">
+                  <span>{`${currentEmail}/${maxEmail} smart emails`}</span>
                 </div>
-                <div>Exp: {expiredDate}</div>
                 </>
               </Button>
             </Dropdown>

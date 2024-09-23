@@ -39,7 +39,7 @@ axiosInstance.interceptors.request.use(
 axiosInstance.interceptors.response.use(
   async (response: AxiosResponse<any>) => {
     // Handle success responses globally
-    if(response?.data?.status_code == 401){
+    if(response?.data?.status_code == 401 || response?.data?.status_code == 406){
       console.log('Unauthorized request');
         const originalRequest = response.config as CustomAxiosRequestConfig;
         if(!originalRequest._retryCount){

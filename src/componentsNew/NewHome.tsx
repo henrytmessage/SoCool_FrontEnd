@@ -10,6 +10,7 @@ import CustomDropDown from '../common/CustomDropDown';
 import dayjs from 'dayjs';
 import CustomModalWarning from '../common/CustomModalWarning';
 import { useNavigate } from 'react-router-dom';
+import CustomButtonBorder from '../common/CustomButtonBorder';
 interface ScoreField {
   label?: string;
   minScore: number;
@@ -569,8 +570,8 @@ const NewHome: React.FC = () => {
       const accessToken = localStorage.getItem('access_token');
       const requireProject = localStorage.getItem('require_project_or_company_name');
       if (!accessToken) {
-        navigate('/login');
-        // setLoadingInit(true);
+        // navigate('/login');
+        setLoadingInit(true);
       } else {
         setLoadingInit(false);
       }
@@ -1100,13 +1101,13 @@ const NewHome: React.FC = () => {
 
   const wrapLogin = () => {
     return (
-      <div className="flex gap-10 justify-center items-center">
-        <CustomButton type="primary" onClick={OnClickNavigateLogin}>
+      <div className="flex gap-5 justify-center items-center">
+        <CustomButton classNameCustom='px-10' type="primary" onClick={OnClickNavigateLogin}>
                 Sign in
               </CustomButton>
-        <CustomButton type="primary" onClick={OnClickNavigateSignUp}>
-                Sign up
-              </CustomButton>
+        <CustomButtonBorder type="primary" onClick={OnClickNavigateSignUp}>
+                Create new account
+              </CustomButtonBorder>
       </div>
     );
   }
