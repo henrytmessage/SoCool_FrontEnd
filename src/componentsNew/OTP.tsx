@@ -69,7 +69,7 @@ const SendOTP: React.FC = () => {
         localStorage.setItem('expired_date_email', formatDate(data.data.exp));
         localStorage.setItem('is_admin',data?.data?.is_admin)
         localStorage.setItem('email',data?.data?.email)
-        navigate('/');
+        navigate('/companyOrProduct');
       } else {
         message.error(data.errors?.message);
       }
@@ -97,7 +97,7 @@ const SendOTP: React.FC = () => {
         localStorage.setItem('expired_date_email', formatDate(data?.data?.exp));
         localStorage.setItem('is_admin',data?.data?.is_admin)
         localStorage.setItem('email',data?.data?.email)
-        navigate('/');
+        navigate('/companyOrProduct');
       } else {
         message.error(data.error.message);
       }
