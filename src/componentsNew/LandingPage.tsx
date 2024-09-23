@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Card, Typography, Divider, Alert } from 'antd';
 import { getJobDescriptionService } from '../service';
+import { formatDate } from '../function';
 
 const { Title, Paragraph } = Typography;
 
@@ -34,7 +35,7 @@ const LandingPage = () => {
         getJobResponsibilities(response?.data?.job_responsibilities)
         setJobRequirements(response?.data?.job_requirements)
         setCompanyName(response?.data?.company_project_name)
-        setExpireDate(response?.data?.expire_time)
+        setExpireDate(formatDate(response?.data?.expire_time))
       } catch (error) {
         console.error('Error fetching response:', error);
       }

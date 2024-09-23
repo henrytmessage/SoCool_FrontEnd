@@ -116,8 +116,8 @@ const NewHome: React.FC = () => {
   const [isRequireProject, setIsRequireProject] = useState(false)
   const [jobCloseDate, setJobCloseDate] = useState('')
 
-  const currentEmail = parseInt(localStorage.getItem('current_emails_count') ?? '0', 10);
-  const maxEmail = parseInt(localStorage.getItem('max_emails_count') ?? '0', 10);  
+  const currentEmail = parseInt(localStorage.getItem('current_emails_count') ?? '0', 0);
+  const maxEmail = parseInt(localStorage.getItem('max_emails_count') ?? '0', 9);  
 
   const handleFromChange = (value: number | null) => {
     setFromValue(value);

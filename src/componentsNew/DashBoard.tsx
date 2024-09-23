@@ -14,6 +14,7 @@ const DashBoardPage = () => {
   const [aliasInfos, setAliasInfos] = useState<IAliasInfo[]>([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [aliasInfo, setALiasInfo] = useState<IAliasInfo>()
+  let currentEmail = parseInt(localStorage.getItem('current_emails_count') ?? '0', 0);
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -40,6 +41,13 @@ const DashBoardPage = () => {
           message.success('Remove successfully!')
           const filteredAliasInfos = aliasInfos.filter( alias => alias.alias_id != aliasInfo.alias_id)
           setAliasInfos(filteredAliasInfos)
+
+          currentEmail = currentEmail - 1
+          if (currentEmail < 0){
+            currentEmail = 0
+          }
+          localStorage.setItem('current_emails_count', currentEmail.toString());
+
         }else{
           message.error(response.errors.message)
         }
