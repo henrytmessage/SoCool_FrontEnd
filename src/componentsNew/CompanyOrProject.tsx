@@ -3,12 +3,14 @@ import React, { useState } from 'react'
 import { ICompanyProject } from '../api/core/interface';
 import { postSaveCompanyOrProjectNameService } from '../service';
 import { CustomButton } from '../common';
+import { useNavigate } from 'react-router-dom';
 
 const { Title, Text } = Typography;
 
 const CompanyOrProject = () => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false)
+  const navigate = useNavigate()
 
 
   const onFinishInit = async (values: any) => {
@@ -21,6 +23,7 @@ const CompanyOrProject = () => {
       
       if(response?.status_code === 200){
         localStorage.setItem('require_project_or_company_name','false')
+        navigate('/')
       }
     }catch(error){
       console.error(error);
@@ -34,6 +37,7 @@ const CompanyOrProject = () => {
       <div className="flex flex-col w-full max-w-md bg-white p-6 rounded-lg">
         <Title level={2} className="text-center">Company or project name</Title>
       <Form
+      className='mt-5'
         form={form}
         name="project_company_form"
         onFinish={onFinishInit}
@@ -48,9 +52,9 @@ const CompanyOrProject = () => {
           <Input placeholder="Enter your company or project name" size="large"/>
         </Form.Item>
 
-        <Form.Item>
-          <CustomButton type="primary" htmlType="submit" size="large" classNameCustom='w-full'>
-            Submit
+        <Form.Item className='mt-10'>
+          <CustomButton type="primary" htmlType="submit" size="large" classNameCustom='w-full' loading = {loading}>
+            Done
           </CustomButton>
         </Form.Item>
       </Form>

@@ -36,7 +36,8 @@ const Header = () => {
   const menuItems: MenuProps['items'] = [
     {
       key: '1',
-      label: `Expired date: ${expiredDate}`,
+      label: <Text strong>Expired date: {expiredDate}</Text>,
+      disabled: true
     },
     {
       key: '2',
@@ -58,7 +59,7 @@ const Header = () => {
   const menuItemsHasAdmin: MenuProps['items'] = [
     {
       key: '1',
-      label: `Expired date: ${expiredDate}`,
+      label: <Text strong>Expired date: {expiredDate}</Text>,
     },
     {
       key: '2',
