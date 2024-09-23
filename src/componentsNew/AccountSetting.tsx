@@ -6,12 +6,11 @@ import { IUpdateAccountSetting } from '../api/core/interface';
 import ModalPlan from './ModalPlan';
 import PopupModal from './PopupModal';
 import { useNavigate } from 'react-router-dom';
+import { CustomButton } from '../common';
 
 const { Title, Text } = Typography;
 type OTPProps = GetProps<typeof Input.OTP>;
 const AccountSettings: React.FC = () => {
-  const [isEditingCompany, setIsEditingCompany] = useState(false);
-  const [isEditingEmail, setIsEditingEmail] = useState(false);
   const [companyName, setCompanyName] = useState('');
   const [plan, setPlan] = useState('')
   const [receivedEmail, setReceivedEmail] = useState('')
@@ -23,6 +22,8 @@ const AccountSettings: React.FC = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [loadingPopup, setLoadingPopup] = useState(false)
   const navigate = useNavigate();
+  const [isLoadingEdit, setIsLoadingEdit] = useState(false)
+  const [isLoadingOtp, setIsLoadingOtp] = useState(false)
 
   const showPlanModal = () => {
     setIsPlanModalVisible(true);
@@ -36,31 +37,25 @@ const AccountSettings: React.FC = () => {
     handleRemove()
   };
 
-  const toggleEditCompany = () => {
-    setIsEditingCompany(!isEditingCompany);
-    setIsSendOtp(true)
-  };
-
-  const toggleEditEmail = () => {
-    setIsEditingEmail(!isEditingEmail);
-    setIsSendOtp(true)
-  };
-
   const handleSendOtp = async () => {
     const bodyAuthOTP = {
       email: registeredEmail,
       type: 'CHANGE_NOTIFY_EMAIL'
     }
     try {
+      setIsLoadingEdit(true)
       const data = await postAuthOTP(bodyAuthOTP)
       if(data.status_code === 200) {
         message.success('OTP sent to your email!');
         setOpenModalOtp(true)
+        setIsSendOtp(false)
       } else {
         message.error(data.errors?.message);
       }
+      setIsLoadingEdit(false)
     } catch (error) {
       console.log(error);
+      setIsLoadingEdit(false)
     }
   };
 
@@ -72,21 +67,32 @@ const AccountSettings: React.FC = () => {
       otp: otp
     }
     try {
+      setIsLoadingOtp(true)
       const data = await postUpdateAccountSettingService(bodyUpdateAccount)
       if(data.status_code === 200) {
         message.success('Update account setting successful!');
         setOpenModalOtp(false)
       } else {
         message.error(data.errors?.message);
-        setOpenModalOtp(false)
       }
+      setIsLoadingOtp(false)
     } catch (error) {
       console.log(error);
+      setIsLoadingOtp(false)
     }
   }
 
   const handleModalCancel = () => {
     setOpenModalOtp(false);
+  }
+
+  const handleModalEditCancel = () => {
+    setIsSendOtp(false);
+    setOtp('')
+  }
+
+  const onOpenModalEdit = () => {
+    setIsSendOtp(true);
   }
 
   // Change OTP
@@ -146,62 +152,45 @@ const AccountSettings: React.FC = () => {
     <div className="p-6 ml-8">
       {/* <Card className=""> */}
         <Title level={2}>Account Settings</Title>
+        <div className='mb-2 flex items-center gap-5'>
+          <Text strong>Account: </Text>
+          <span  >{registeredEmail}</span>
+        </div>
+        <Divider style={{  borderColor: '#eeeee4' }} />
 
-        <div className='flex gap-10 items-center'>
-          <div className="mb-2 mt-10 flex items-center justify-center gap-5">
+        <div className='flex gap-5 items-center'>
             <Text strong>Plan Name: </Text>
             <span>{plan}</span>
             <Button type="primary" onClick={showPlanModal} className="ml-4">
               Change Plan
             </Button>
-          </div>
+        </div>
+        <Divider style={{  borderColor: '#eeeee4' }} />
+
+        <div className='mb-2 flex items-center gap-5'>
+          <Text strong>Expired Date: </Text>
+          <span style={{ color: '#c0c0c0' }} >{localStorage.getItem('expired_date_email')}</span>
         </div>
         <Divider style={{  borderColor: '#eeeee4' }} />
 
         <div className="mb-2 flex items-center gap-5">
           <Text strong>Company Name or Project Name:</Text>
-          {isEditingCompany ? (
-            <div>
-              <Input 
-                value={companyName} 
-                onChange={(e) => setCompanyName(e.target.value)} 
-              />
-            </div>
-          ) : (
             <div style={{ color: '#c0c0c0' }}  >{companyName}</div>
-          )}
           <Button 
             icon={<EditOutlined />} 
-            onClick={toggleEditCompany} 
-             
+            onClick={onOpenModalEdit} 
           />
         </div>
         <Divider style={{  borderColor: '#eeeee4' }} />
 
         <div className="mb-2 flex items-center gap-5">
           <Text strong>Registered Emails to receive CV screening results from the smart emails:</Text>
-          {isEditingEmail ? (
-            <div>
-              <Input 
-                value={receivedEmail} 
-                onChange={(e) => setReceivedEmail(e.target.value)} 
-                 
-              />
-          </div>
-          ) : (
             <div style={{ color: '#c0c0c0' }}  >{receivedEmail}</div>
-          )}
           <Button 
             icon={<EditOutlined />} 
-            onClick={toggleEditEmail} 
+            onClick={onOpenModalEdit} 
              
           />
-        </div>
-        <Divider style={{  borderColor: '#eeeee4' }} />
-
-        <div className='mb-2 flex items-center gap-5'>
-          <Text strong>Initial Signed-Up Emails: </Text>
-          <span style={{ color: '#c0c0c0' }} >{registeredEmail}</span>
         </div>
         <Divider style={{  borderColor: '#eeeee4' }} />
 
@@ -209,27 +198,67 @@ const AccountSettings: React.FC = () => {
           <Button type="primary" danger onClick={handleDeleteAccount}>
             Delete My Account
           </Button>
-
-          {isSendOtp && (
-            <Button type="primary" onClick={handleSendOtp} className="mb-4">
-              Confirm Change
-            </Button>
-          )}
         </div>
-      {/* </Card> */}
+      <Modal
+        title="Edit Account"
+        visible={isSendOtp}
+        footer={[
+          <CustomButton
+            key="back"
+            onClick={handleModalEditCancel}
+            classNameCustom="outline outline-0 bg-gray-200 text-gray-800 hover:bg-gray-300"
+          >
+            Back
+          </CustomButton>,
+          <CustomButton key="submit" onClick={handleSendOtp} classNameCustom="ml-6" loading={isLoadingEdit}>
+            Submit
+          </CustomButton>
+        ]}
+      >
+        <div className='flex flex-col gap-5'>
+         <div>
+            <div className='mb-2'><Text strong>Company Name or Project Name: </Text></div>
+            <Input 
+              value={companyName} 
+              onChange={(e) => setCompanyName(e.target.value)} 
+            />
+         </div>
+          <div>
+            <div className='mb-2'><Text strong>Registered Emails to receive CV screening results from the smart emails: </Text></div>
+            <Input 
+              value={receivedEmail} 
+              onChange={(e) => setReceivedEmail(e.target.value)} 
+            />
+          </div>
+        </div>
+      </Modal>
+
       <Modal
         title="Enter OTP"
         visible={openModalOtp}
-        onOk={handleModalOk}
-        onCancel={handleModalCancel}
+        // onOk={handleModalOk}
+        // onCancel={handleModalCancel}
+        footer={[
+          <CustomButton
+            key="back"
+            onClick={handleModalCancel}
+            classNameCustom="outline outline-0 bg-gray-200 text-gray-800 hover:bg-gray-300"
+          >
+            Back
+          </CustomButton>,
+          <CustomButton key="submit" onClick={handleModalOk} classNameCustom="ml-6" loading={isLoadingOtp}>
+            Submit
+          </CustomButton>
+        ]}
       >
+         <div className='mb-2'><Text strong>We've sent a 6-digit code to your email. The code expires shortly, so please enter it soon.</Text></div>
         <Input.OTP
           value={otp}
           formatter={str => str.toUpperCase()}
           {...sharedProps}
         />
       </Modal>
-      <ModalPlan visible={isPlanModalVisible} onClose={hidePlanModal} />
+      <ModalPlan visible={isPlanModalVisible} onClose={hidePlanModal} email={registeredEmail} />
 
       <PopupModal isVisible = {isModalVisible} hideModal={hideModal} confirm = { deleteUser } loading = {loadingPopup} title='Are you sure to delete your account?'/>
     </div>
