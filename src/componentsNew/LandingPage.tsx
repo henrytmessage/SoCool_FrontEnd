@@ -59,7 +59,7 @@ const LandingPage = () => {
         <Alert
           description={
             <>
-              Please submit your CV to 
+              Please submit your CV (in either PDF or DOC format) to 
               <span className="font-semibold mx-1">{mailAlias}</span> 
             </>
           }
@@ -70,7 +70,7 @@ const LandingPage = () => {
           <li>
            - After receiving your CV, we will notify you of the results within a maximum of 3 days. Please only apply once to avoid being marked as spam.
           </li>
-          <li>{`- This link will expire after ${expireDate}`}</li>
+          <li>{`- The application deadline for this position is ${expireDate}`}</li>
         </ul>
         </div>
       </Card>

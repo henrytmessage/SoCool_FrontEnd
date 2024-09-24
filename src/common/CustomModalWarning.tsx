@@ -42,7 +42,7 @@ const CustomModalWarning: React.FC<IModalSuccessProps> = ({
         }
         extra={[
           <div className='flex justify-around' key={textButtonConfirm}>
-          <Button type="default" key={titleWarning} onClick={handleCancel}>
+          <Button type="primary" key={titleWarning} onClick={handleCancel}>
             Cancel
           </Button>
           <Button key={textButtonConfirm} onClick={handleConfirm}>

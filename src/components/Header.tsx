@@ -107,7 +107,7 @@ const Header = () => {
                 <div className='text-left'>
                 {/* <CaretDownOutlined className="ml-4" /> */}
                 {/* <img src={avatar} alt="Dropdown icon" style={{ width: '50px', height: '50px' }} /> */}
-                <Text strong>{email}</Text>
+                <Text strong>{email && email.length > 15 ? `${email.substring(0, 15)}...` : email}</Text>
                 <div className="flex items-left cursor-pointer">
                   <span>{`${currentEmail}/${maxEmail} smart emails`}</span>
                 </div>
