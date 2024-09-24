@@ -50,11 +50,7 @@ export const isExpired = (date:string):boolean =>{
     
     const parsedDate = dayjs(date);
     
-    if (parsedDate.isBefore(now)) {
-      return false
-    } else {
-      return true
-    }
+    return parsedDate.isBefore(now);
     
   }catch(error){
     return true

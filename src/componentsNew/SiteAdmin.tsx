@@ -24,6 +24,10 @@ const SiteAdminPage = () => {
   const [isLoadingOtp, setLoadingOtp] = useState(false)
   const registeredEmail = localStorage.getItem('email');
   const [otp, setOtp] = useState('')
+  const [currentPackage, setCurrentPackage] = useState('')
+  const [currentStatus, setCurrentStatus] = useState('')
+  const [loadingStatus, setLoadingStatus] = useState(false)
+  const [loadingPlan, setLoadingPlan] = useState(false)
 
 
   const handleChangePlan = async (newPackage:string, index:number) =>{
@@ -60,11 +64,16 @@ const SiteAdminPage = () => {
     }
   }
 
-  const handleSendOtp = async () => {
+  const handleSendOtp = async (newType:string) => {
     try {
+      if (type == 'CHANGE_PLAN'){
+        setLoadingPlan(true)
+      }else{
+        setLoadingStatus(true)
+      }
       const data = await postAuthOTP({
         email: registeredEmail || '',
-        type: type
+        type: newType
       })
       if(data.status_code === 200) {
         message.success('OTP sent to your email!');
@@ -75,7 +84,11 @@ const SiteAdminPage = () => {
     } catch (error) {
       console.log(error);
     }finally{
-      
+      if (type == 'CHANGE_PLAN'){
+        setLoadingPlan(false)
+      }else{
+        setLoadingStatus(false)
+      }
     }
   };
 
@@ -84,10 +97,12 @@ const SiteAdminPage = () => {
   }
 
   const handleModalOk = () =>{
+    setOpenModalOtp(false)
+    setOtp('')
     if (type == 'CHANGE_PLAN'){
-      handleChangePlan(data[currentIndex].package, currentIndex)
+      handleChangePlan(currentPackage, currentIndex)
     }else{
-      changeUserStatus(data[currentIndex].status,data[currentIndex].id)
+      changeUserStatus(currentStatus,data[currentIndex].id, currentIndex)
     }
   }
 
@@ -110,7 +125,7 @@ const SiteAdminPage = () => {
           const user:IUserInfo = {
             id:item.id,
             email: item.email,
-            created_date: item.created_date,
+            created_date: item.created_at,
             status: item.status,
             package: item.package,
             project_or_company_name: item.project_or_company_name,
@@ -127,16 +142,30 @@ const SiteAdminPage = () => {
     }
   }
 
-  const changeUserStatus = async (status:string, user_id:number) => {
+  const changeUserStatus = async (status:string, user_id:number, index: number) => {
     try{
       const response = await changeUserStatusService({
         user_status: status,
         user_id: user_id
       })
       if (response.status_code == 200){
-        message.error('Change status successfully!')
+        if (response?.data?.affected == 1){
+          let newData:IUserInfo[]= []
+          for(const item of data){
+            if (item.id == data[index].id){
+              item.status = status
+            }
+            newData.push(item)
+          }
+          setData(newData)
+
+          message.success('Change status successfully!')
+
+        }else{
+          message.error('Change status fail!')
+        }
       }else{
-        message.error('Change status fail!')
+        message.error(response?.errors?.message)
       }
     }catch(error){
       console.error(error);
@@ -182,9 +211,9 @@ const SiteAdminPage = () => {
             return {
               ...item,
               onClick: () => {
-                setType('CHANGE_PLAN')
+                setCurrentPackage(typeof item.label === 'string' ? item.label : '')
                 setCurrentIndex(count)
-                handleSendOtp()
+                handleSendOtp('CHANGE_PLAN')
               }
             };
           }
@@ -199,7 +228,7 @@ const SiteAdminPage = () => {
   const dropdown = (index:number) => {
     return (
       <Dropdown menu={{ items: getMenu(index) }} placement="bottomRight" arrow>
-        <Button className="py-6 px-2">
+        <Button className="py-6 px-2" loading = {loadingPlan}>
           <>
             <CaretDownOutlined className="ml-2" />
           </>
@@ -232,9 +261,9 @@ const SiteAdminPage = () => {
             return {
               ...item,
               onClick: () => {
-                setType('CHANGE_STATUS')
+                setCurrentStatus(typeof item.label === 'string' ? item.label : '')
                 setCurrentIndex(count)
-                handleSendOtp()
+                handleSendOtp('CHANGE_STATUS')
               }
             };
           }
@@ -249,7 +278,7 @@ const SiteAdminPage = () => {
   const dropdownStatus = (index:number) => {
     return (
       <Dropdown menu={{ items: getMenuStatus(index) }} placement="bottomRight" arrow>
-        <Button className="py-6 px-2">
+        <Button className="py-6 px-2" loading= {loadingStatus}>
           <>
             <CaretDownOutlined className="ml-2" />
           </>
@@ -298,7 +327,7 @@ const SiteAdminPage = () => {
                       {user.project_or_company_name}
                     </td>
                     <td className="border border-gray-300 p-4">
-                      {isExpired(user.expiration_date) ? 'Expired' : 'Valid'}
+                      {isExpired(user.expiration_date) == true ? 'Expired' : 'Valid'}
                     </td>
                     <td className="border border-gray-300 p-4">
                       {user.package}
@@ -337,7 +366,7 @@ const SiteAdminPage = () => {
           const user:IUserInfo = {
             id:item.id,
             email: item.email,
-            created_date: item.created_date,
+            created_date: item.created_at,
             status: item.status,
             package: item.package,
             project_or_company_name: item.project_or_company_name,
@@ -400,19 +429,13 @@ const SiteAdminPage = () => {
         // onOk={handleModalOk}
         onCancel={handleModalCancel}
         footer={[
-          <CustomButton
-            key="back"
-            onClick={handleModalCancel}
-            classNameCustom="outline outline-0 bg-gray-200 text-gray-800 hover:bg-gray-300"
-          >
-            Back
-          </CustomButton>,
+        
           <CustomButton key="submit" onClick={handleModalOk} classNameCustom="ml-6" loading={isLoadingOtp}>
             Submit
           </CustomButton>
         ]}
       >
-         <div className='mb-4'><Text strong><div>We need to verify your email to approve the request for updating the information.</div></Text>
+         <div className='mb-4'><Text strong><div>We need to verify your email to approve the request for the admin permission.</div></Text>
          <div className='mt-2'><Text>We've sent a 6-digit code to <Text strong>{registeredEmail}</Text>. The code expires shortly, so please enter it soon.</Text></div>
          </div>
          
