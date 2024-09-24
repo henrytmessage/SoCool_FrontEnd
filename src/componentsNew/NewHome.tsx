@@ -416,6 +416,15 @@ const NewHome: React.FC = () => {
     setJobCloseDate(dateString.toString())
   };
 
+  const disabledDate: DatePickerProps['disabledDate'] = (current) => {
+    const today = dayjs().startOf('day');
+    const ninetyDaysFromToday = dayjs().add(90, 'days').endOf('day');
+    return (
+      (current && current < today) || // Disable các ngày trước hôm nay
+      (current && current > ninetyDaysFromToday) // Disable các ngày sau 90 ngày từ hôm nay
+    );
+  };
+
   const onFinishStep3 = (values: any) => {
     
     const newAnswersWithIds2 = questions2.map((question, index) => ({
@@ -1003,7 +1012,7 @@ const NewHome: React.FC = () => {
                   name="choose job posting close"
                   rules={[{ required: true, message: 'Please input this job posting close!'}]}
                 >
-                  <DatePicker onChange={onChangeJobClose} />
+                  <DatePicker onChange={onChangeJobClose} disabledDate={disabledDate}/>
                 </Form.Item>
 
                 <Form.Item
