@@ -41,8 +41,24 @@ export const formatDate = (date:string) => {
   }catch(error){
     console.log(error)
     return ''
+  }  
+}
+
+export const isExpired = (date:string):boolean =>{
+  try{
+    const now = dayjs();
+    
+    const parsedDate = dayjs(date);
+    
+    if (parsedDate.isBefore(now)) {
+      return false
+    } else {
+      return true
+    }
+    
+  }catch(error){
+    return true
   }
-  
 }
 
 export const isNotEmpty = (text:string): boolean => {

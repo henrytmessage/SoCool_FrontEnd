@@ -48,6 +48,7 @@ const AccountSettings: React.FC = () => {
       setIsLoadingEdit(true)
       const data = await postAuthOTP(bodyAuthOTP)
       if(data.status_code === 200) {
+        setOpenModalOtp(true)
         message.success('OTP sent to your email!');
         setIsSendOtp(false)
       } else {
@@ -56,7 +57,6 @@ const AccountSettings: React.FC = () => {
     } catch (error) {
       console.log(error);
     }finally{
-      setOpenModalOtp(true)
       setIsLoadingEdit(false)
     }
   };

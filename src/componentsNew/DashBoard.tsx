@@ -71,12 +71,12 @@ const DashBoardPage = () => {
                 <th className="border border-gray-300 p-2  ">Smart Email</th>
                 <th className="border border-gray-300 p-2 ">Job Title</th>
                 <th className="border border-gray-300 p-2  ">Landing Page</th>
-                <th className="border border-gray-300 p-2  ">Plublished Date</th>
+                <th className="border border-gray-300 p-2  ">Published Date</th>
                 <th className="border border-gray-300 p-2  ">End Date</th>
-                <th className="border border-gray-300 p-2  ">No.Submited CV</th>
-                <th className="border border-gray-300 p-2  ">No.Not-Decide CV</th>
-                <th className="border border-gray-300 p-2 ">No.Accepted CV</th>
-                <th className="border border-gray-300 p-2  ">No.Rejected CV</th>
+                <th className="border border-gray-300 p-2  ">Submited CV</th>
+                <th className="border border-gray-300 p-2  ">Not-Decide CV</th>
+                <th className="border border-gray-300 p-2 ">Accepted CV</th>
+                <th className="border border-gray-300 p-2  ">Rejected CV</th>
                 <th className=" p-2 w-[50px]"></th>
               </tr>
             </thead>
@@ -91,7 +91,11 @@ const DashBoardPage = () => {
                     {info.job_title}
                     </td>
                     <td className="border border-gray-300 p-4 text-center align-middle">
-                    {info.landing_page}
+                      <div>
+                      <a href={info.landing_page} target="_blank" rel="noopener noreferrer" style={{ color: 'blue' }}>
+                         {info.landing_page}
+                      </a>
+                      </div>
                     </td>
                     <td className="border border-gray-300 p-4 text-center align-middle">
                     {info.published_date}

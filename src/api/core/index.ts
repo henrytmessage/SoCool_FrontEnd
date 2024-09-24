@@ -24,6 +24,7 @@ import {
   ISearchUser,
   IUpdateAccountSetting,
   IUpdatePlan,
+  IUserStatus,
 } from './interface'
 
 // vi du
@@ -165,4 +166,8 @@ export const findUserByEmail = (body: ISearchUser) =>{
 
 export const deleteUser = () =>{
   return axiosInstance.post('/user/delete-user')
+}
+
+export const changeUserStatus = (body:IUserStatus) =>{
+  return axiosInstance.post('/user/change-status',body)
 }

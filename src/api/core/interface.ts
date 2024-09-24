@@ -148,10 +148,9 @@ export interface IGetAllUser{
 export interface IUserInfo{
   id:number,
   email:string,
-  phone:string,
-  full_name:string,
+  created_date:string,
+  status:string,
   project_or_company_name:string,
-  notification_email:string,
   package:string,
   expiration_date:string
 }
@@ -163,4 +162,9 @@ export interface IUpdatePlan{
 
 export interface ISearchUser{
   search: string
+}
+
+export interface IUserStatus{
+  user_status: string,
+  user_id: number
 }

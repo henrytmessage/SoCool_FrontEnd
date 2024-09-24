@@ -51,7 +51,7 @@ const LoginPage: React.FC = () => {
           localStorage.setItem('expired_date_email', formatDate(data?.data?.exp));
           localStorage.setItem('is_admin',data?.data?.is_admin)
           localStorage.setItem('email',data?.data?.email)
-          if (data?.data?.require_project_or_company_name == true){
+          if (data?.data?.require_project_or_company_name == true || data?.data?.require_project_or_company_name == 'true'){
             navigate('/companyOrProduct');
           }else{
             navigate('/')
