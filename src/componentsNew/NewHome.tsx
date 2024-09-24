@@ -1109,12 +1109,12 @@ const NewHome: React.FC = () => {
   const wrapLogin = () => {
     return (
       <div className="flex gap-5 justify-center items-center">
-        <CustomButton classNameCustom='px-8' type="primary" onClick={OnClickNavigateLogin}>
-                Sign in
-              </CustomButton>
         <CustomButtonBorder type="primary" onClick={OnClickNavigateSignUp}>
                 Create new account
               </CustomButtonBorder>
+        <CustomButton classNameCustom='px-8' type="primary" onClick={OnClickNavigateLogin}>
+                Sign in
+              </CustomButton>
       </div>
     );
   }
