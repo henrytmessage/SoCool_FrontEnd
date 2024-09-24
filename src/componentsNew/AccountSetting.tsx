@@ -24,6 +24,7 @@ const AccountSettings: React.FC = () => {
   const navigate = useNavigate();
   const [isLoadingEdit, setIsLoadingEdit] = useState(false)
   const [isLoadingOtp, setIsLoadingOtp] = useState(false)
+  const [type,setType] = useState('')
 
   const showPlanModal = () => {
     setIsPlanModalVisible(true);
@@ -38,6 +39,7 @@ const AccountSettings: React.FC = () => {
   };
 
   const handleSendOtp = async () => {
+    setType('CHANGE_NOTIFY_EMAIL') 
     const bodyAuthOTP = {
       email: registeredEmail,
       type: 'CHANGE_NOTIFY_EMAIL'
@@ -47,15 +49,39 @@ const AccountSettings: React.FC = () => {
       const data = await postAuthOTP(bodyAuthOTP)
       if(data.status_code === 200) {
         message.success('OTP sent to your email!');
-        setOpenModalOtp(true)
         setIsSendOtp(false)
       } else {
         message.error(data.errors?.message);
       }
-      setIsLoadingEdit(false)
     } catch (error) {
       console.log(error);
+    }finally{
+      setOpenModalOtp(true)
       setIsLoadingEdit(false)
+    }
+  };
+
+  const handleSendOtpDelete = async () => {
+    setType('DELETE_USER') 
+    const bodyAuthOTP = {
+      email: registeredEmail,
+      type: 'DELETE_USER'
+    }
+    try {
+      setLoadingPopup(true)
+      const data = await postAuthOTP(bodyAuthOTP)
+      if(data.status_code === 200) {
+        message.success('OTP sent to your email!');
+        // setIsSendOtp(false)
+        
+      } else {
+        message.error(data.errors?.message);
+      }
+    } catch (error) {
+      console.log(error);
+    }finally{
+      setOpenModalOtp(true)
+      setLoadingPopup(false)
     }
   };
 
@@ -68,13 +94,27 @@ const AccountSettings: React.FC = () => {
     }
     try {
       setIsLoadingOtp(true)
-      const data = await postUpdateAccountSettingService(bodyUpdateAccount)
-      if(data.status_code === 200) {
-        message.success('Update account setting successful!');
-        setOpenModalOtp(false)
-      } else {
-        message.error(data.errors?.message);
+      let data 
+      if (type == ''){
+        data = await postUpdateAccountSettingService(bodyUpdateAccount)
+        if(data.status_code === 200) {
+          message.success('Update account setting successful!');
+          setOpenModalOtp(false)
+        } else {
+          message.error(data.errors?.message);
+        }
+      }else{
+        data = await deleteUserService()
+        if(data.status_code === 200) {
+          message.success('Your account have been deleted!');
+          localStorage.clear(); 
+          navigate('/login'); 
+          setOpenModalOtp(false)
+        } else {
+          message.error(data.errors?.message);
+        }
       }
+      
       setIsLoadingOtp(false)
     } catch (error) {
       console.log(error);
@@ -262,7 +302,7 @@ const AccountSettings: React.FC = () => {
       </Modal>
       <ModalPlan visible={isPlanModalVisible} onClose={hidePlanModal} email={registeredEmail} />
 
-      <PopupModal isVisible = {isModalVisible} hideModal={hideModal} confirm = { deleteUser } loading = {loadingPopup} title='Are you sure to delete your account?'/>
+      <PopupModal isVisible = {isModalVisible} hideModal={hideModal} confirm = { handleSendOtpDelete } loading = {loadingPopup} title='Are you sure to delete your account?'/>
     </div>
   );
 };
