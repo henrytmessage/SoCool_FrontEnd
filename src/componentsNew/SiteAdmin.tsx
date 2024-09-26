@@ -1,4 +1,4 @@
-import { Button, Dropdown, Form, Input, MenuProps, message, Modal, Typography } from "antd";
+import { Button, Dropdown, Form, Input, MenuProps, message, Modal, Spin, Typography } from "antd";
 import { useEffect, useState } from "react";
 import { changeUserStatusService, findUserByEmailService, getAllUserService, getCurrentRoleService, postAuthOTP, updatePlanService } from "../service";
 import { ROLE } from "../constant";
@@ -15,7 +15,6 @@ const { Title, Text } = Typography;
 const SiteAdminPage = () => {
   const [form] = Form.useForm();
   const [admin, setAdmin] = useState(false)
-  const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState(10)
   const [data, setData] = useState<IUserInfo[]>([])
   const [email, setEmail] = useState('');  
@@ -29,7 +28,8 @@ const SiteAdminPage = () => {
   const [currentStatus, setCurrentStatus] = useState('')
   const [loadingStatus, setLoadingStatus] = useState(false)
   const [loadingPlan, setLoadingPlan] = useState(false)
-  const [onSelect, setOnSelect] = useState<string[]>(['normal','normal','normal','normal','normal'])
+  const [loading,setLoading] = useState(false)
+  const [onSelect, setOnSelect] = useState<string[]>(['isSelected','normal','normal','normal','normal'])
 
 
 
@@ -114,10 +114,14 @@ const SiteAdminPage = () => {
     setEmail(event.target.value);  
   };
 
-  const handleSearch = async () => {
+  const handleSearch = async (newPage:number) => {
     try{
+      setLoading(true)
       const response = await findUserByEmailService({
-        search: email
+
+        search: email,
+        page: newPage,
+        page_size: pageSize
       })
 
       if (response?.status_code == 200){
@@ -142,6 +146,8 @@ const SiteAdminPage = () => {
       }
     }catch(error){
       console.error(error);
+    }finally{
+      setLoading(false)
     }
   }
 
@@ -355,10 +361,11 @@ const SiteAdminPage = () => {
     
   }
 
-  const getAllUser = async () => {
+  const getAllUser = async (newPage:number) => {
     try{
+      setLoading(true)
       const response = await getAllUserService({
-        page: page,
+        page: newPage,
         page_size: pageSize
       })
 
@@ -384,11 +391,12 @@ const SiteAdminPage = () => {
 
     }catch(error){
       console.error(error);
+    }finally{
+      setLoading(false)
     }
   }
 
   const getUserByPage = async(newPage:number) => {
-    console.log(newPage)
     if (newPage == 1){
       setOnSelect(['isSelected','normal','normal','normal','normal'])
     }else if (newPage == 2){
@@ -400,8 +408,7 @@ const SiteAdminPage = () => {
     }else if (newPage == 5){
       setOnSelect(['normal','normal','normal','normal','isSelected'])
     }
-    setPage(newPage)
-    getAllUser()
+    getAllUser(newPage)
   }
 
   useEffect(() => {
@@ -412,7 +419,7 @@ const SiteAdminPage = () => {
           const data = response?.data 
           if (data == ROLE.ADMIN){
             setAdmin(true)
-            await getAllUser()
+            await getAllUser(1)
           }
         }
       }catch(error){
@@ -432,7 +439,7 @@ const SiteAdminPage = () => {
         className='md:w-[400px]'
         onChange={handleChange}
       />
-      <CustomButton classNameCustom="ml-10 mt-5" key='button' onClick={handleSearch}>
+      <CustomButton classNameCustom="ml-10 mt-5" key='button' onClick={ () => handleSearch(1)}>
               Search
       </CustomButton>
     </div>
@@ -484,7 +491,7 @@ const SiteAdminPage = () => {
           {...sharedProps}
         />
       </Modal>
-
+      {loading == true ? (<div className="flex items-center justify-center h-screen" ><Spin></Spin></div>): <></>}
   </div>);
 
 }

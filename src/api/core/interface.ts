@@ -161,7 +161,9 @@ export interface IUpdatePlan{
 }
 
 export interface ISearchUser{
-  search: string
+  search: string,
+  page: number,
+  page_size: number
 }
 
 export interface IUserStatus{
