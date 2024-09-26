@@ -153,6 +153,8 @@ export interface IUserInfo{
   project_or_company_name:string,
   package:string,
   expiration_date:string
+  link_created:number,
+  received_cv:number
 }
 
 export interface IUpdatePlan{

@@ -1,6 +1,6 @@
 import { Button, Dropdown, Form, Input, MenuProps, message, Modal, Spin, Typography } from "antd";
 import { useEffect, useState } from "react";
-import { changeUserStatusService, findUserByEmailService, getAllUserService, getCurrentRoleService, postAuthOTP, updatePlanService } from "../service";
+import { changeUserStatusService, findUserByEmailService, getAllUserService, getCurrentRoleService, getUserTotalService, postAuthOTP, updatePlanService } from "../service";
 import { ROLE } from "../constant";
 import { IUserInfo } from "../api/core/interface";
 import { CaretDownOutlined, DownOutlined } from "@ant-design/icons";
@@ -15,7 +15,7 @@ const { Title, Text } = Typography;
 const SiteAdminPage = () => {
   const [form] = Form.useForm();
   const [admin, setAdmin] = useState(false)
-  const [pageSize, setPageSize] = useState(10)
+  const [pageSize, setPageSize] = useState(50)
   const [data, setData] = useState<IUserInfo[]>([])
   const [email, setEmail] = useState('');  
   const [openModalOtp, setOpenModalOtp] = useState(false)
@@ -30,6 +30,7 @@ const SiteAdminPage = () => {
   const [loadingPlan, setLoadingPlan] = useState(false)
   const [loading,setLoading] = useState(false)
   const [onSelect, setOnSelect] = useState<string[]>(['isSelected','normal','normal','normal','normal'])
+  const [userTotal, setUserTotal] = useState(0)
 
 
 
@@ -136,7 +137,9 @@ const SiteAdminPage = () => {
             status: item.status,
             package: item.package,
             project_or_company_name: item.project_or_company_name,
-            expiration_date: item.expiration_date
+            expiration_date: item.expiration_date,
+            received_cv: item.received_cv,
+            link_created:item.link_created
           }
           list.push(user)
         }
@@ -317,6 +320,8 @@ const SiteAdminPage = () => {
                 <th className="border border-gray-300 p-2  ">Change plan</th>
                 <th className="border border-gray-300 p-2  ">User status</th>
                 <th className="border border-gray-300 p-2  ">Change user status</th>
+                <th className="border border-gray-300 p-2  ">No created email</th>
+                <th className="border border-gray-300 p-2  ">No submited CV</th>
               </tr>
             </thead>
             <tbody>
@@ -350,6 +355,12 @@ const SiteAdminPage = () => {
                     <td className="border border-gray-300 p-4">
                       {dropdownStatus(index)}
                     </td>
+                    <td className="border border-gray-300 p-4">
+                      {user.link_created}
+                    </td>
+                    <td className="border border-gray-300 p-4">
+                      {user.received_cv}
+                    </td>
                   </tr>
                 ))
               }
@@ -380,7 +391,9 @@ const SiteAdminPage = () => {
             status: item.status,
             package: item.package,
             project_or_company_name: item.project_or_company_name,
-            expiration_date: item.expiration_date
+            expiration_date: item.expiration_date,
+            received_cv: item.received_cv,
+            link_created:item.link_created
           }
           list.push(user)
 
@@ -426,6 +439,21 @@ const SiteAdminPage = () => {
         console.error(error);
       }
     }
+
+    const getUserTotal = async () =>{
+      try{
+        const response = await getUserTotalService()
+        if (response?.status_code == 200){
+          const data = response?.data 
+          console.log(data)
+          setUserTotal(data)
+        }
+      }catch(error){
+        console.error(error);
+      }
+    }
+
+    getUserTotal()
     getCurrentRole()
   },[])
 
@@ -444,7 +472,8 @@ const SiteAdminPage = () => {
       </CustomButton>
     </div>
     <div className="mt-5">
-    <StatusButton onClick={ () => getUserByPage(1)} status={onSelect[0]}>
+    <Text strong>Total user ({userTotal})</Text>
+    <StatusButton classNameCustom="ml-5" onClick={ () => getUserByPage(1)} status={onSelect[0]}>
               1
       </StatusButton> 
       <StatusButton classNameCustom="ml-5"  onClick={ () => getUserByPage(2)} status={onSelect[1]}>

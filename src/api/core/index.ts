@@ -171,3 +171,7 @@ export const deleteUser = () =>{
 export const changeUserStatus = (body:IUserStatus) =>{
   return axiosInstance.post('/user/change-status',body)
 }
+
+export const getUserTotal = () =>{
+  return axiosInstance.get('/user/count-all-users')
+}

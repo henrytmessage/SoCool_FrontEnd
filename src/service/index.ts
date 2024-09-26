@@ -1,4 +1,4 @@
-import { changeUserStatus, deleteUser, findUserByEmail, getAccountSetting, getAliasInfos, getAllUser, getApiExample, getConversation, getConversationList, getCurrentRole, getDetailConversation, getJobDescription, getLink, postAuthOtp, postAuthRegister, postConversation, postConversationCreateSearchPrice, postConversationCreateTitle, postConversationSendMessage, postCreateLink, postLink, postLinkAnswer, postLinkDeactivate, postLinkGenerateAnswerByAi, postLinkGenerateQuestion, postLinkUploadFile, postLogin, postLoginGoogle, postLogout, postSaveCompanyOrProjectName, postSendEmailRunOnRice, postUpdateAccountSetting, removeAlias, updatePlan } from "../api/core";
+import { changeUserStatus, deleteUser, findUserByEmail, getAccountSetting, getAliasInfos, getAllUser, getApiExample, getConversation, getConversationList, getCurrentRole, getDetailConversation, getJobDescription, getLink, getUserTotal, postAuthOtp, postAuthRegister, postConversation, postConversationCreateSearchPrice, postConversationCreateTitle, postConversationSendMessage, postCreateLink, postLink, postLinkAnswer, postLinkDeactivate, postLinkGenerateAnswerByAi, postLinkGenerateQuestion, postLinkUploadFile, postLogin, postLoginGoogle, postLogout, postSaveCompanyOrProjectName, postSendEmailRunOnRice, postUpdateAccountSetting, removeAlias, updatePlan } from "../api/core";
 import { IBodyAuthOTP, IBodyAuthRegister, IBodyConversation, IBodyConversationList, IBodyCreateLink, IBodyCreateSearchPrice, IBodyCreateTitle, IBodyDetailConversation, IBodyGenerateAnswerByAi, IBodyGenerateQuestion, IBodyGetJob, IBodyLinkAnswer, IBodyPostLink, IBodySendEmailRunOnRice, IBodySendMessage, ICompanyProject, IGetAllUser, ILogin, ILoginGoogle, IRemoveAlias, ISearchUser, IUpdateAccountSetting, IUpdatePlan, IUserStatus } from "../api/core/interface";
 
 export const getExample = async (messageChat: string) => {
@@ -335,6 +335,16 @@ export const deleteUserService = async () => {
 export const changeUserStatusService = async (body:IUserStatus) => {
   try{
     const response = await changeUserStatus(body)
+    return response?.data
+  }catch(error){
+    console.error('Error fetching data:', error);
+    throw error;
+  }
+}
+
+export const getUserTotalService = async () => {
+  try{
+    const response = await getUserTotal()
     return response?.data
   }catch(error){
     console.error('Error fetching data:', error);
