@@ -491,7 +491,7 @@ const SiteAdminPage = () => {
           {...sharedProps}
         />
       </Modal>
-      {loading == true ? (<div className="flex items-center justify-center h-screen" ><Spin></Spin></div>): <></>}
+      <div className="flex items-center justify-center h-screen" ><Spin spinning = {loading}></Spin></div>
   </div>);
 
 }
