@@ -8,6 +8,7 @@ import { MenuItemType } from "antd/es/menu/interface";
 import { CustomButton } from "../common";
 import { formatDate, isExpired } from "../function";
 import { OTPProps } from "antd/es/input/OTP";
+import StatusButton from "../components/StatusButton";
 
 const { Title, Text } = Typography;
 
@@ -28,6 +29,8 @@ const SiteAdminPage = () => {
   const [currentStatus, setCurrentStatus] = useState('')
   const [loadingStatus, setLoadingStatus] = useState(false)
   const [loadingPlan, setLoadingPlan] = useState(false)
+  const [onSelect, setOnSelect] = useState<string[]>(['normal','normal','normal','normal','normal'])
+
 
 
   const handleChangePlan = async (newPackage:string, index:number) =>{
@@ -384,6 +387,23 @@ const SiteAdminPage = () => {
     }
   }
 
+  const getUserByPage = async(newPage:number) => {
+    console.log(newPage)
+    if (newPage == 1){
+      setOnSelect(['isSelected','normal','normal','normal','normal'])
+    }else if (newPage == 2){
+      setOnSelect(['normal','isSelected','normal','normal','normal'])
+    }else if (newPage == 3){
+      setOnSelect(['normal','normal','isSelected','normal','normal'])
+    }else if (newPage == 4){
+      setOnSelect(['normal','normal','normal','isSelected','normal'])
+    }else if (newPage == 5){
+      setOnSelect(['normal','normal','normal','normal','isSelected'])
+    }
+    setPage(newPage)
+    getAllUser()
+  }
+
   useEffect(() => {
     const getCurrentRole = async () =>{
       try{
@@ -416,6 +436,24 @@ const SiteAdminPage = () => {
               Search
       </CustomButton>
     </div>
+    <div className="mt-5">
+    <StatusButton onClick={ () => getUserByPage(1)} status={onSelect[0]}>
+              1
+      </StatusButton> 
+      <StatusButton classNameCustom="ml-5"  onClick={ () => getUserByPage(2)} status={onSelect[1]}>
+              2
+      </StatusButton>
+      <StatusButton classNameCustom="ml-5"  onClick={ () => getUserByPage(3)} status={onSelect[2]}>
+              3
+      </StatusButton>
+      <StatusButton classNameCustom="ml-5" onClick={ () => getUserByPage(4)}  status={onSelect[3]}>
+              4
+      </StatusButton>
+      <StatusButton classNameCustom="ml-5"onClick={ () => getUserByPage(5)} status={onSelect[4]}>
+              5
+      </StatusButton>
+    </div>
+    
     
     </div>
     
@@ -452,3 +490,5 @@ const SiteAdminPage = () => {
 }
 
 export default SiteAdminPage;
+
+
