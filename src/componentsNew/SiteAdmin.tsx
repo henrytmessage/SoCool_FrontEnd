@@ -472,7 +472,7 @@ const SiteAdminPage = () => {
       </CustomButton>
     </div>
     <div className="mt-5">
-    <Text strong>Total user ({userTotal})</Text>
+    <Text strong>Total users ({userTotal})</Text>
     <StatusButton classNameCustom="ml-5" onClick={ () => getUserByPage(1)} status={onSelect[0]}>
               1
       </StatusButton> 
