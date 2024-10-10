@@ -70,7 +70,8 @@ const SiteAdminPage = () => {
 
   const handleSendOtp = async (newType:string) => {
     try {
-      if (type == 'CHANGE_PLAN'){
+      setType(newType)
+      if (newType == 'CHANGE_PLAN'){
         setLoadingPlan(true)
       }else{
         setLoadingStatus(true)
@@ -88,7 +89,7 @@ const SiteAdminPage = () => {
     } catch (error) {
       console.log(error);
     }finally{
-      if (type == 'CHANGE_PLAN'){
+      if (newType == 'CHANGE_PLAN'){
         setLoadingPlan(false)
       }else{
         setLoadingStatus(false)
