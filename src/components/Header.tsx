@@ -13,7 +13,7 @@ const Header = () => {
   const { t } = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
-  const [currentEmail,setCurrentEmail] = useState(() => localStorage.getItem('current_emails_count') || 0)
+  let currentEmail = localStorage.getItem('current_emails_count') || 0
   const maxEmail = localStorage.getItem('max_emails_count');
   const expiredDate = localStorage.getItem('expired_date_email');
   const admin = localStorage.getItem('is_admin');
@@ -86,7 +86,7 @@ const Header = () => {
 
   useEffect(() => {
     const refresh = () => {
-      setCurrentEmail(localStorage.getItem('current_emails_count') || 0)
+      currentEmail = localStorage.getItem('current_emails_count') || 0
     }
     
     refresh()
