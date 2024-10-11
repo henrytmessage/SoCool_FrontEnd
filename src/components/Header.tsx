@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Avatar, Button, Dropdown, MenuProps, Typography } from 'antd';
@@ -13,7 +13,7 @@ const Header = () => {
   const { t } = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
-  const currentEmail = localStorage.getItem('current_emails_count');
+  const [currentEmail,setCurrentEmail] = useState(() => localStorage.getItem('current_emails_count') || 0)
   const maxEmail = localStorage.getItem('max_emails_count');
   const expiredDate = localStorage.getItem('expired_date_email');
   const admin = localStorage.getItem('is_admin');
@@ -83,6 +83,14 @@ const Header = () => {
       onClick: handleLogout,
     },
   ];
+
+  useEffect(() => {
+    const refresh = () => {
+      setCurrentEmail(localStorage.getItem('current_emails_count') || 0)
+    }
+    
+    refresh()
+  },[])
 
   return (
     <div className="fixed w-full bg-[#F4F4F4] z-50 px-6 shadow-md flex items-center justify-between">

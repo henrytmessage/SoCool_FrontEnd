@@ -511,9 +511,7 @@ const NewHome: React.FC = () => {
         setExpireTime(dayjs(data.data?.exp).format('DD/MM/YYYY'))
         setTempMail(data.data.alias.alias)
         setIsModalSuccess(true)
-        if (currentEmail < maxEmail) {
-          localStorage.setItem('current_emails_count', (currentEmail + 1).toString());
-        }
+        localStorage.setItem('current_emails_count', (currentEmail + 1).toString());
       }
       setIsLoadingGenerate(false)
     } catch (error) {

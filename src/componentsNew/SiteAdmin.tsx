@@ -70,6 +70,7 @@ const SiteAdminPage = () => {
 
   const handleSendOtp = async (newType:string) => {
     try {
+      console.log('newType',newType)
       setType(newType)
       if (newType == 'CHANGE_PLAN'){
         setLoadingPlan(true)
@@ -104,6 +105,7 @@ const SiteAdminPage = () => {
   const handleModalOk = () =>{
     setOpenModalOtp(false)
     setOtp('')
+    console.log('handleModalOk', type)
     if (type == 'CHANGE_PLAN'){
       handleChangePlan(currentPackage, currentIndex)
     }else{
