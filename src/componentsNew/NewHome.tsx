@@ -512,11 +512,14 @@ const NewHome: React.FC = () => {
         setTempMail(data.data.alias.alias)
         setIsModalSuccess(true)
         localStorage.setItem('current_emails_count', (currentEmail + 1).toString());
+      }else{
+        message.error(data.errors?.message);
       }
       setIsLoadingGenerate(false)
     } catch (error) {
+      console.log(error)
       setIsLoadingGenerate(false)
-      console.error('Error fetching data:', error)
+      message.error('Fail to create new smart email');
     }
   }
 
