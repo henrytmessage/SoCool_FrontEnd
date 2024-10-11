@@ -508,10 +508,16 @@ const NewHome: React.FC = () => {
       setIsLoadingGenerate(true)
       const data = await postCreateLinkService(body)
       if (data.status_code === 200) {
-        setExpireTime(dayjs(data.data?.exp).format('DD/MM/YYYY'))
-        setTempMail(data.data.alias.alias)
-        setIsModalSuccess(true)
-        localStorage.setItem('current_emails_count', (currentEmail + 1).toString());
+
+        if(data.data.alias){
+          setExpireTime(dayjs(data.data?.exp).format('DD/MM/YYYY'))
+          setTempMail(data.data.alias.alias)
+          setIsModalSuccess(true)
+          localStorage.setItem('current_emails_count', (currentEmail + 1).toString());
+        }else{
+          message.error(data?.data?.message);
+        }
+        
       }else{
         message.error(data.errors?.message);
       }
