@@ -54,7 +54,7 @@ const DashBoardPage = () => {
       }catch(error){
         message.error(response.error)
       }finally{
-        setLoadingPopup(true)
+        setLoadingPopup(false)
         hideModal()
       }
     }
