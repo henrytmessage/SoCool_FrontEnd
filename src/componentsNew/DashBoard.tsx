@@ -77,6 +77,7 @@ const DashBoardPage = () => {
                 <th className="border border-gray-300 p-2  ">Not-Decide CV</th>
                 <th className="border border-gray-300 p-2 ">Accepted CV</th>
                 <th className="border border-gray-300 p-2  ">Rejected CV</th>
+                <th className="border border-gray-300 p-2  ">Manual CV</th>
                 <th className=" p-2 w-[50px]"></th>
               </tr>
             </thead>
@@ -114,6 +115,9 @@ const DashBoardPage = () => {
                     </td>
                     <td className="border border-gray-300 p-4 text-center align-middle">
                     {info.no_rejected_cv}
+                    </td>
+                    <td className="border border-gray-300 p-4 text-center align-middle">
+                    {info.no_manual_cv}
                     </td>
                     <td className=" text-center align-middle w-[50px]">
                     {
@@ -159,7 +163,8 @@ const DashBoardPage = () => {
               no_summitted_cv: alias.no_summited_cv,
               no_not_decide_cv: (Number(alias.no_summited_cv) - Number(alias.no_accepted_cv) - Number(alias.no_rejected_cv)).toString(),
               no_accepted_cv: alias.no_accepted_cv,
-              no_rejected_cv: alias.no_rejected_cv
+              no_rejected_cv: alias.no_rejected_cv,
+              no_manual_cv: alias.no_manual_cv
             }
             if (aliasInfo && alias.aliasId){
               aliasInfos.push(aliasInfo)
@@ -174,7 +179,8 @@ const DashBoardPage = () => {
                 no_summitted_cv: '0',
                 no_not_decide_cv: '0',
                 no_accepted_cv: '0',
-                no_rejected_cv: '0'
+                no_rejected_cv: '0',
+                no_manual_cv: '0'
               })
             }
             

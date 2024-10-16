@@ -126,7 +126,8 @@ export interface IAliasInfo{
   no_summitted_cv:string,
   no_not_decide_cv:string,
   no_accepted_cv:string,
-  no_rejected_cv:string
+  no_rejected_cv:string,
+  no_manual_cv:string
 }
 
 export interface IRemoveAlias{
@@ -154,7 +155,8 @@ export interface IUserInfo{
   package:string,
   expiration_date:string
   link_created:number,
-  received_cv:number
+  received_cv:number,
+  manual_cv:number
 }
 
 export interface IUpdatePlan{

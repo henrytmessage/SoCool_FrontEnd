@@ -142,7 +142,8 @@ const SiteAdminPage = () => {
             project_or_company_name: item.project_or_company_name,
             expiration_date: item.expiration_date,
             received_cv: item.received_cv,
-            link_created:item.link_created
+            link_created:item.link_created,
+            manual_cv: item.manual_cv
           }
           list.push(user)
         }
@@ -325,6 +326,7 @@ const SiteAdminPage = () => {
                 <th className="border border-gray-300 p-2  ">Change user status</th>
                 <th className="border border-gray-300 p-2  ">No created email</th>
                 <th className="border border-gray-300 p-2  ">No submited CV</th>
+                <th className="border border-gray-300 p-2  ">No manual CV</th>
               </tr>
             </thead>
             <tbody>
@@ -364,6 +366,9 @@ const SiteAdminPage = () => {
                     <td className="border border-gray-300 p-4">
                       {user.received_cv}
                     </td>
+                    <td className="border border-gray-300 p-4">
+                      {user.manual_cv}
+                    </td>
                   </tr>
                 ))
               }
@@ -396,7 +401,8 @@ const SiteAdminPage = () => {
             project_or_company_name: item.project_or_company_name,
             expiration_date: item.expiration_date,
             received_cv: item.received_cv,
-            link_created:item.link_created
+            link_created:item.link_created,
+            manual_cv: item.manual_cv
           }
           list.push(user)
 
