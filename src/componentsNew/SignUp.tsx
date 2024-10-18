@@ -44,6 +44,7 @@ const SignUpPage: React.FC = () => {
         const data = await postLoginGoogleService(bodyLoginGoogle);
         if (data.status_code === 200) {
           message.success('Logged in with Google successfully!');
+          localStorage.setItem('user_id',data?.data?.user_id)
           localStorage.setItem('access_token', data.data.access_token);
           localStorage.setItem('expired_time', data.data.expired_time);
           localStorage.setItem('refresh_token', data.data.refresh_token);
