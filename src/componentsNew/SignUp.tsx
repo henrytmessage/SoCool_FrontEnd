@@ -56,6 +56,7 @@ const SignUpPage: React.FC = () => {
           localStorage.setItem('email',data?.data?.email)
           if (data?.data?.require_project_or_company_name == true || data?.data?.require_project_or_company_name == 'true'){
             navigate('/companyOrProduct');
+            addScript()
           }else{
             navigate('/')
           }
@@ -71,6 +72,14 @@ const SignUpPage: React.FC = () => {
       message.error('Google login failed!');
     },
   });
+
+  const addScript = () => {
+    const script = document.createElement('script');
+      script.innerHTML = `
+        gtag('event', 'SignUp');
+      `;
+    document.body.appendChild(script);
+  }
 
   return (
     <div className="flex flex-col items-center justify-center px-4 mt-14">

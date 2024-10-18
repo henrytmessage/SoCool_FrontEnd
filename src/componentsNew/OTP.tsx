@@ -60,6 +60,7 @@ const SendOTP: React.FC = () => {
       const data = await postAuthRegisterService(bodyRegister);
       if (data.status_code === 200) {
         message.success('Register successfully!');
+        addScript()
         localStorage.setItem('user_id',data?.data?.user_id)
         localStorage.setItem('access_token', data.data.access_token);
         localStorage.setItem('expired_time', data.data.expired_time);
@@ -80,6 +81,14 @@ const SendOTP: React.FC = () => {
       setLoading(false);
     }
   };
+
+  const addScript = () => {
+    const script = document.createElement('script');
+      script.innerHTML = `
+        gtag('event', 'SignUp');
+      `;
+    document.body.appendChild(script);
+  }
 
   const handleLogin = async (email: string) => {
     setLoading(true);
