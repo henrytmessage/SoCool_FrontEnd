@@ -63,21 +63,22 @@ const LandingPage = () => {
         <Paragraph style={{ whiteSpace: 'pre-wrap' }}>{jobRequirements}</Paragraph>
         <div className='flex gap-4 flex-col'>
         <Alert
-          description={
-            <>
-              Please submit your CV (in either PDF or DOC format) to:  
-              <span className="font-semibold mx-1">{mailAlias}</span> 
-              
-              {/* <div className='ml-20 mt-2 flex justify-center'>  */}
-                <CustomButton classNameCustom='ml-5' key='button' onClick={() => handleCopy(mailAlias)}>
-                  Copy
-                </CustomButton>
-              {/* </div> */}
-            </>
+        description={
+          <div className="flex items-center"> 
+            <span className="flex-grow">
+              Please submit your CV (in either PDF or DOC format) to:
+              <span className="font-semibold mx-1">{mailAlias}</span>
+            </span>
+            <CustomButton classNameCustom="ml-5" key='button' onClick={() => handleCopy(mailAlias)}>
+              Copy
+            </CustomButton>
+          </div>
           }
           type="info"
           showIcon
+          className="flex items-center"  
         />
+
         <ul>
           <li>
            - After receiving your CV, we will notify you of the results within a maximum of 3 days. Please only apply once to avoid being marked as spam.
