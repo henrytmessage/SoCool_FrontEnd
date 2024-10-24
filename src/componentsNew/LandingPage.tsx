@@ -14,7 +14,7 @@ interface JobDetails {
 }
 
 const LandingPage = () => {
-  const code = window.location.search?.substring(1);
+  let code = window.location.search?.substring(1);
 
   const [expireDate, setExpireDate] = useState('')
   const [companyName, setCompanyName] = useState('')
@@ -30,10 +30,14 @@ const LandingPage = () => {
 
   useEffect(() => {
     const getJobDes = async () => {
+      if (code.includes('&')){
+        code = code.split('&')?.[0]
+      }
       const body = {
         code: code
       }
       try {
+        
         const response = await getJobDescriptionService(body);
         console.log("response", response);
         setMailAlias(response?.data?.alias)
