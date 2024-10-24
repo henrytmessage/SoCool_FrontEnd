@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Card, Typography, Divider, Alert } from 'antd';
+import { Card, Typography, Divider, Alert, message } from 'antd';
 import { getJobDescriptionService } from '../service';
 import { formatDate } from '../function';
+import { CustomButton } from '../common';
 
 const { Title, Paragraph } = Typography;
 
@@ -21,6 +22,11 @@ const LandingPage = () => {
   const [jobPosition, getJobPosition] = useState('')
   const [jobResponsibilities, getJobResponsibilities] = useState('')
   const [jobRequirements, setJobRequirements] = useState('')
+
+  const handleCopy = async (mail:string) => {
+    await navigator.clipboard.writeText(mail);
+    message.success('The email has been copied.')
+  }
 
   useEffect(() => {
     const getJobDes = async () => {
@@ -59,8 +65,14 @@ const LandingPage = () => {
         <Alert
           description={
             <>
-              Please submit your CV (in either PDF or DOC format) to 
+              Please submit your CV (in either PDF or DOC format) to:  
               <span className="font-semibold mx-1">{mailAlias}</span> 
+              
+              {/* <div className='ml-20 mt-2 flex justify-center'>  */}
+                <CustomButton classNameCustom='ml-5' key='button' onClick={() => handleCopy(mailAlias)}>
+                  Copy
+                </CustomButton>
+              {/* </div> */}
             </>
           }
           type="info"
