@@ -209,7 +209,7 @@ const AccountSettings: React.FC = () => {
               Change Plan
             </Button>
         </div>
-        <Divider style={{  borderColor: '#eeeee4' }} />
+        {/* <Divider style={{  borderColor: '#eeeee4' }} />
         <div className="mb-2 flex items-center gap-5">
           <Text strong>Company Name or Project Name:</Text>
             <div style={{ color: '#c0c0c0' }}  >{companyName}</div>
@@ -217,7 +217,7 @@ const AccountSettings: React.FC = () => {
             icon={<EditOutlined />} 
             onClick={onOpenModalEdit} 
           />
-        </div>
+        </div> */}
         <Divider style={{  borderColor: '#eeeee4' }} />
 
         <div className="mb-2 flex items-center gap-5">
@@ -254,13 +254,13 @@ const AccountSettings: React.FC = () => {
         ]}
       >
         <div className='flex flex-col gap-5'>
-         <div>
+         {/* <div>
             <div className='mb-2'><Text strong>Company Name or Project Name: </Text></div>
             <Input 
               value={companyName} 
               onChange={(e) => setCompanyName(e.target.value)} 
             />
-         </div>
+         </div> */}
           <div>
             <div className='mb-2'><Text strong>Registered Emails to receive CV screening results from the smart emails: </Text></div>
             <Input 

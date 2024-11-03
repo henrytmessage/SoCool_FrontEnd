@@ -131,13 +131,14 @@ const NewHome: React.FC = () => {
   const [showEmailBox, setShowEmailBox] = useState(false)
   const [uploadJd, setUploadJd] = useState(false)
   const isFirstRender = useRef(true);
+  const [isClickUpload, setClickUpload] = useState(false)
 
   const addValueStep1 = (value: any) => {
     setStatesStep1((prevStates) => [...prevStates, value]);
   };
 
   const updateValueAtIndexStep1 = (index: number, newValue: any, isFinish:boolean = false) => {
-    if (statesStep1[index] == ''){
+    if (statesStep1[index] == '' && isClickUpload !== true){
       scrollToBottom()
     }
     setStatesStep1((prevStates) =>
@@ -170,6 +171,7 @@ const NewHome: React.FC = () => {
       if (newValue === 'Negotiable'){
         setToValue(0)
         setFromValue(0)
+        
         setNegotiable(true)
       }else{
         setNegotiable(false)
@@ -201,10 +203,12 @@ const NewHome: React.FC = () => {
 
   const handleFromChange = (value: number | null) => {
     setFromValue(value);
+    console.log(`fromValue: ${value}`)
   };
 
   const handleToChange = (value: number | null) => {
     setToValue(value);
+    console.log(`toValue: ${value}`)
   };
 
   const handlePeriodChange = (value: string) => {
@@ -458,6 +462,7 @@ const NewHome: React.FC = () => {
     formData.append('files', file);
   
     try {
+      setClickUpload(true)
       const response = await postLinkUploadFileService(formData);
   
       if (response?.status_code === 200) {
@@ -926,7 +931,7 @@ const NewHome: React.FC = () => {
                   }
                   name={`question_${qs?.id}`}
                   rules={[
-                    { required: true, message: 'Please enter a value!' },
+                    { required: statesStep2[index] == 'Negotiable' ? false: true, message: 'Please enter a value!' },
                     {
                       validator: (_, value) => {
                         if (fromValue !== undefined && toValue !== undefined && toValue && fromValue && toValue < fromValue) {

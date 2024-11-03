@@ -55,7 +55,7 @@ const SignUpPage: React.FC = () => {
           localStorage.setItem('is_admin',data?.data?.is_admin)
           localStorage.setItem('email',data?.data?.email)
           if (data?.data?.require_project_or_company_name == true || data?.data?.require_project_or_company_name == 'true'){
-            navigate('/companyOrProduct');
+            navigate('/');
             addScript()
           }else{
             navigate('/')
