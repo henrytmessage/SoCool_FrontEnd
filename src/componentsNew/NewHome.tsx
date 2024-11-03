@@ -12,6 +12,7 @@ import CustomModalWarning from '../common/CustomModalWarning';
 import { useNavigate } from 'react-router-dom';
 import CustomButtonBorder from '../common/CustomButtonBorder';
 import { isNotEmpty } from '../function';
+import { url } from 'inspector';
 interface ScoreField {
   label?: string;
   minScore: number;
@@ -97,6 +98,7 @@ const NewHome: React.FC = () => {
   const [totalScore, setTotalScore] = useState(0)
   const [inputCompanyName, setInputCompanyName] = useState('')
   const [expireTime, setExpireTime] = useState('')
+  const [landingPage, setLandingPage] = useState('')
   const [isModalWarning, setIsModalWarning] = useState(false)
   const navigate = useNavigate();
 
@@ -135,6 +137,9 @@ const NewHome: React.FC = () => {
   };
 
   const updateValueAtIndexStep1 = (index: number, newValue: any, isFinish:boolean = false) => {
+    if (statesStep1[index] == ''){
+      scrollToBottom()
+    }
     setStatesStep1((prevStates) =>
       prevStates.map((item, i) => (i === index ? newValue : item))
     );
@@ -143,6 +148,7 @@ const NewHome: React.FC = () => {
       setFinishStep1(true)
     }
     console.log(`statesStep1: ${index}, ${statesStep1[index]}`)
+
   };
 
   const addValueStep2 = (value: any) => {
@@ -150,6 +156,9 @@ const NewHome: React.FC = () => {
   };
 
   const updateValueAtIndexStep2 = (index: number, newValue: any, isFinish:boolean = false, type = undefined) => {
+    if (statesStep2[index] == ''){
+      scrollToBottom()
+    }
     setStatesStep2((prevStates) =>
       prevStates.map((item, i) => (i === index ? newValue : item))
     );
@@ -159,8 +168,8 @@ const NewHome: React.FC = () => {
     }
     if(type === 'range'){
       if (newValue === 'Negotiable'){
-        setToValue(null)
-        setFromValue(null)
+        setToValue(0)
+        setFromValue(0)
         setNegotiable(true)
       }else{
         setNegotiable(false)
@@ -175,7 +184,9 @@ const NewHome: React.FC = () => {
   };
 
   const updateValueAtIndexStep3 = (index: number, newValue: any, isFinish:boolean = false) => {
-    
+    if (statesStep3[index] == ''){
+      scrollToBottom()
+    }
     setStatesStep3((prevStates) =>
       prevStates.map((item, i) => (i === index ? (index == 3 ? dayjs(newValue).format('YYYY-MM-DD') : newValue) : item))
     );
@@ -596,6 +607,7 @@ const NewHome: React.FC = () => {
 
         if(data.data.alias){
           setExpireTime(dayjs(data.data?.exp).format('DD/MM/YYYY'))
+          setLandingPage(data.data?.url)
           setTempMail(data.data.alias.alias)
           setIsModalSuccess(true)
           localStorage.setItem('current_emails_count', (currentEmail + 1).toString());
@@ -646,6 +658,13 @@ const NewHome: React.FC = () => {
   //     </Form>
   //   )
   // }
+
+  const scrollToBottom = () => {
+    window.scrollTo({
+      top: document.documentElement.scrollHeight, 
+      behavior: 'smooth', 
+    });
+  }
 
   useEffect(() => {
     const checkAccessToken = async () => {
@@ -812,11 +831,12 @@ const NewHome: React.FC = () => {
               (<React.Fragment key={index}>
                 <Form.Item
                   label={
-                    <span style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
-                      {qs?.content}
-                      
-                    </span>
+                    qs?.is_optional ? null : <span style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+                    {qs?.content}
+                    
+                  </span>
                   }
+                
                   name={`question_${qs?.id}`}
                   rules={[
                     { required: !qs?.is_optional, message: 'Please answer this question!' },
@@ -1220,9 +1240,9 @@ const NewHome: React.FC = () => {
           {/* Avatar and Start Button Section */}
           {
             isStartNow ? 
-            <AvatarWithText text="We need to learn your recruitment preferences so the smart email can handle all the CV screening tasks for you." />
+            <AvatarWithText text="We need to know your recruitment details, so we can filter, screen, and rank the Resumes (CVs) for you." />
             : 
-            <AvatarWithText text="Let’s set up your own smart email address to help you recruit great candidates!">
+            <AvatarWithText text="Let’s set up your hiring page to help you recruit top candidates!">
               <CustomButton type="primary" onClick={OnClickStartNow}>
                 Start Now
               </CustomButton>
@@ -1265,6 +1285,7 @@ const NewHome: React.FC = () => {
         isOpen={isModalSuccess}
         titleSuccess={t('alertCheckMail', { time: expireTime })}
         textChildren={t('useEmail')}
+        textBottom={landingPage}
         textButtonConfirm={t('confirm')}
         linkAi={tempMail}
         onCloseModalSuccess={handleCloseModalSuccess}

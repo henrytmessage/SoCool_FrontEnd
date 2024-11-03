@@ -9,7 +9,8 @@ interface IModalSuccessProps {
   textButtonConfirm?: string
   status?: 'success' | 'error' | 'info' | 'warning'
   onCloseModalSuccess: () => void
-  textChildren?: string
+  textChildren?: string,
+  textBottom?: string
 }
 
 const CustomModalSuccess: React.FC<IModalSuccessProps> = ({
@@ -19,7 +20,8 @@ const CustomModalSuccess: React.FC<IModalSuccessProps> = ({
   textButtonConfirm,
   status = 'success',
   onCloseModalSuccess,
-  textChildren
+  textChildren,
+  textBottom
 }) => {
   const { t } = useTranslation()
 
@@ -48,6 +50,7 @@ const CustomModalSuccess: React.FC<IModalSuccessProps> = ({
           <>
             <div className=" text-base">{titleSuccess}</div>
             <div className=" text-base">{textChildren}</div>
+            <div className=" text-base">This is the hiring page related to your job: <a href='dashboard'>{textBottom}</a>. You can check the details in your account dashboard.</div>
           </>
         }
         extra={[
