@@ -100,6 +100,7 @@ const NewHome: React.FC = () => {
   const [expireTime, setExpireTime] = useState('')
   const [landingPage, setLandingPage] = useState('')
   const [isModalWarning, setIsModalWarning] = useState(false)
+  const [requireSalary, setRequireSalary] = useState(true)
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState(false)
@@ -171,11 +172,13 @@ const NewHome: React.FC = () => {
       if (newValue === 'Negotiable'){
         setToValue(0)
         setFromValue(0)
-        
+        setRequireSalary(false)
         setNegotiable(true)
       }else{
+        setRequireSalary(true)
         setNegotiable(false)
       }
+      
     }
     console.log(`updateValueAtIndexStep2: ${statesStep2[index]}`)
   };
@@ -931,7 +934,7 @@ const NewHome: React.FC = () => {
                   }
                   name={`question_${qs?.id}`}
                   rules={[
-                    { required: statesStep2[index] == 'Negotiable' ? false: true, message: 'Please enter a value!' },
+                    { required: requireSalary, message: 'Please enter a value!' },
                     {
                       validator: (_, value) => {
                         if (fromValue !== undefined && toValue !== undefined && toValue && fromValue && toValue < fromValue) {
