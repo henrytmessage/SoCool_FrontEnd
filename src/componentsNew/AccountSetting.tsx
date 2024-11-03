@@ -95,20 +95,21 @@ const AccountSettings: React.FC = () => {
     try {
       setIsLoadingOtp(true)
       let data 
-      if (type == ''){
-        data = await postUpdateAccountSettingService(bodyUpdateAccount)
-        if(data.status_code === 200) {
-          message.success('Update account setting successful!');
-          setOpenModalOtp(false)
-        } else {
-          message.error(data.errors?.message);
-        }
-      }else{
+      if (type === 'delete'){
         data = await deleteUserService()
         if(data.status_code === 200) {
           message.success('Your account have been deleted!');
           localStorage.clear(); 
           navigate('/login'); 
+          setOpenModalOtp(false)
+        } else {
+          message.error(data.errors?.message);
+        }
+
+      }else{
+        data = await postUpdateAccountSettingService(bodyUpdateAccount)
+        if(data.status_code === 200) {
+          message.success('Update account setting successful!');
           setOpenModalOtp(false)
         } else {
           message.error(data.errors?.message);
