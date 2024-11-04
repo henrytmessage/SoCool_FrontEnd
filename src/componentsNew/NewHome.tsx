@@ -139,7 +139,7 @@ const NewHome: React.FC = () => {
   };
 
   const updateValueAtIndexStep1 = (index: number, newValue: any, isFinish:boolean = false) => {
-    if (statesStep1[index] == '' && isClickUpload !== true){
+    if (statesStep1[index] == '' && isClickUpload !== true && finishStep1 !== true){
       scrollToBottom()
     }
     setStatesStep1((prevStates) =>
@@ -158,7 +158,7 @@ const NewHome: React.FC = () => {
   };
 
   const updateValueAtIndexStep2 = (index: number, newValue: any, isFinish:boolean = false, type = undefined) => {
-    if (statesStep2[index] == ''){
+    if (statesStep2[index] == '' && finishStep2 !== true){
       scrollToBottom()
     }
     setStatesStep2((prevStates) =>
@@ -189,7 +189,7 @@ const NewHome: React.FC = () => {
   };
 
   const updateValueAtIndexStep3 = (index: number, newValue: any, isFinish:boolean = false) => {
-    if (statesStep3[index] == ''){
+    if (statesStep3[index] == '' && showEmailBox !== true){
       scrollToBottom()
     }
     setStatesStep3((prevStates) =>
