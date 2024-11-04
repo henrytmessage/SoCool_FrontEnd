@@ -806,6 +806,10 @@ const NewHome: React.FC = () => {
             if (qs?.question_after === true && statesStep1[index - 2] === 'Remote'){
               previousQuestionAnswered = true
             }
+
+            if (finishStep1 === true){
+              previousQuestionAnswered = true
+            }
             
             return previousQuestionAnswered ? (
               
@@ -844,7 +848,7 @@ const NewHome: React.FC = () => {
                     
                   </span>
                   }
-                
+                  style={{ width: qs?.is_optional ? '50%' : '100%'}}
                   name={`question_${qs?.id}`}
                   rules={[
                     { required: !qs?.is_optional, message: 'Please answer this question!' },
@@ -862,6 +866,7 @@ const NewHome: React.FC = () => {
                   ]}
                 >
                   <CustomTextArea
+                    height={qs?.is_optional ? '50px' : undefined}
                     placeholder={qs?.place_holder || 'Your answer here'}
                     value={form.getFieldValue(`question_${qs?.id}`) || ''}
                     maxLength={qs.type === 'normal' ? 500 : qs.type === 'large' ? 3000 : undefined}
@@ -915,6 +920,9 @@ const NewHome: React.FC = () => {
             index === 0 || (form.getFieldValue(`question_${visibleQuestions2[index - 1]?.id}`) || '').trim() !== '';
 
             if (statesStep2[index - 1] === 'Negotiable'){
+              previousQuestionAnswered = true
+            }
+            if(finishStep2 == true){
               previousQuestionAnswered = true
             }
 
@@ -1091,6 +1099,7 @@ const NewHome: React.FC = () => {
       </div>
       ),
     },
+    
     {
       title: '',
       content: (
@@ -1100,6 +1109,9 @@ const NewHome: React.FC = () => {
               let previousQuestionAnswered: boolean | undefined =
               index === 0 || (form.getFieldValue(`question_${questions3[index - 1]?.id}`) || '').trim() !== '';
 
+              if (showEmailBox == true){
+                previousQuestionAnswered = true
+              }
               if (qs?.type !== 'date'){
                 return previousQuestionAnswered && (<React.Fragment key={index}>
                   <Form.Item key={index} label={qs?.content} name={`question_${qs?.id}`} rules={[

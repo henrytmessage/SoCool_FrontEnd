@@ -13,6 +13,8 @@ interface CustomTextAreaProps {
   required?: boolean;
   isEdit?: boolean;
   key?: string;
+  classNameCustom?: string;
+  height?:string
 }
 
 const CustomTextArea = forwardRef<HTMLTextAreaElement, CustomTextAreaProps>(({
@@ -24,7 +26,9 @@ const CustomTextArea = forwardRef<HTMLTextAreaElement, CustomTextAreaProps>(({
   placeholder,
   required,
   isEdit,
-  key
+  key,
+  classNameCustom,
+  height
 }, ref) => {
   const { t } = useTranslation();
   const [rows, setRows] = useState(3);
@@ -42,6 +46,7 @@ const CustomTextArea = forwardRef<HTMLTextAreaElement, CustomTextAreaProps>(({
   return (
     <div className="flex flex-col">
       <Input.TextArea
+        style={{ height: height }}
         ref={ref}
         rows={rows}
         maxLength={maxLength}
@@ -50,7 +55,7 @@ const CustomTextArea = forwardRef<HTMLTextAreaElement, CustomTextAreaProps>(({
         disabled={disabled}
         status={required ? 'error' : isEdit ? 'warning' : ''}
         onChange={onChange}
-        className="md:w-[850px]"
+        className={`md:w-[850px] ${classNameCustom}`}
         key={key}
       />
       {required && <span className="text-red-500 text-sm mt-1">{t('required')}</span>}
