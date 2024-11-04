@@ -851,7 +851,7 @@ const NewHome: React.FC = () => {
                   style={{ width: qs?.is_optional ? '50%' : '100%'}}
                   name={`question_${qs?.id}`}
                   rules={[
-                    { required: !qs?.is_optional, message: 'Please answer this question!' },
+                    { required: index == 3 ? (statesStep1[2] === 'Remote' ? false : true) : !qs?.is_optional, message: 'Please answer this question!' },
                     {
                       validator(_, value) {
                         const maxLength = qs.type === 'normal' ? 500 : qs.type === 'large' ? 3000 : undefined;
@@ -869,7 +869,7 @@ const NewHome: React.FC = () => {
                     height={qs?.is_optional ? '50px' : undefined}
                     placeholder={qs?.place_holder || 'Your answer here'}
                     value={form.getFieldValue(`question_${qs?.id}`) || ''}
-                    maxLength={qs.type === 'normal' ? 500 : qs.type === 'large' ? 3000 : undefined}
+                    maxLength={qs.type === 'normal' ? 500 : qs.type === 'large' ? 3000 : (qs.type == 'medium' ? 1000 : undefined)}
                     onChange = {(event) => updateValueAtIndexStep1(index, event.target.value, qs?.is_finish)}
                   />
                 </Form.Item>
