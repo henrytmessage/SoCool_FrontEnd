@@ -465,10 +465,10 @@ const NewHome: React.FC = () => {
     formData.append('files', file);
   
     try {
-      setClickUpload(true)
       const response = await postLinkUploadFileService(formData);
   
       if (response?.status_code === 200) {
+        setClickUpload(true)
         onSuccess(response); 
         const jobPosition = response?.data.job_position
         const jobOverview = response?.data.job_overview.replace(/-\s/g, '\n- ')
