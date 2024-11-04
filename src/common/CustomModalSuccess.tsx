@@ -50,7 +50,10 @@ const CustomModalSuccess: React.FC<IModalSuccessProps> = ({
           <>
             <div className=" text-base">{titleSuccess}</div>
             <div className=" text-base">{textChildren}</div>
-            <div className=" text-base">This is the hiring page related to your job: <a href='dashboard'>{textBottom}</a>. You can check the details in your account dashboard.</div>
+            <div className=" text-base mt-5">This is the hiring page related to your job: <a href='dashboard' style={{ color: 'blue' }}>{textBottom}</a>. </div>
+            <div className=" text-base">
+            You can check the details in your account dashboard.
+            </div>
           </>
         }
         extra={[
