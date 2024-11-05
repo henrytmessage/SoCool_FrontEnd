@@ -40,7 +40,7 @@ axiosInstance.interceptors.response.use(
   async (response: AxiosResponse<any>) => {
     // Handle success responses globally
     // look like refresh token is incorrect
-    if (response?.data?.status_code == 406){
+    if (response?.data?.status_code == 400){
       console.log('refresh token is incorrect');
       const refresh_token = localStorage.get('refresh_token') 
       if(refresh_token){

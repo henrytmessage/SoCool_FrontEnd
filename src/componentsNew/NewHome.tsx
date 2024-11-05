@@ -611,6 +611,7 @@ const NewHome: React.FC = () => {
     try {
       setIsLoadingGenerate(true)
       const data = await postCreateLinkService(body)
+      console.log(data)
       if (data.status_code === 200) {
 
         if(data.data.alias){
@@ -624,6 +625,7 @@ const NewHome: React.FC = () => {
         }
         
       }else{
+        console.log(data.errors?.message)
         message.error(data.errors?.message);
       }
       setIsLoadingGenerate(false)
