@@ -1070,7 +1070,7 @@ const NewHome: React.FC = () => {
                 />
                 
               </Form.Item>
-              {qs?.prompt && (<Form.Item>
+              {!(statesStep1[2] === 'Remote' && qs?.alias === 'q13') && qs?.prompt && (<Form.Item>
                       <CustomButton 
                         type="primary"
                         loading={loadingButtons[qs.id]}
