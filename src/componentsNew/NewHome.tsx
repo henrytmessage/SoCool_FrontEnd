@@ -218,19 +218,6 @@ const NewHome: React.FC = () => {
     setPeriod(value);
   };
 
-
-  const renderSelectOptions = (minScore: number) => {
-    const options = [];
-    for (let i = minScore; i <= minScore + 60; i += 5) {
-      options.push(
-        <Option key={i} value={i}>
-          {i}
-        </Option>
-      );
-    }
-    return options;
-  };
-
   const OnClickStartNow = () => {
     setIsStartNow(true)
     let values:any = {
@@ -508,11 +495,6 @@ const NewHome: React.FC = () => {
     }
   }
 
-  const onChangeJobClose: DatePickerProps['onChange'] = (date, dateString) => {
-    setJobCloseDate(dateString.toString())
-    setShowEmailBox(true)
-  };
-
   const disabledDate: DatePickerProps['disabledDate'] = (current) => {
     const today = dayjs().startOf('day');
     const ninetyDaysFromToday = dayjs().add(90, 'days').endOf('day');
@@ -639,35 +621,6 @@ const NewHome: React.FC = () => {
   const handleCloseModalSuccess = () => {
     window.location.reload()
   }
-
-  // const formRequireInit = () => {
-  //  return (
-  //     <Form
-  //       form={form}
-  //       name="project_company_form"
-  //       onFinish={onFinishInit}
-  //       layout= "vertical"
-  //       // labelCol={{ span: 8 }}
-  //       // wrapperCol={{ span: 16 }}
-  //       // style={{ maxWidth: 600, margin: '0 auto' }}
-  //     >
-
-  //       <Form.Item
-  //         label="Project or company"
-  //         name="project_company"
-  //         rules={[{ required: true, message: 'Please enter your company or project name!' }]}
-  //       >
-  //         <Input placeholder="Enter your company or project name" size="large"/>
-  //       </Form.Item>
-
-  //       <Form.Item>
-  //         <Button type="primary" htmlType="submit" size="large">
-  //           Submit
-  //         </Button>
-  //       </Form.Item>
-  //     </Form>
-  //   )
-  // }
 
   const scrollToBottom = () => {
     window.scrollTo({
@@ -801,7 +754,7 @@ const NewHome: React.FC = () => {
              ((form.getFieldValue(`question_${visibleQuestions1[index - 1]?.id}`) || '').trim() !== '')
              || (qs?.is_optional && (form.getFieldValue(`question_${visibleQuestions1[index - 2]?.id}`) || '').trim() !== '');
 
-            if (qs?.require_previous_question === true && statesStep1[index - 1] === 'Remote'){
+            if (qs?.require_previous_question === true && (statesStep1[index - 1] === 'Remote' || statesStep1[index - 1] === '')){
               previousQuestionAnswered = undefined
             }
 
@@ -809,7 +762,7 @@ const NewHome: React.FC = () => {
               previousQuestionAnswered = true
             }
 
-            if (finishStep1 === true){
+            if (finishStep1 === true && qs?.alias !== 'q4'){
               previousQuestionAnswered = true
             }
             
@@ -856,7 +809,7 @@ const NewHome: React.FC = () => {
                     { required: index == 3 ? (statesStep1[2] === 'Remote' ? false : true) : !qs?.is_optional, message: 'Please answer this question!' },
                     {
                       validator(_, value) {
-                        const maxLength = qs.type === 'normal' ? 500 : qs.type === 'large' ? 3000 : undefined;
+                        const maxLength = qs.type === 'normal' ? 500 : qs.type === 'large' ? 3000 : (qs.type == 'medium' ? 1000 : undefined);
                         if (value && value.length === maxLength) {
                           return Promise.reject(
                             new Error(`You have reached the maximum length of ${maxLength} characters!`)

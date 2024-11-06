@@ -318,7 +318,6 @@ const SiteAdminPage = () => {
                 <th className="border border-gray-300 p-2  ">Email</th>
                 <th className="border border-gray-300 p-2 ">Created date</th>
                 <th className="border border-gray-300 p-2  ">Expiration date</th>
-                <th className="border border-gray-300 p-2  ">Project or company</th>
                 <th className="border border-gray-300 p-2  ">Account status</th>
                 <th className="border border-gray-300 p-2  ">Plan</th>
                 <th className="border border-gray-300 p-2  ">Change plan</th>
@@ -341,9 +340,6 @@ const SiteAdminPage = () => {
                     </td>
                     <td className="border border-gray-300 p-4">
                       {formatDate(user.expiration_date)}
-                    </td>
-                    <td className="border border-gray-300 p-4">
-                      {user.project_or_company_name}
                     </td>
                     <td className="border border-gray-300 p-4">
                       {isExpired(user.expiration_date) == true ? 'Expired' : 'Valid'}
