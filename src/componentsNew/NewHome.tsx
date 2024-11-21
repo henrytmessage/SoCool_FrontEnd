@@ -1217,7 +1217,7 @@ const NewHome: React.FC = () => {
             isStartNow ? 
             <AvatarWithText text="We need to know your recruitment details, so we can filter, screen, and rank the Resumes (CVs) for you." />
             : 
-            <AvatarWithText text="Let’s set up your smart email to help you recruit top candidates!">
+            <AvatarWithText text="Let’s set up your smart email address to help you recruit top candidates!">
               <CustomButton type="primary" onClick={OnClickStartNow}>
                 Start Now
               </CustomButton>
